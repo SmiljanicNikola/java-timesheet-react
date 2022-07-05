@@ -1,10 +1,15 @@
 package vega.it.TimeSheetApp.model;
 
+import java.util.List;
+
 import javax.persistence.Column;
 import javax.persistence.Entity;
+import javax.persistence.EnumType;
+import javax.persistence.Enumerated;
 import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
 import javax.persistence.Id;
+import javax.persistence.OneToMany;
 import javax.persistence.Table;
 
 @Entity
@@ -36,6 +41,13 @@ public class TeamMember {
 	
 	@Column(name="blocked", unique=false, nullable=false)
 	private boolean blocked;
+	
+	@Column(nullable = false)
+	@Enumerated(EnumType.STRING)
+	private Roles role;
+	
+	@OneToMany(mappedBy="lead")
+	private List<Project> projects;
 	
 	public TeamMember() {
 		
@@ -104,9 +116,47 @@ public class TeamMember {
 	public void setBlocked(boolean blocked) {
 		this.blocked = blocked;
 	}
-	
-	
-	
-	
+
+	public Roles getRole() {
+		return role;
+	}
+
+	public void setRole(Roles role) {
+		this.role = role;
+	}
+
+	public TeamMember(String firstname, String lastname, String username, String password, Integer hoursPerWeek,
+			String email, boolean blocked, Roles role) {
+		super();
+		this.firstname = firstname;
+		this.lastname = lastname;
+		this.username = username;
+		this.password = password;
+		this.hoursPerWeek = hoursPerWeek;
+		this.email = email;
+		this.blocked = blocked;
+		this.role = role;
+	}
+
+	public TeamMember(Integer id, String firstname, String lastname, String username, String password,
+			Integer hoursPerWeek, String email, boolean blocked, Roles role) {
+		super();
+		this.id = id;
+		this.firstname = firstname;
+		this.lastname = lastname;
+		this.username = username;
+		this.password = password;
+		this.hoursPerWeek = hoursPerWeek;
+		this.email = email;
+		this.blocked = blocked;
+		this.role = role;
+	}
+
+	@Override
+	public String toString() {
+		return "TeamMember [id=" + id + ", firstname=" + firstname + ", lastname=" + lastname + ", username=" + username
+				+ ", password=" + password + ", hoursPerWeek=" + hoursPerWeek + ", email=" + email + ", blocked="
+				+ blocked + ", role=" + role + "]";
+	}	
 
 }

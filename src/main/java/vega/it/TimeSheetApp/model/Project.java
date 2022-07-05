@@ -1,5 +1,7 @@
 package vega.it.TimeSheetApp.model;
 
+import java.util.List;
+
 import javax.persistence.Column;
 import javax.persistence.Entity;
 import javax.persistence.GeneratedValue;
@@ -7,6 +9,7 @@ import javax.persistence.GenerationType;
 import javax.persistence.Id;
 import javax.persistence.JoinColumn;
 import javax.persistence.ManyToOne;
+import javax.persistence.OneToMany;
 import javax.persistence.Table;
 
 @Entity
@@ -34,6 +37,10 @@ public class Project {
 	
 	@Column(name="finished", unique=false, nullable=false)
 	private Boolean finished;
+	
+	@OneToMany(mappedBy="project")
+	private List<TimeSheetActivity> timeSheetActivities;
+
 
 	public Project() {
 		super();

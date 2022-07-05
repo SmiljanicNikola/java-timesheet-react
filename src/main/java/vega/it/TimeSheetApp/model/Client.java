@@ -7,6 +7,8 @@ import javax.persistence.Entity;
 import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
 import javax.persistence.Id;
+import javax.persistence.JoinColumn;
+import javax.persistence.ManyToOne;
 import javax.persistence.OneToMany;
 import javax.persistence.Table;
 
@@ -31,14 +33,26 @@ public class Client {
 	@Column(name="zip_code", unique=false, nullable=false)
 	private String zipCode;
 	
-	@Column(name="country", unique=false, nullable=false)
-	private String country;
+	@ManyToOne
+	@JoinColumn(name="country_id", referencedColumnName="country_id")
+	private Country country;
 	
 	@OneToMany(mappedBy="client")
 	private List<Project> projects;
 	
-	
-	public Client(String clientName, String address, String city, String zipCode, String country) {
+	@OneToMany(mappedBy="client")
+	private List<TimeSheetActivity> timeSheetActivities;
+
+
+	public Client(String clientName, String address, String city, String zipCode) {
+		super();
+		this.clientName = clientName;
+		this.address = address;
+		this.city = city;
+		this.zipCode = zipCode;
+	}
+
+	public Client(String clientName, String address, String city, String zipCode, Country country) {
 		super();
 		this.clientName = clientName;
 		this.address = address;
@@ -47,7 +61,7 @@ public class Client {
 		this.country = country;
 	}
 
-	public Client(Integer id, String clientName, String address, String city, String zipCode, String country,
+	public Client(Integer id, String clientName, String address, String city, String zipCode, Country country,
 			List<Project> projects) {
 		super();
 		this.id = id;
@@ -103,11 +117,12 @@ public class Client {
 		this.zipCode = zipCode;
 	}
 
-	public String getCountry() {
+	
+	public Country getCountry() {
 		return country;
 	}
 
-	public void setCountry(String country) {
+	public void setCountry(Country country) {
 		this.country = country;
 	}
 
@@ -118,6 +133,22 @@ public class Client {
 	public void setProjects(List<Project> projects) {
 		this.projects = projects;
 	}
+
+	@Override
+	public String toString() {
+		return "Client [id=" + id + ", clientName=" + clientName + ", address=" + address + ", city=" + city
+				+ ", zipCode=" + zipCode + ", country=" + country + ", projects=" + projects + "]";
+	}
+
+	public List<TimeSheetActivity> getTimeSheetActivities() {
+		return timeSheetActivities;
+	}
+
+	public void setTimeSheetActivities(List<TimeSheetActivity> timeSheetActivities) {
+		this.timeSheetActivities = timeSheetActivities;
+	}
+	
+	
 	
 	
 	
