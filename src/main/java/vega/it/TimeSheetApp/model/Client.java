@@ -43,6 +43,8 @@ public class Client {
 	@OneToMany(mappedBy="client")
 	private List<TimeSheetActivity> timeSheetActivities;
 
+	
+	
 
 	public Client(String clientName, String address, String city, String zipCode) {
 		super();

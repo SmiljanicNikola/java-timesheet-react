@@ -6,13 +6,19 @@ import java.util.List;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
+import org.springframework.web.bind.annotation.DeleteMapping;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
+import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.RestController;
 
 import vega.it.TimeSheetApp.DTO.TimeSheetActivityDTO;
+import vega.it.TimeSheetApp.model.Project;
 import vega.it.TimeSheetApp.model.TimeSheetActivity;
 import vega.it.TimeSheetApp.service.TimeSheetActivityService;
 
+@RestController
+@RequestMapping(value = "api/timeSheetActivities")
 public class TimeSheetActivityController {
 
 	@Autowired
@@ -40,5 +46,16 @@ public class TimeSheetActivityController {
         return new ResponseEntity<>(new TimeSheetActivityDTO(timeSheetActivity), HttpStatus.OK);
 
 	}
+	
+	@DeleteMapping(value = "/{id}")
+    public ResponseEntity<?> delete(@PathVariable("id") Integer id) {
+		TimeSheetActivity timeSheetActivity = timeSheetActivityService.findOne(id);
+        if (timeSheetActivity != null) {
+        	timeSheetActivityService.remove(id);
+            return new ResponseEntity<>(HttpStatus.OK);
+        } else {
+            return new ResponseEntity<>(HttpStatus.NOT_FOUND);
+        }
+    }
 	
 }

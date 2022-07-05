@@ -2,35 +2,38 @@ package vega.it.TimeSheetApp.service.implementation;
 
 import java.util.List;
 
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 import vega.it.TimeSheetApp.model.TimeSheetActivity;
+import vega.it.TimeSheetApp.repository.TimeSheetActivityRepository;
 import vega.it.TimeSheetApp.service.TimeSheetActivityService;
 
 @Service
 public class TimeSheetActivityServiceImpl implements TimeSheetActivityService {
 
+	@Autowired
+	private TimeSheetActivityRepository timeSheetActivityRepository;
+	
 	@Override
 	public List<TimeSheetActivity> findAll() {
-		// TODO Auto-generated method stub
-		return null;
+		return timeSheetActivityRepository.findAll();
 	}
 
 	@Override
 	public TimeSheetActivity findOne(Integer timeSheetActivityId) {
-		// TODO Auto-generated method stub
-		return null;
+		return timeSheetActivityRepository.findById(timeSheetActivityId).orElse(null);
 	}
 
 	@Override
 	public TimeSheetActivity save(TimeSheetActivity timeSheetActivity) {
-		// TODO Auto-generated method stub
-		return null;
+		timeSheetActivityRepository.save(timeSheetActivity);
+		return timeSheetActivity;
 	}
 
 	@Override
 	public void remove(Integer id) {
-		// TODO Auto-generated method stub
+		timeSheetActivityRepository.deleteById(id);
 		
 	}
 

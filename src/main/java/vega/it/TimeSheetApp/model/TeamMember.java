@@ -12,6 +12,8 @@ import javax.persistence.Id;
 import javax.persistence.OneToMany;
 import javax.persistence.Table;
 
+import com.fasterxml.jackson.annotation.JsonIgnore;
+
 @Entity
 @Table(name="team_members")
 public class TeamMember {
@@ -46,6 +48,7 @@ public class TeamMember {
 	@Enumerated(EnumType.STRING)
 	private Roles role;
 	
+	@JsonIgnore
 	@OneToMany(mappedBy="lead")
 	private List<Project> projects;
 	

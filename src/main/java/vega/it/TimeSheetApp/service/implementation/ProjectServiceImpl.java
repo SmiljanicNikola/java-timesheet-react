@@ -3,6 +3,8 @@ package vega.it.TimeSheetApp.service.implementation;
 import java.util.List;
 
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
 
 import vega.it.TimeSheetApp.model.Project;
@@ -36,6 +38,11 @@ public class ProjectServiceImpl implements ProjectService {
 	public void remove(Integer id) {
 		projectRepository.deleteById(id);
 		
+	}
+
+	@Override
+	public Page<Project> findAll(Pageable pageable) {
+		return projectRepository.findAll(pageable);
 	}
 
 }

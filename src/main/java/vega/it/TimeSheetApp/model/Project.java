@@ -12,6 +12,8 @@ import javax.persistence.ManyToOne;
 import javax.persistence.OneToMany;
 import javax.persistence.Table;
 
+import com.fasterxml.jackson.annotation.JsonIgnore;
+
 @Entity
 @Table(name="project")
 public class Project {
@@ -38,13 +40,42 @@ public class Project {
 	@Column(name="finished", unique=false, nullable=false)
 	private Boolean finished;
 	
+	@JsonIgnore
 	@OneToMany(mappedBy="project")
 	private List<TimeSheetActivity> timeSheetActivities;
+	
+	@Column(name="deleted", unique=false, nullable=false)
+	private Boolean deleted;
 
 
 	public Project() {
 		super();
 	}
+
+	
+	public Boolean getDeleted() {
+		return deleted;
+	}
+
+
+
+	public void setDeleted(Boolean deleted) {
+		this.deleted = deleted;
+	}
+
+
+
+	public List<TimeSheetActivity> getTimeSheetActivities() {
+		return timeSheetActivities;
+	}
+
+
+
+	public void setTimeSheetActivities(List<TimeSheetActivity> timeSheetActivities) {
+		this.timeSheetActivities = timeSheetActivities;
+	}
+
+
 
 	public Integer getId() {
 		return id;
