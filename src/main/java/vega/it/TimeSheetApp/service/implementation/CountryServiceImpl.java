@@ -21,7 +21,7 @@ public class CountryServiceImpl implements CountryService {
 	}
 
 	@Override
-	public Country findOne(Integer countryId) {
+	public Country findById(Integer countryId) {
 		return countryRepository.findById(countryId).orElse(null);
 	}
 

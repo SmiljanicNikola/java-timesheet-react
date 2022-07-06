@@ -12,7 +12,7 @@ public interface ClientService {
 	
 	List<Client> findAll();
 	
-	Client findOne(Integer clientId);
+	Client findById(Integer clientId);
 	
 	Client save (Client client);
 	

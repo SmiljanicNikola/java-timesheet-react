@@ -23,7 +23,7 @@ public class TeamMemberServiceImpl implements TeamMemberService {
 	}
 
 	@Override
-	public TeamMember findOne(Integer teamMemberId) {
+	public TeamMember findById(Integer teamMemberId) {
 		return teamMemberRepository.findById(teamMemberId).orElse(null);
 	}
 

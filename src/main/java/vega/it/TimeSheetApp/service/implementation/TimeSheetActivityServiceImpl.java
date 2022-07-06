@@ -21,7 +21,7 @@ public class TimeSheetActivityServiceImpl implements TimeSheetActivityService {
 	}
 
 	@Override
-	public TimeSheetActivity findOne(Integer timeSheetActivityId) {
+	public TimeSheetActivity findById(Integer timeSheetActivityId) {
 		return timeSheetActivityRepository.findById(timeSheetActivityId).orElse(null);
 	}
 

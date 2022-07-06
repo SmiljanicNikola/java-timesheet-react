@@ -9,7 +9,7 @@ public interface TimeSheetActivityService {
 
 	List<TimeSheetActivity> findAll();
 	
-	TimeSheetActivity findOne(Integer timeSheetActivityId);
+	TimeSheetActivity findById(Integer timeSheetActivityId);
 	
 	TimeSheetActivity save(TimeSheetActivity timeSheetActivity);
 	

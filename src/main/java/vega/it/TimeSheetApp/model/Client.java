@@ -12,6 +12,8 @@ import javax.persistence.ManyToOne;
 import javax.persistence.OneToMany;
 import javax.persistence.Table;
 
+import com.fasterxml.jackson.annotation.JsonIgnore;
+
 @Entity
 @Table(name="client")
 public class Client {
@@ -37,9 +39,11 @@ public class Client {
 	@JoinColumn(name="country_id", referencedColumnName="country_id")
 	private Country country;
 	
+	@JsonIgnore
 	@OneToMany(mappedBy="client")
 	private List<Project> projects;
 	
+	@JsonIgnore
 	@OneToMany(mappedBy="client")
 	private List<TimeSheetActivity> timeSheetActivities;
 

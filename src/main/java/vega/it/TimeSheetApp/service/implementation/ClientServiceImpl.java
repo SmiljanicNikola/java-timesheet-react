@@ -23,7 +23,7 @@ public class ClientServiceImpl implements ClientService {
 	}
 
 	@Override
-	public Client findOne(Integer clientId) {
+	public Client findById(Integer clientId) {
 		return clientRepository.findById(clientId).orElse(null);
 	}
 

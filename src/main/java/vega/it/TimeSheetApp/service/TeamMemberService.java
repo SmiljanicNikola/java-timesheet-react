@@ -12,7 +12,7 @@ public interface TeamMemberService {
 	
 	List<TeamMember> findAll();
 	
-	TeamMember findOne(Integer teamMemberId);
+	TeamMember findById(Integer teamMemberId);
 	
 	TeamMember save(TeamMember teamMember);
 	

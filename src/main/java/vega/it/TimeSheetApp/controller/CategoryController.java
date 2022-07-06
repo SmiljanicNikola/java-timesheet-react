@@ -8,6 +8,7 @@ import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
+import org.springframework.web.bind.annotation.CrossOrigin;
 import org.springframework.web.bind.annotation.DeleteMapping;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
@@ -25,6 +26,7 @@ import vega.it.TimeSheetApp.model.Project;
 import vega.it.TimeSheetApp.service.CategoryService;
 
 @RestController
+@CrossOrigin(origins="http://localhost:3000")
 @RequestMapping(value = "api/categories")
 public class CategoryController {
 	
@@ -50,7 +52,7 @@ public class CategoryController {
 	
 	@GetMapping(value="/{id}")
 	public ResponseEntity<CategoryDTO> getCategoryById(@PathVariable("id") Integer id){
-		Category category = categoryService.findOne(id);
+		Category category = categoryService.findById(id);
 		if(category == null) {
             return new ResponseEntity<>(HttpStatus.NOT_FOUND); 
 		}
@@ -61,13 +63,14 @@ public class CategoryController {
 	
 	@DeleteMapping(value = "/{id}")
     public ResponseEntity<?> delete(@PathVariable("id") Integer id) {
-		Category category = categoryService.findOne(id);
-        if (category != null) {
-        	categoryService.remove(id);
-            return new ResponseEntity<>(HttpStatus.OK);
-        } else {
-            return new ResponseEntity<>(HttpStatus.NOT_FOUND);
-        }
+		Category category = categoryService.findById(id);
+        if (category == null) {
+        	return new ResponseEntity<>(HttpStatus.NOT_FOUND);
+        } 
+        
+        categoryService.remove(id);
+        return new ResponseEntity<>(HttpStatus.OK);
+        
     }
 	
 	@PostMapping()

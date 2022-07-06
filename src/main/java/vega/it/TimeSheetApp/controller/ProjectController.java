@@ -2,12 +2,14 @@ package vega.it.TimeSheetApp.controller;
 
 import java.util.ArrayList;
 import java.util.List;
+import java.util.stream.Collectors;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
+import org.springframework.web.bind.annotation.CrossOrigin;
 import org.springframework.web.bind.annotation.DeleteMapping;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
@@ -25,6 +27,7 @@ import vega.it.TimeSheetApp.service.ProjectService;
 import vega.it.TimeSheetApp.service.TeamMemberService;
 
 @RestController
+@CrossOrigin(origins="http://localhost:3000")
 @RequestMapping(value = "api/projects")
 public class ProjectController {
 	
@@ -43,9 +46,9 @@ public class ProjectController {
 		
 		List<ProjectDTO> projectsDTO = new ArrayList<>();
 		for(Project p : projects) {
-			if(p.getDeleted() == false) {
+			//if(p.getDeleted() == false) {
 			projectsDTO.add(new ProjectDTO(p));
-			}
+			//}
 		}
 		
 		return new ResponseEntity<>(projectsDTO, HttpStatus.OK);
@@ -58,7 +61,7 @@ public class ProjectController {
 	
 	@GetMapping(value="/{id}")
 	public ResponseEntity<ProjectDTO> getProjectById(@PathVariable("id") Integer id){
-		Project project = projectService.findOne(id);
+		Project project = projectService.findById(id);
 		if(project == null) {
             return new ResponseEntity<>(HttpStatus.NOT_FOUND); 
 		}
@@ -81,26 +84,27 @@ public class ProjectController {
 	@DeleteMapping(value = "/{id}")
     public ResponseEntity<?> delete(@PathVariable("id") Integer id) {
 		
-        Project project = projectService.findOne(id);
+        Project project = projectService.findById(id);
         
-        if (project != null) {
-        	
-        	project.setDeleted(true);
-        	projectService.save(project);
-        	
-            return new ResponseEntity<>(HttpStatus.OK);
-        } else {
-            return new ResponseEntity<>(HttpStatus.NOT_FOUND);
-        }
-    }
+        if (project == null) {
+        	return new ResponseEntity<>(HttpStatus.NOT_FOUND);
+        } 
+        
+        project.setDeleted(true);
+    	projectService.save(project);
+    	
+        return new ResponseEntity<>(HttpStatus.OK);
+        
+	}
+    
 	
 	@PostMapping()
     public ResponseEntity<ProjectDTO> saveProject(@RequestBody AddProjectRequestDTO addProjectRequestDTO) {
         Project project = new Project();
         project.setDescription(addProjectRequestDTO.getDescription());
         project.setProjectName(addProjectRequestDTO.getProjectName());
-        project.setClient(this.clientService.findOne(addProjectRequestDTO.getClientId()));
-        project.setLead(this.teamMemberService.findOne(addProjectRequestDTO.getTeamMemberId()));
+        project.setClient(this.clientService.findById(addProjectRequestDTO.getClientId()));
+        project.setLead(this.teamMemberService.findById(addProjectRequestDTO.getTeamMemberId()));
         //artikal.setProdavac(this.prodavacService.findOne(addArtikalRequest.getProdavacId()));
         project.setFinished(false);
 
@@ -112,7 +116,7 @@ public class ProjectController {
 	@PutMapping(value = "/{id}")
 	    public ResponseEntity<ProjectDTO> updateProject(@RequestBody AddProjectRequestDTO addProjectRequestDTO, @PathVariable("id") Integer id) {
 		
-	        Project project = projectService.findOne(id);
+	        Project project = projectService.findById(id);
 
 	        if (project == null) {
 	            return new ResponseEntity<>(HttpStatus.BAD_REQUEST);
@@ -120,8 +124,8 @@ public class ProjectController {
 
 	        project.setDescription(addProjectRequestDTO.getDescription());
 	        project.setProjectName(addProjectRequestDTO.getProjectName());
-	        project.setClient(this.clientService.findOne(addProjectRequestDTO.getClientId()));
-	        project.setLead(this.teamMemberService.findOne(addProjectRequestDTO.getTeamMemberId()));
+	        project.setClient(this.clientService.findById(addProjectRequestDTO.getClientId()));
+	        project.setLead(this.teamMemberService.findById(addProjectRequestDTO.getTeamMemberId()));
 
 	        project = projectService.save(project);
 

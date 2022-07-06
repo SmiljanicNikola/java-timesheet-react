@@ -13,7 +13,7 @@ public interface ProjectService {
 	
 	List<Project> findAll();
 	
-	Project findOne(Integer projectId);
+	Project findById(Integer projectId);
 	
 	Project save (Project project);
 	

@@ -12,7 +12,7 @@ public interface CountryService {
 
 	List<Country> findAll();
 	
-	Country findOne(Integer countryId);
+	Country findById(Integer countryId);
 	
 	Country save (Country country);
 	

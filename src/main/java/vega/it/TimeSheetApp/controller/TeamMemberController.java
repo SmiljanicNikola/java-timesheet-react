@@ -10,6 +10,7 @@ import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
+import org.springframework.web.bind.annotation.CrossOrigin;
 import org.springframework.web.bind.annotation.DeleteMapping;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
@@ -22,6 +23,7 @@ import net.bytebuddy.description.modifier.EnumerationState;
 import vega.it.TimeSheetApp.DTO.AddProjectRequestDTO;
 import vega.it.TimeSheetApp.DTO.ProjectDTO;
 import vega.it.TimeSheetApp.DTO.TeamMemberDTO;
+import vega.it.TimeSheetApp.model.Client;
 import vega.it.TimeSheetApp.model.Project;
 import vega.it.TimeSheetApp.model.Roles;
 import vega.it.TimeSheetApp.model.TeamMember;
@@ -29,6 +31,7 @@ import vega.it.TimeSheetApp.model.TimeSheetActivity;
 import vega.it.TimeSheetApp.service.TeamMemberService;
 
 @RestController
+@CrossOrigin(origins="http://localhost:3000")
 @RequestMapping(value = "api/teamMembers")
 public class TeamMemberController {
 	
@@ -49,7 +52,7 @@ public class TeamMemberController {
 	
 	@GetMapping(value="/{id}")
 	public ResponseEntity<TeamMemberDTO> getTeamMemberById(@PathVariable("id") Integer id){
-		TeamMember teamMember = teamMemberService.findOne(id);
+		TeamMember teamMember = teamMemberService.findById(id);
 		if(teamMember == null) {
             return new ResponseEntity<>(HttpStatus.NOT_FOUND); 
 		}
@@ -60,13 +63,15 @@ public class TeamMemberController {
 	
 	@DeleteMapping(value = "/{id}")
     public ResponseEntity<?> delete(@PathVariable("id") Integer id) {
-		TeamMember teamMember = teamMemberService.findOne(id);
-        if (teamMember != null) {
-        	teamMemberService.remove(id);
-            return new ResponseEntity<>(HttpStatus.OK);
-        } else {
-            return new ResponseEntity<>(HttpStatus.NOT_FOUND);
-        }
+		
+		TeamMember teamMember = teamMemberService.findById(id);
+		
+        if (teamMember == null) {
+        	return new ResponseEntity<>(HttpStatus.NOT_FOUND);
+        } 
+        
+        teamMemberService.remove(id);
+        return new ResponseEntity<>(HttpStatus.OK);
     }
 	
 	@GetMapping("/paginate")

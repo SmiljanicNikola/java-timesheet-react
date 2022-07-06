@@ -12,7 +12,7 @@ public interface CategoryService {
 
 	List<Category> findAll();
 	
-	Category findOne(Integer categoryId);
+	Category findById(Integer categoryId);
 	
 	Category save (Category category);
 	

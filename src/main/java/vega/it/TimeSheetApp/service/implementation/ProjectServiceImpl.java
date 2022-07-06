@@ -1,6 +1,7 @@
 package vega.it.TimeSheetApp.service.implementation;
 
 import java.util.List;
+import java.util.stream.Collectors;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Page;
@@ -19,11 +20,11 @@ public class ProjectServiceImpl implements ProjectService {
 	
 	@Override
 	public List<Project> findAll() {
-		return projectRepository.findAll();
+		return projectRepository.findAll().stream().filter(project -> project.getDeleted() == false).collect(Collectors.toList());
 	}
 
 	@Override
-	public Project findOne(Integer projectId) {
+	public Project findById(Integer projectId) {
 		return projectRepository.findById(projectId).orElse(null);
 		
 	}
