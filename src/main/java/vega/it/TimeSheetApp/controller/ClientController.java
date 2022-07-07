@@ -41,15 +41,11 @@ public class ClientController {
 	@GetMapping
 	public ResponseEntity<List<ClientDTO>> getClients(){
 		
-		List<Client> clients = clientService.findAll();
-		
-		
-		//List<ClientDTO> clientsDTO = new ArrayList<>();
-		List<ClientDTO> clientsDTO = new ArrayList<>();
-		for(Client c : clients) {
-			clientsDTO.add(new ClientDTO(c));
-			
-		}
+		List<ClientDTO> clientsDTO = clientService
+				.findAll()
+				.stream()
+				.map(c -> new ClientDTO(c))
+				.toList();
 		
 		return new ResponseEntity<>(clientsDTO, HttpStatus.OK);
 	}
@@ -80,7 +76,10 @@ public class ClientController {
         	return new ResponseEntity<>(HttpStatus.NOT_FOUND);
         } 
         
-        clientService.remove(id);
+        //clientService.remove(id);
+
+        client.setDeleted(true);
+        clientService.save(client);
         return new ResponseEntity<>(HttpStatus.OK);
     }
 	

@@ -13,6 +13,7 @@ import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
+import vega.it.TimeSheetApp.DTO.ClientDTO;
 import vega.it.TimeSheetApp.DTO.TimeSheetActivityDTO;
 import vega.it.TimeSheetApp.model.Project;
 import vega.it.TimeSheetApp.model.TeamMember;
@@ -29,12 +30,12 @@ public class TimeSheetActivityController {
 	
 	@GetMapping
 	public ResponseEntity<List<TimeSheetActivityDTO>> getTimesheetActivities(){
-		List<TimeSheetActivity> timesheetActivities = timeSheetActivityService.findAll();
 		
-		List<TimeSheetActivityDTO> timesheetActivitiesDTO = new ArrayList<>();
-		for(TimeSheetActivity tsa : timesheetActivities) {
-			timesheetActivitiesDTO.add(new TimeSheetActivityDTO(tsa));
-		}
+		List<TimeSheetActivityDTO> timesheetActivitiesDTO = timeSheetActivityService
+				.findAll()
+				.stream()
+				.map(tsa -> new TimeSheetActivityDTO(tsa))
+				.toList();
 		
 		return new ResponseEntity<>(timesheetActivitiesDTO, HttpStatus.OK);
 	}

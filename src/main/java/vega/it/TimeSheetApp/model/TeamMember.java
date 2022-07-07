@@ -44,6 +44,10 @@ public class TeamMember {
 	@Column(name="blocked", unique=false, nullable=false)
 	private boolean blocked;
 	
+	@Column(name="deleted", unique=false, nullable=false)
+	private Boolean deleted;
+
+	
 	@Column(nullable = false)
 	@Enumerated(EnumType.STRING)
 	private Roles role;
@@ -139,6 +143,29 @@ public class TeamMember {
 		this.email = email;
 		this.blocked = blocked;
 		this.role = role;
+	}
+	
+	
+
+	public TeamMember(String firstname, String lastname, String username, String password, Integer hoursPerWeek,
+			String email, boolean blocked, Boolean deleted) {
+		super();
+		this.firstname = firstname;
+		this.lastname = lastname;
+		this.username = username;
+		this.password = password;
+		this.hoursPerWeek = hoursPerWeek;
+		this.email = email;
+		this.blocked = blocked;
+		this.deleted = deleted;
+	}
+
+	public Boolean getDeleted() {
+		return deleted;
+	}
+
+	public void setDeleted(Boolean deleted) {
+		this.deleted = deleted;
 	}
 
 	public TeamMember(Integer id, String firstname, String lastname, String username, String password,

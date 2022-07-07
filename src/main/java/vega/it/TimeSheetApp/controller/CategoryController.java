@@ -38,14 +38,19 @@ public class CategoryController {
 		return new ResponseEntity<>(categoryService.findAll(pageable), HttpStatus.OK);
 	}
 	
+	/*@GetMapping("/paginate")
+	public ResponseEntity<Page<CategoryDTO>> findAll(Pageable pageable){
+		return new ResponseEntity<>(categoryService.findAllPaginate(pageable), HttpStatus.OK);
+	}*/
+	
 	@GetMapping
 	public ResponseEntity<List<CategoryDTO>> getCategories(){
-		List<Category> categories = categoryService.findAll();
 		
-		List<CategoryDTO> categoriesDTO = new ArrayList<>();
-		for(Category c : categories) {
-			categoriesDTO.add(new CategoryDTO(c));
-		}
+		List<CategoryDTO> categoriesDTO = categoryService
+				.findAll()
+				.stream()
+				.map(c -> new CategoryDTO(c))
+				.toList();
 		
 		return new ResponseEntity<>(categoriesDTO, HttpStatus.OK);
 	}

@@ -7,6 +7,7 @@ import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
 
+import vega.it.TimeSheetApp.DTO.CategoryDTO;
 import vega.it.TimeSheetApp.model.Category;
 import vega.it.TimeSheetApp.repository.CategoryRepository;
 import vega.it.TimeSheetApp.service.CategoryService;

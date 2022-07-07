@@ -39,6 +39,10 @@ public class Client {
 	@JoinColumn(name="country_id", referencedColumnName="country_id")
 	private Country country;
 	
+	@Column(name="deleted", unique=false, nullable=false)
+	private Boolean deleted;
+
+	
 	@JsonIgnore
 	@OneToMany(mappedBy="client")
 	private List<Project> projects;
@@ -47,8 +51,23 @@ public class Client {
 	@OneToMany(mappedBy="client")
 	private List<TimeSheetActivity> timeSheetActivities;
 
-	
-	
+	public Boolean getDeleted() {
+		return deleted;
+	}
+
+	public void setDeleted(Boolean deleted) {
+		this.deleted = deleted;
+	}
+
+	public Client(String clientName, String address, String city, String zipCode, Country country, Boolean deleted) {
+		super();
+		this.clientName = clientName;
+		this.address = address;
+		this.city = city;
+		this.zipCode = zipCode;
+		this.country = country;
+		this.deleted = deleted;
+	}
 
 	public Client(String clientName, String address, String city, String zipCode) {
 		super();
@@ -78,6 +97,8 @@ public class Client {
 		this.country = country;
 		this.projects = projects;
 	}
+	
+	
 
 	public Client() {
 		super();

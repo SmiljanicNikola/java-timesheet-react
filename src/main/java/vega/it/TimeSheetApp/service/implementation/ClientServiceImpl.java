@@ -1,6 +1,7 @@
 package vega.it.TimeSheetApp.service.implementation;
 
 import java.util.List;
+import java.util.stream.Collectors;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Page;
@@ -19,7 +20,7 @@ public class ClientServiceImpl implements ClientService {
 	
 	@Override
 	public List<Client> findAll() {
-		return clientRepository.findAll();
+		return clientRepository.findAll().stream().filter(client -> client.getDeleted() == false).collect(Collectors.toList());
 	}
 
 	@Override

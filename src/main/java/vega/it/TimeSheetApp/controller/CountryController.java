@@ -29,12 +29,12 @@ public class CountryController {
 	
 	@GetMapping
 	public ResponseEntity<List<CountryDTO>> getCountries(){
-		List<Country> countries = countryService.findAll();
 		
-		List<CountryDTO> countriesDTO = new ArrayList<>();
-		for(Country c : countries) {
-			countriesDTO.add(new CountryDTO(c));
-		}
+		List<CountryDTO> countriesDTO = countryService
+				.findAll()
+				.stream()
+				.map(c -> new CountryDTO(c))
+				.toList();
 		
 		return new ResponseEntity<>(countriesDTO, HttpStatus.OK);
 	}

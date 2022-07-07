@@ -21,6 +21,7 @@ import org.springframework.web.bind.annotation.RestController;
 
 import net.bytebuddy.description.modifier.EnumerationState;
 import vega.it.TimeSheetApp.DTO.AddProjectRequestDTO;
+import vega.it.TimeSheetApp.DTO.ClientDTO;
 import vega.it.TimeSheetApp.DTO.ProjectDTO;
 import vega.it.TimeSheetApp.DTO.TeamMemberDTO;
 import vega.it.TimeSheetApp.model.Client;
@@ -40,12 +41,12 @@ public class TeamMemberController {
 	
 	@GetMapping
 	public ResponseEntity<List<TeamMemberDTO>> getTeamMembers(){
-		List<TeamMember> teamMembers = teamMemberService.findAll();
 		
-		List<TeamMemberDTO> teamMembersDTO = new ArrayList<>();
-		for(TeamMember tm : teamMembers) {
-			teamMembersDTO.add(new TeamMemberDTO(tm));
-		}
+		List<TeamMemberDTO> teamMembersDTO = teamMemberService
+				.findAll()
+				.stream()
+				.map(c -> new TeamMemberDTO(c))
+				.toList();
 		
 		return new ResponseEntity<>(teamMembersDTO, HttpStatus.OK);
 	}

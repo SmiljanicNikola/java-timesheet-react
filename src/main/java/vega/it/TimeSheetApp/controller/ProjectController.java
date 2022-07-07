@@ -42,20 +42,19 @@ public class ProjectController {
 	
 	@GetMapping
 	public ResponseEntity<List<ProjectDTO>> getProjects(){
-		List<Project> projects = projectService.findAll();
 		
-		List<ProjectDTO> projectsDTO = new ArrayList<>();
-		for(Project p : projects) {
-			//if(p.getDeleted() == false) {
-			projectsDTO.add(new ProjectDTO(p));
-			//}
-		}
+		List<ProjectDTO> projectsDTO = projectService
+				.findAll()
+				.stream()
+				.map(p -> new ProjectDTO(p))
+				.toList();
 		
 		return new ResponseEntity<>(projectsDTO, HttpStatus.OK);
 	}
 	
 	@GetMapping("/paginate")
 	public ResponseEntity<Page<Project>> findAll(Pageable pageable){
+		
 		return new ResponseEntity<>(projectService.findAll(pageable), HttpStatus.OK);
 	}
 	
