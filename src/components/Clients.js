@@ -3,6 +3,7 @@ import ClientService from '../services/ClientService';
 import TeamMemberService from '../services/TeamMemberService';
 import axios from 'axios'
 import Pagination from './Pagination';
+import { Footer } from './Footer';
 
 export const Clients = () => {
 
@@ -13,8 +14,9 @@ export const Clients = () => {
 	const [paginatedClients, setPaginatedClients] = useState([])
 	const [clientsPerPage, setClientsPerPage] = useState(2);
 	const [display, setDisplay] = useState(false);
+	const [client, setClient] = useState({});
+	const [clientZaBrisanje, setClientZaBrisanje] = useState({});
 
-    
     useEffect(() => {
 
 		console.log(pageNumber);
@@ -65,18 +67,16 @@ export const Clients = () => {
 		console.log('save')
 	}
 
-	function deleteTeamMember(id){
-		console.log('delete')
+	function deleteClient(id){
+		ClientService.deleteClient(id).then(response => {
+			ClientService.getClientById(id).then(response => {
+				setClientZaBrisanje(response.data)
+			})
+			paginatedClients.pop(clientZaBrisanje);
+			paginatedClients.filter(paginatedClients => client.id !== id)
+			console.log('delete')
+		});
 
-	}
-
-	function resetPassword(id){
-		console.log('delete')
-
-	}
-
-	function toggleModal(){
-		setDisplay(true)
 	}
 
 	const paginate = (pageNumber) => {
@@ -84,7 +84,7 @@ export const Clients = () => {
 		axios.get("http://localhost:8080/api/clients/paginate?page="+currentPage+"&size=2")
 		.then(response => {
 			setPaginatedClients(response.data.content);
-			})
+		})
 	}
 	
 	console.log(currentPage);
@@ -235,53 +235,36 @@ export const Clients = () => {
 							<div class="details">
 								<ul class="form">
 									<li>
-										<label>Name:</label>
+										<label>Client Name:</label>
 										<input type="text" value={client.clientName} class="in-text" />
 									</li>								
 									<li>
-										<label>Hours per week:</label>
+										<label>Zip-Postal code:</label>
 										<input type="text" value={client.address} class="in-text" />
 									</li>
+									
 								</ul>
 								<ul class="form">
 									<li>
-										<label>Username:</label>
+										<label>Adress:</label>
 										<input type="text" value={client.city} class="in-text" />
 									</li>
 									<li>
-										<label>Email:</label>
+										<label>Country:</label>
 										<input type="text" value={client.zipCode} class="in-text" />
 									</li>								
 								</ul>
 								<ul class="form last">
-									<li>
-										<label>Status:</label>
-										<span class="radio">
-											<label for="inactive">Inactive:</label>
-											<input type="radio" value="1" name="status" id="inactive" />
-										</span>
-										<span class="radio">
-											<label for="active">Active:</label>
-											<input type="radio" value="2" name="status" id="active" />
-										</span>
+								<li>
+										<label>City:</label>
+										<input type="text" value={client.city} class="in-text" />
 									</li>
-									<li>
-										<label>Role:</label>
-										<span class="radio">
-											<label for="admin">Admin:</label>
-											<input type="radio" value="1" name="status" id="admin" />
-										</span>
-										<span class="radio">
-											<label for="worker">Worker:</label>
-											<input type="radio" value="2" name="status" id="worker" />
-										</span>
-									</li>
+									
 								</ul>
 								<div class="buttons">
 									<div class="inner">
 										<a href="javascript:;" onClick={ () => saveTeamMember(client.id)} class="btn green">Save</a>
-										<a href="#" onClick={ () => deleteTeamMember(client.id)} class="btn green" class="btn red">Delete</a>
-										<a href="javascript:;" onClick={ () => resetPassword(client.id)} class="btn green" class="btn orange">Reset Password</a>
+										<a href="#" onClick={ () => deleteClient(client.id)} class="btn green" class="btn red">Delete</a>
 									</div>
 								</div>
 							</div>
@@ -293,6 +276,7 @@ export const Clients = () => {
 				</div>
 				<div class="pagination">
 					<ul>
+						
 						<li>
 							<button onClick={() => previousPage()} style={{marginTop:'15px', marginRight:'5px'}}>Pervious</button>
 						</li>
@@ -308,6 +292,7 @@ export const Clients = () => {
 				</div>
 			</section>			
 		</div>
+		
         </div>
     )
 }

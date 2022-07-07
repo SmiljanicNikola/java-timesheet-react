@@ -9,7 +9,7 @@ class TeamMemberService {
     }
 
     getTeamMembersPaginate(){
-        return axios.get(TeamMembers_REST_API_URL+"pagination");
+        return axios.get(TeamMembers_REST_API_URL+"/pagination");
     }
 }
 

@@ -12,6 +12,7 @@ export const Projects = () => {
 	const [paginatedProjects, setPaginatedProjects] = useState([])
 	const [projectsPerPage, setprojectsPerPage] = useState(2);
 	const [display, setDisplay] = useState(false);
+	const [project, setProject] = useState({})
 
     
     useEffect(() => {
@@ -20,20 +21,44 @@ export const Projects = () => {
 		const fetchPaginatedProjects = async () =>{
 		axios.get("http://localhost:8080/api/projects/paginate?page="+currentPage+"&size=2")
 		.then(response => {
-			setPaginatedProjects(response.data.content);
+			setPaginatedProjects(response.data.content.filter(project => project.deleted == false));
 			setLoading(false);
 			})
 		};
+
+		
 
 		fetchPaginatedProjects();
         
 		axios.get("http://localhost:8080/api/projects/paginate")
         .then(response => {
-			setProjects(response.data.content);
+			setProjects(response.data.content.filter(project => project.deleted == false));
 			setLoading(false);
         })
         
 	}, []);
+
+	function updateProject(id){
+		ProjectService.getProjectById(id).then(response => {
+			setProject(response.data)
+			console.log(project);
+		})
+	}
+
+	function deleteProject(id){
+		ProjectService.deleteProject(id).then(response => {
+			paginatedProjects.filter(paginatedProjects => project.id !== id)
+			console.log('delete')
+		});
+	}
+
+	function HandleProjectName(e){
+		setProject({
+			...project,
+			[e.target.projectName]: e.target.value
+		})
+	}
+		
 	
 	const nextPage = async () => {
 
@@ -43,7 +68,7 @@ export const Projects = () => {
 		
 		axios.get("http://localhost:8080/api/projects/paginate?page="+nextPage+"&size=2")
 		.then(response => {
-			setPaginatedProjects(response.data.content);
+			setPaginatedProjects(response.data.content.filter(project => project.deleted == false));
 		})
 	}	
 
@@ -55,7 +80,7 @@ export const Projects = () => {
 		
 		axios.get("http://localhost:8080/api/projects/paginate?page="+previousPage+"&size=2")
 		.then(response => {
-			setPaginatedProjects(response.data.content);
+			setPaginatedProjects(response.data.content.filter(project => project.deleted == false));
 		})
 	}	
 
@@ -82,7 +107,7 @@ export const Projects = () => {
 		setCurrentPage(pageNumber);
 		axios.get("http://localhost:8080/api/projects/paginate?page="+currentPage+"&size=2")
 		.then(response => {
-			setPaginatedProjects(response.data.content);
+			setPaginatedProjects(response.data.content.filter(project => project.deleted == false));
 		})
 	}
 	
@@ -120,7 +145,7 @@ export const Projects = () => {
 							<ul class="form">
 								<li>
 									<label>Project Name:</label>
-									<input type="text" value={project.projectName} class="in-text" />
+									<input type="text" onChange={HandleProjectName} value={project.projectName}  class="in-text" />
 								</li>
 								<li>
 									<label>Lead:</label>
@@ -166,8 +191,8 @@ export const Projects = () => {
 							</ul>
 							<div class="buttons">
 								<div class="inner">
-									<a href="javascript:;" class="btn green">Save</a>
-									<a href="javascript:;" class="btn red">Delete</a>
+									<a  href="javascript:;" class="btn green" onClick={() => updateProject(project.id)}>Save</a>
+									<a class="btn red" onClick={() => deleteProject(project.id)}>Delete</a>
 								</div>
 							</div>
 						</div>

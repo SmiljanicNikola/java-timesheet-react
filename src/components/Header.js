@@ -37,7 +37,7 @@ export const Header = () => {
 				<nav>
 					<ul class="menu">
 						<li>
-							<a href="index" class="btn nav">TimeSheet</a>
+							<a href="timesheet" class="btn nav">TimeSheet</a>
 						</li>
 						<li>
 							<a href="clients" class="btn nav">Clients</a>

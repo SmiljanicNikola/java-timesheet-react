@@ -1,17 +1,40 @@
 import React, { useState, useEffect } from 'react'
 import TeamMemberService from '../services/TeamMemberService';
 import { NewMemberForm } from './NewMemberForm';
+import Pagination from './Pagination';
 import {useNavigate} from 'react-router-dom'
+import axios from 'axios';
+
 
 export const TeamMembers = () => {
 
     const [teamMembers, setTeamMembers] = useState([]);
     const navigate = useNavigate();
-    const [display, setDisplay] = useState(false);
+	const [display, setDisplay] = useState(false);
+	const [currentPage, setCurrentPage] = useState(1);
+	const [paginatedTeamMembers, setPaginatedTeamMembers] = useState([])
+	const [teamMembersPerPage, setTeamMembersPerPage] = useState(2);
+	const [pageNumber, setPageNumber] = useState(0);
+
 
 
     useEffect(() => {
-        TeamMemberService.getTeamMembers().then((response ) => setTeamMembers(response.data))
+
+        console.log(pageNumber);
+		const fetchPaginatedTeamMembers = async () =>{
+		axios.get("http://localhost:8080/api/teamMembers/paginate?page="+currentPage+"&size=2")
+		.then(response => {
+			setPaginatedTeamMembers(response.data.content);
+			})
+		};
+
+		fetchPaginatedTeamMembers();
+        
+		axios.get("http://localhost:8080/api/teamMembers/paginate")
+        .then(response => {
+			setTeamMembers(response.data.content);
+		})
+		
     }, []);
 
     function saveTeamMember(id){
@@ -30,8 +53,39 @@ export const TeamMembers = () => {
 
     function toggleModal(){
         setDisplay(true)
-    }
-    
+	}
+	
+	const nextPage = async () => {
+
+		console.log('NEXT')
+		let nextPage = currentPage + 1;
+		console.log(nextPage)
+		
+		axios.get("http://localhost:8080/api/teamMembers/paginate?page="+nextPage+"&size=2")
+		.then(response => {
+			setPaginatedTeamMembers(response.data.content);
+			})
+	}	
+
+	const previousPage = async () => {
+
+		console.log('PERVIOUS')
+		let previousPage = currentPage - 1;
+		console.log(previousPage)
+		
+		axios.get("http://localhost:8080/api/teamMembers/paginate?page="+previousPage+"&size=2")
+		.then(response => {
+			setPaginatedTeamMembers(response.data.content);
+			})
+	}	
+
+    const paginate = (pageNumber) => {
+		setCurrentPage(pageNumber);
+		axios.get("http://localhost:8080/api/teamMembers/paginate?page="+currentPage+"&size=2")
+		.then(response => {
+			setPaginatedTeamMembers(response.data.content);
+			})
+	}
 
     return (
         <div>
@@ -112,12 +166,7 @@ export const TeamMembers = () => {
 							</div>
 						</div>
 					</div>
-
-              <td>
-              {/*<button className="btn btn-success" onClick={ () => skiniPDGradjanina(gradjanin.korisnickoIme)}>Preuzmi PDF Zaposlenja</button>*/}
-              </td>
             </tr> 
-            
           ))}
         
 
@@ -125,17 +174,16 @@ export const TeamMembers = () => {
 				<div class="pagination">
 					<ul>
 						<li>
-							<a href="javascript:;">1</a>
+							<button onClick={() => previousPage()} style={{marginTop:'15px', marginRight:'5px'}}>Pervious</button>
 						</li>
 						<li>
-							<a href="javascript:;">2</a>
+							<Pagination
+								clientsPerPage={teamMembersPerPage}
+								totalClients={teamMembers.length}
+								paginate={paginate}
+							/>
 						</li>
-						<li>
-							<a href="javascript:;">3</a>
-						</li>
-						<li class="last">
-							<a href="javascript:;">Next</a>
-						</li>
+						<li><button onClick={() => nextPage()} style={{marginTop:'15px',  marginLeft:'5px'}}>Next</button></li>
 					</ul>
 				</div>
 			</section>			
