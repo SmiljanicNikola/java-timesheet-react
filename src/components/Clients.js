@@ -2,36 +2,96 @@ import React, { useState, useEffect } from 'react'
 import ClientService from '../services/ClientService';
 import TeamMemberService from '../services/TeamMemberService';
 import axios from 'axios'
+import Pagination from './Pagination';
 
 export const Clients = () => {
-    const [clients, setClients] = useState([]);
-    const [pageNumber, setPageNumber] = useState(0);
 
-    const pageSize = 2;
+	const [clients, setClients] = useState([]);
+	const [loading, setLoading] = useState(false);
+	const [pageNumber, setPageNumber] = useState(0);
+	const [currentPage, setCurrentPage] = useState(1);
+	const [paginatedClients, setPaginatedClients] = useState([])
+	const [clientsPerPage, setClientsPerPage] = useState(2);
+	const [display, setDisplay] = useState(false);
 
     
     useEffect(() => {
-        /*ClientService.getClientsPaginate().then((response) => setClients(response.data))
-        console.log(clients)*/
-        console.log(pageNumber);
-        axios.get("http://localhost:8080/api/clients/paginate?page="+pageNumber+"&size=1")
+
+		console.log(pageNumber);
+		const fetchPaginatedClients = async () =>{
+		axios.get("http://localhost:8080/api/clients/paginate?page="+currentPage+"&size=2")
+		.then(response => {
+			setPaginatedClients(response.data.content);
+			setLoading(false);
+			})
+		};
+
+		fetchPaginatedClients();
+        
+		axios.get("http://localhost:8080/api/clients/paginate")
         .then(response => {
-            setClients(response.data.content);
-            console.log(response.data.content)
+			setClients(response.data.content);
+			setLoading(false);
         })
         
-        
-    }, []);
+	}, []);
+	
+	const nextPage = async () => {
 
-    function reRender(){
-        axios.get("http://localhost:8080/api/clients/paginate?page="+pageNumber+"&size=1")
-        .then(response => {
-            setClients(response.data.content);
-            console.log(response.data.content)
-        })
-    }
+		console.log('NEXT')
+		let nextPage = currentPage + 1;
+		console.log(nextPage)
+		
+		axios.get("http://localhost:8080/api/clients/paginate?page="+nextPage+"&size=2")
+		.then(response => {
+			setPaginatedClients(response.data.content);
+			})
+	}	
+
+	const previousPage = async () => {
+
+		console.log('PERVIOUS')
+		let previousPage = currentPage - 1;
+		console.log(previousPage)
+		
+		axios.get("http://localhost:8080/api/clients/paginate?page="+previousPage+"&size=2")
+		.then(response => {
+			setPaginatedClients(response.data.content);
+			})
+	}	
 
 
+	function saveTeamMember(id){
+		console.log('save')
+	}
+
+	function deleteTeamMember(id){
+		console.log('delete')
+
+	}
+
+	function resetPassword(id){
+		console.log('delete')
+
+	}
+
+	function toggleModal(){
+		setDisplay(true)
+	}
+
+	const paginate = (pageNumber) => {
+		setCurrentPage(pageNumber);
+		axios.get("http://localhost:8080/api/clients/paginate?page="+currentPage+"&size=2")
+		.then(response => {
+			setPaginatedClients(response.data.content);
+			})
+	}
+	
+	console.log(currentPage);
+
+	const indexOfLastClient = currentPage * clientsPerPage;
+	const indexOfFirstClient = indexOfLastClient - clientsPerPage;
+	const currentClients = clients.slice(indexOfFirstClient, indexOfLastClient); 
 
     return (
         <div>
@@ -161,40 +221,91 @@ export const Clients = () => {
 					</ul>
 				</div>
 				<div class="accordion-wrap clients">
-                <h3>Clients</h3>
-      
-          {clients.map((client) => (
-            <tr key={client.id}>
                 
-              <input value={client.clientName}></input>
-              <input value={client.name}></input>
-              <input value={client.name}></input>
-              <input value={client.name}></input>
+					
+                {paginatedClients.map((client) => (
+                <tr key={client.id}>
 
-              <td>
-              {/*<button className="btn btn-success" onClick={ () => skiniPDGradjanina(gradjanin.korisnickoIme)}>Preuzmi PDF Zaposlenja</button>*/}
-              </td>
-            </tr> 
-            
-          ))}
+
+					<div class="item">
+						<div class="heading">
+							<span>{client.clientName}</span>
+							<i>+</i>
+						</div>
+							<div class="details">
+								<ul class="form">
+									<li>
+										<label>Name:</label>
+										<input type="text" value={client.clientName} class="in-text" />
+									</li>								
+									<li>
+										<label>Hours per week:</label>
+										<input type="text" value={client.address} class="in-text" />
+									</li>
+								</ul>
+								<ul class="form">
+									<li>
+										<label>Username:</label>
+										<input type="text" value={client.city} class="in-text" />
+									</li>
+									<li>
+										<label>Email:</label>
+										<input type="text" value={client.zipCode} class="in-text" />
+									</li>								
+								</ul>
+								<ul class="form last">
+									<li>
+										<label>Status:</label>
+										<span class="radio">
+											<label for="inactive">Inactive:</label>
+											<input type="radio" value="1" name="status" id="inactive" />
+										</span>
+										<span class="radio">
+											<label for="active">Active:</label>
+											<input type="radio" value="2" name="status" id="active" />
+										</span>
+									</li>
+									<li>
+										<label>Role:</label>
+										<span class="radio">
+											<label for="admin">Admin:</label>
+											<input type="radio" value="1" name="status" id="admin" />
+										</span>
+										<span class="radio">
+											<label for="worker">Worker:</label>
+											<input type="radio" value="2" name="status" id="worker" />
+										</span>
+									</li>
+								</ul>
+								<div class="buttons">
+									<div class="inner">
+										<a href="javascript:;" onClick={ () => saveTeamMember(client.id)} class="btn green">Save</a>
+										<a href="#" onClick={ () => deleteTeamMember(client.id)} class="btn green" class="btn red">Delete</a>
+										<a href="javascript:;" onClick={ () => resetPassword(client.id)} class="btn green" class="btn orange">Reset Password</a>
+									</div>
+								</div>
+							</div>
+					</div>
+            	</tr> 
+          		))}
+        
       
 				</div>
-				{/*<div class="pagination">
+				<div class="pagination">
 					<ul>
 						<li>
-							<a href="#" onClick={ () => setPageNumber(1)}>1</a>
+							<button onClick={() => previousPage()} style={{marginTop:'15px', marginRight:'5px'}}>Pervious</button>
 						</li>
 						<li>
-							<a href="#" onClick={ () => setPageNumber(2)}  >2</a>
+							<Pagination
+								clientsPerPage={clientsPerPage}
+								totalClients={clients.length}
+								paginate={paginate}
+							/>
 						</li>
-						<li>
-							<a href="javascript:;">3</a>
-						</li>
-						<li class="last">
-							<a onClick={ () => setPageNumber(pageNumber+1)}>Next</a>
-						</li>
+						<li><button onClick={() => nextPage()} style={{marginTop:'15px',  marginLeft:'5px'}}>Next</button></li>
 					</ul>
-          </div>*/}
+				</div>
 			</section>			
 		</div>
         </div>
