@@ -25,8 +25,8 @@ public class TimeSheetActivity {
 	private String description;
 	
 	@ManyToOne
-	@JoinColumn(name="client_id", referencedColumnName="client_id")
-	private Client client;
+	@JoinColumn(name="team_member_id", referencedColumnName="team_member_id")
+	private TeamMember teamMember;
 	
 	@ManyToOne
 	@JoinColumn(name="project_id", referencedColumnName="project_id")
@@ -60,13 +60,14 @@ public class TimeSheetActivity {
 	public void setDescription(String description) {
 		this.description = description;
 	}
+		
 
-	public Client getClient() {
-		return client;
+	public TeamMember getTeamMember() {
+		return teamMember;
 	}
 
-	public void setClient(Client client) {
-		this.client = client;
+	public void setTeamMember(TeamMember teamMember) {
+		this.teamMember = teamMember;
 	}
 
 	public Project getProject() {
@@ -109,24 +110,13 @@ public class TimeSheetActivity {
 		this.date = date;
 	}
 
-	public TimeSheetActivity(Integer id, String description, Client client, Project project, Category category,
+	
+	public TimeSheetActivity(Integer id, String description, TeamMember teamMember, Project project, Category category,
 			Integer time, Integer overtime, LocalDate date) {
 		super();
 		this.id = id;
 		this.description = description;
-		this.client = client;
-		this.project = project;
-		this.category = category;
-		this.time = time;
-		this.overtime = overtime;
-		this.date = date;
-	}
-
-	public TimeSheetActivity(String description, Client client, Project project, Category category, Integer time,
-			Integer overtime, LocalDate date) {
-		super();
-		this.description = description;
-		this.client = client;
+		this.teamMember = teamMember;
 		this.project = project;
 		this.category = category;
 		this.time = time;
@@ -134,16 +124,24 @@ public class TimeSheetActivity {
 		this.date = date;
 	}
 	
+	
+
+	public TimeSheetActivity(String description, TeamMember teamMember, Project project, Category category,
+			Integer time, Integer overtime, LocalDate date) {
+		super();
+		this.description = description;
+		this.teamMember = teamMember;
+		this.project = project;
+		this.category = category;
+		this.time = time;
+		this.overtime = overtime;
+		this.date = date;
+	}
+
 	public TimeSheetActivity() {
 		
 	}
 
-	@Override
-	public String toString() {
-		return "TimeSheetActivity [id=" + id + ", description=" + description + ", client=" + client + ", project="
-				+ project + ", category=" + category + ", time=" + time + ", overtime=" + overtime + ", date=" + date
-				+ "]";
-	}
 	
 	
 

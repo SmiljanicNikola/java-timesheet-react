@@ -18,7 +18,7 @@ public interface ClientService {
 	
 	void remove(Integer id);
 	
-	Page<Client> findAll(Pageable pageable);
+	Page<Client> findAllClientsPagination(Pageable pageable);
 
 	
 }

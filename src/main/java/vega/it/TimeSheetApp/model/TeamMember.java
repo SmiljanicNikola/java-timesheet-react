@@ -131,6 +131,10 @@ public class TeamMember {
 	public void setRole(Roles role) {
 		this.role = role;
 	}
+	
+	@JsonIgnore
+	@OneToMany(mappedBy="teamMember")
+	private List<TimeSheetActivity> timeSheetActivities;
 
 	public TeamMember(String firstname, String lastname, String username, String password, Integer hoursPerWeek,
 			String email, boolean blocked, Roles role) {
@@ -180,6 +184,24 @@ public class TeamMember {
 		this.email = email;
 		this.blocked = blocked;
 		this.role = role;
+	}
+	
+	
+
+	public List<Project> getProjects() {
+		return projects;
+	}
+
+	public void setProjects(List<Project> projects) {
+		this.projects = projects;
+	}
+
+	public List<TimeSheetActivity> getTimeSheetActivities() {
+		return timeSheetActivities;
+	}
+
+	public void setTimeSheetActivities(List<TimeSheetActivity> timeSheetActivities) {
+		this.timeSheetActivities = timeSheetActivities;
 	}
 
 	@Override

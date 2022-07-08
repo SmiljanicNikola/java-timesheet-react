@@ -52,11 +52,25 @@ public class ProjectController {
 		return new ResponseEntity<>(projectsDTO, HttpStatus.OK);
 	}
 	
-	@GetMapping("/paginate")
+	/*@GetMapping("/paginate")
 	public ResponseEntity<Page<Project>> findAll(Pageable pageable){
 		
 		return new ResponseEntity<>(projectService.findAll(pageable), HttpStatus.OK);
-	}
+	}*/
+	
+	@GetMapping("/paginate")
+	public ResponseEntity<Page<Project>> findAll(Pageable pageable){
+		
+		return new ResponseEntity<>(projectService.findAllProjectsPaginate(pageable), HttpStatus.OK);	}
+	
+	
+	
+	/*@GetMapping("/paginate/real")
+	public ResponseEntity<Page<Project>> findAllProjectsPagination(Pageable pageable){
+		
+		return new ResponseEntity<>(projectService.findAllProjectPaginate(pageable), HttpStatus.OK);
+	}*/
+	
 	
 	@GetMapping(value="/{id}")
 	public ResponseEntity<ProjectDTO> getProjectById(@PathVariable("id") Integer id){

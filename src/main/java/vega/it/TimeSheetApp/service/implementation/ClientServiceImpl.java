@@ -41,8 +41,8 @@ public class ClientServiceImpl implements ClientService {
 	}
 
 	@Override
-	public Page<Client> findAll(Pageable pageable) {
-		return clientRepository.findAll(pageable);
+	public Page<Client> findAllClientsPagination(Pageable pageable) {
+		return clientRepository.findAllClientsWithPagination(pageable);
 
 	}
 

@@ -51,6 +51,33 @@ public class TimeSheetActivityController {
 
 	}
 	
+	@GetMapping(value="/projectId/{projectId}")
+	public ResponseEntity<List<TimeSheetActivityDTO>> getTimeSheetActivityByProjectId(@PathVariable("projectId") Integer projectId){
+		
+		List<TimeSheetActivityDTO> timesheetActivitiesDTO = timeSheetActivityService.findAllByProjectId(projectId)
+				.stream()
+				.map(tsa -> new TimeSheetActivityDTO(tsa))
+				.toList();
+		
+		return new ResponseEntity<>(timesheetActivitiesDTO, HttpStatus.OK);
+
+	}
+	
+	@GetMapping(value="/projectId/{projectId}/teamMemberId/{teamMemberId}/categoryId/{categoryId}")
+	public ResponseEntity<List<TimeSheetActivityDTO>> getTimeSheetActivityByThreeParameters(
+			@PathVariable("projectId") Integer projectId, 
+			@PathVariable("teamMemberId") Integer teamMemberId, 
+			@PathVariable("categoryId") Integer categoryId){
+		
+		List<TimeSheetActivityDTO> timesheetActivitiesDTO = timeSheetActivityService.findAllByThreeParameters(projectId, teamMemberId, categoryId)
+				.stream()
+				.map(tsa -> new TimeSheetActivityDTO(tsa))
+				.toList();
+		
+		return new ResponseEntity<>(timesheetActivitiesDTO, HttpStatus.OK);
+
+	}
+	
 	@DeleteMapping(value = "/{id}")
     public ResponseEntity<?> delete(@PathVariable("id") Integer id) {
 		

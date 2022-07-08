@@ -65,19 +65,22 @@ public class TeamMemberController {
 	@DeleteMapping(value = "/{id}")
     public ResponseEntity<?> delete(@PathVariable("id") Integer id) {
 		
-		TeamMember teamMember = teamMemberService.findById(id);
-		
+        TeamMember teamMember = teamMemberService.findById(id);
+        
         if (teamMember == null) {
         	return new ResponseEntity<>(HttpStatus.NOT_FOUND);
         } 
         
-        teamMemberService.remove(id);
+        teamMember.setDeleted(true);
+    	teamMemberService.save(teamMember);
+    	
         return new ResponseEntity<>(HttpStatus.OK);
-    }
+        
+	}
 	
 	@GetMapping("/paginate")
 	public ResponseEntity<Page<TeamMember>> findAll(Pageable pageable){
-		return new ResponseEntity<>(teamMemberService.findAll(pageable), HttpStatus.OK);
+		return new ResponseEntity<>(teamMemberService.findAllTeamMembersPaginate(pageable), HttpStatus.OK);
 	}
 	
 	@PostMapping()

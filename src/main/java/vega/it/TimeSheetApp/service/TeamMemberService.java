@@ -18,6 +18,6 @@ public interface TeamMemberService {
 	
 	void remove(Integer id);
 
-	Page<TeamMember> findAll(Pageable pageable);
+	Page<TeamMember> findAllTeamMembersPaginate(Pageable pageable);
 	
 }

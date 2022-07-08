@@ -52,7 +52,7 @@ public class ClientController {
 	
 	@GetMapping("/paginate")
 	public ResponseEntity<Page<Client>> findAll(Pageable pageable){
-		return new ResponseEntity<>(clientService.findAll(pageable), HttpStatus.OK);
+		return new ResponseEntity<>(clientService.findAllClientsPagination(pageable), HttpStatus.OK);
 	}
 	
 	@GetMapping(value="/{id}")

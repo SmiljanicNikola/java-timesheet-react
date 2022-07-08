@@ -14,6 +14,10 @@ public interface TimeSheetActivityService {
 	TimeSheetActivity save(TimeSheetActivity timeSheetActivity);
 	
 	void remove(Integer id);
+	
+	List<TimeSheetActivity> findAllByProjectId(Integer projectId);
+
+	List<TimeSheetActivity> findAllByThreeParameters(Integer projectId, Integer teamMemberId, Integer categoryId);
 
 	
 }

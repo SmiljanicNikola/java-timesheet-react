@@ -12,7 +12,7 @@ public class TimeSheetActivityDTO {
 	
 	private String description;
 	
-	private ClientDTO client;
+	private TeamMemberDTO teamMember;
 	
 	private ProjectDTO project;
 	
@@ -29,15 +29,19 @@ public class TimeSheetActivityDTO {
 	}
 	
 	public TimeSheetActivityDTO(TimeSheetActivity timeSheetActivity) {
-		this(timeSheetActivity.getId(), timeSheetActivity.getDescription(), new ClientDTO(timeSheetActivity.getClient()), new ProjectDTO(timeSheetActivity.getProject()), new CategoryDTO(timeSheetActivity.getCategory()), timeSheetActivity.getTime(), timeSheetActivity.getOvertime(), timeSheetActivity.getDate());
+		this(timeSheetActivity.getId(), timeSheetActivity.getDescription(), new TeamMemberDTO(timeSheetActivity.getTeamMember()), new ProjectDTO(timeSheetActivity.getProject()), new CategoryDTO(timeSheetActivity.getCategory()), timeSheetActivity.getTime(), timeSheetActivity.getOvertime(), timeSheetActivity.getDate());
 	}
 
-	public TimeSheetActivityDTO(Integer id, String description, ClientDTO client, ProjectDTO project,
+	
+
+
+
+	public TimeSheetActivityDTO(Integer id, String description, TeamMemberDTO teamMember, ProjectDTO project,
 			CategoryDTO category, Integer time, Integer overtime, LocalDate date) {
 		super();
 		this.id = id;
 		this.description = description;
-		this.client = client;
+		this.teamMember = teamMember;
 		this.project = project;
 		this.category = category;
 		this.time = time;
@@ -45,11 +49,11 @@ public class TimeSheetActivityDTO {
 		this.date = date;
 	}
 
-	public TimeSheetActivityDTO(String description, ClientDTO client, ProjectDTO project, CategoryDTO category,
+	public TimeSheetActivityDTO(String description, TeamMemberDTO teamMember, ProjectDTO project, CategoryDTO category,
 			Integer time, Integer overtime, LocalDate date) {
 		super();
 		this.description = description;
-		this.client = client;
+		this.teamMember = teamMember;
 		this.project = project;
 		this.category = category;
 		this.time = time;
@@ -73,12 +77,14 @@ public class TimeSheetActivityDTO {
 		this.description = description;
 	}
 
-	public ClientDTO getClient() {
-		return client;
+	
+
+	public TeamMemberDTO getTeamMember() {
+		return teamMember;
 	}
 
-	public void setClient(ClientDTO client) {
-		this.client = client;
+	public void setTeamMember(TeamMemberDTO teamMember) {
+		this.teamMember = teamMember;
 	}
 
 	public ProjectDTO getProject() {

@@ -1,6 +1,7 @@
 package vega.it.TimeSheetApp.service.implementation;
 
 import java.util.List;
+import java.util.stream.Collectors;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Page;
@@ -19,7 +20,7 @@ public class TeamMemberServiceImpl implements TeamMemberService {
 	
 	@Override
 	public List<TeamMember> findAll() {
-		return teamMemberRepository.findAll();
+		return teamMemberRepository.findAll().stream().filter(teamMember -> teamMember.getDeleted() == false).collect(Collectors.toList());
 	}
 
 	@Override
@@ -40,9 +41,10 @@ public class TeamMemberServiceImpl implements TeamMemberService {
 	}
 
 	@Override
-	public Page<TeamMember> findAll(Pageable pageable) {
-		return teamMemberRepository.findAll(pageable);
-
+	public Page<TeamMember> findAllTeamMembersPaginate(Pageable pageable) {
+		return teamMemberRepository.findAllTeamMembersWithPagination(pageable);
 	}
+
+	
 
 }

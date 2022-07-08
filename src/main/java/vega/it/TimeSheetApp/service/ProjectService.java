@@ -20,5 +20,8 @@ public interface ProjectService {
 	void remove(Integer id);
 	
 	Page<Project> findAll(Pageable pageable);
+	
+	Page<Project> findAllProjectsPaginate(Pageable pageable);
+
 
 }

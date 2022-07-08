@@ -47,9 +47,9 @@ public class Client {
 	@OneToMany(mappedBy="client")
 	private List<Project> projects;
 	
-	@JsonIgnore
+	/*@JsonIgnore
 	@OneToMany(mappedBy="client")
-	private List<TimeSheetActivity> timeSheetActivities;
+	private List<TimeSheetActivity> timeSheetActivities;*/
 
 	public Boolean getDeleted() {
 		return deleted;
@@ -167,13 +167,13 @@ public class Client {
 				+ ", zipCode=" + zipCode + ", country=" + country + ", projects=" + projects + "]";
 	}
 
-	public List<TimeSheetActivity> getTimeSheetActivities() {
+	/*public List<TimeSheetActivity> getTimeSheetActivities() {
 		return timeSheetActivities;
 	}
 
 	public void setTimeSheetActivities(List<TimeSheetActivity> timeSheetActivities) {
 		this.timeSheetActivities = timeSheetActivities;
-	}
+	}*/
 	
 	
 	
