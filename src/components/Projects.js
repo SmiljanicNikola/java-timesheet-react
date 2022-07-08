@@ -2,11 +2,12 @@ import React, {useState, useEffect} from 'react'
 import ProjectService from '../services/ProjectService';
 import axios from 'axios'
 import Pagination from './Pagination';
+import { NewMemberForm } from './NewMemberForm';
+import { NewProjectForm } from './NewProjectForm';
 
 export const Projects = () => {
     
     const [projects, setProjects] = useState([]);
-	const [loading, setLoading] = useState(false);
 	const [pageNumber, setPageNumber] = useState(0);
 	const [currentPage, setCurrentPage] = useState(1);
 	const [paginatedProjects, setPaginatedProjects] = useState([])
@@ -22,18 +23,14 @@ export const Projects = () => {
 		axios.get("http://localhost:8080/api/projects/paginate?page="+currentPage+"&size=2")
 		.then(response => {
 			setPaginatedProjects(response.data.content.filter(project => project.deleted == false));
-			setLoading(false);
 			})
 		};
-
-		
 
 		fetchPaginatedProjects();
         
 		axios.get("http://localhost:8080/api/projects/paginate")
         .then(response => {
 			setProjects(response.data.content.filter(project => project.deleted == false));
-			setLoading(false);
         })
         
 	}, []);
@@ -59,7 +56,6 @@ export const Projects = () => {
 		})
 	}
 		
-	
 	const nextPage = async () => {
 
 		console.log('NEXT')
@@ -80,10 +76,9 @@ export const Projects = () => {
 		
 		axios.get("http://localhost:8080/api/projects/paginate?page="+previousPage+"&size=2")
 		.then(response => {
-			setPaginatedProjects(response.data.content.filter(project => project.deleted == false));
+			setPaginatedProjects(response.data.content.filter(project => project.deleted = false));
 		})
 	}	
-
 
 	function saveTeamMember(id){
 		console.log('save')
@@ -91,7 +86,6 @@ export const Projects = () => {
 
 	function deleteTeamMember(id){
 		console.log('delete')
-
 	}
 
 	function resetPassword(id){
@@ -123,16 +117,16 @@ export const Projects = () => {
 			<section class="content">
 				<h2><i class="ico clients"></i>Projects</h2>
 				<div class="grey-box-wrap reports">
-					<a href="#new-member" class="link new-member-popup">Create new Project</a>
+					<a onClick={() => toggleModal()} class="link new-member-popup">Create new Project</a>
 					<div class="search-page">
 						<input type="search" name="search-clients" class="in-search" />
 					</div>
 				</div>
-				
+				<NewProjectForm display={display}>
+
+				</NewProjectForm>
 			
-				<div class="accordion-wrap clients">
-                
-					
+				<div class="accordion-wrap clients">	
                 {paginatedProjects.map((project) => (
                 <tr key={project.id}>
 
@@ -150,8 +144,6 @@ export const Projects = () => {
 								<li>
 									<label>Lead:</label>
 									<select>
-										<option>Select lead</option>
-										<option>Sasa Popovic</option>
 										<option>Sladjana Miljanovic</option>
 									</select>
 								</li>
@@ -201,7 +193,6 @@ export const Projects = () => {
             	</tr> 
           		))}
         
-    
 				</div>
 				<div class="pagination">
 					<ul>

@@ -8,9 +8,9 @@ export const TimeSheet = () => {
 				<h2><i class="ico timesheet"></i>TimeSheet</h2>
 				<div class="grey-box-wrap">
 					<div class="top">
-						<a href="javascript:;" class="prev"><i class="zmdi zmdi-chevron-left"></i>previous month</a>
+						<a class="prev"><i class="zmdi zmdi-chevron-left"></i>previous month</a>
 						<span class="center">February, 2013</span>
-						<a href="javascript:;" class="next">next month<i class="zmdi zmdi-chevron-right"></i></a>
+						<a class="next">next month<i class="zmdi zmdi-chevron-right"></i></a>
 					</div>
 					<div class="bottom">
 						

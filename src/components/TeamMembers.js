@@ -2,20 +2,17 @@ import React, { useState, useEffect } from 'react'
 import TeamMemberService from '../services/TeamMemberService';
 import { NewMemberForm } from './NewMemberForm';
 import Pagination from './Pagination';
-import {useNavigate} from 'react-router-dom'
 import axios from 'axios';
 
 
 export const TeamMembers = () => {
 
     const [teamMembers, setTeamMembers] = useState([]);
-    const navigate = useNavigate();
 	const [display, setDisplay] = useState(false);
 	const [currentPage, setCurrentPage] = useState(1);
 	const [paginatedTeamMembers, setPaginatedTeamMembers] = useState([])
 	const [teamMembersPerPage, setTeamMembersPerPage] = useState(2);
 	const [pageNumber, setPageNumber] = useState(0);
-
 
 
     useEffect(() => {
@@ -42,7 +39,9 @@ export const TeamMembers = () => {
     }
 
     function deleteTeamMember(id){
-        console.log('delete')
+		TeamMemberService.deleteTeamMember(id);
+		paginatedTeamMembers.pop(teamMember => teamMember.id == id);
+		paginatedTeamMembers.filter(teamMember => teamMember.id !== id);
 
     }
 
@@ -87,6 +86,10 @@ export const TeamMembers = () => {
 			})
 	}
 
+	const indexOfLastClient = currentPage * teamMembersPerPage;
+	const indexOfFirstClient = indexOfLastClient - teamMembersPerPage;
+	const currentClients = teamMembers.slice(indexOfFirstClient, indexOfLastClient); 
+
     return (
         <div>
             <div class="wrapper">
@@ -103,7 +106,7 @@ export const TeamMembers = () => {
 				
 				<div class="accordion-wrap">
 					
-                {teamMembers.map((member) => (
+                {paginatedTeamMembers.map((member) => (
                     <tr key={member.id}>
 
 

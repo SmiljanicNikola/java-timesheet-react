@@ -12,6 +12,7 @@ import {BrowserRouter as Router, Routes, Route, Outlet} from 'react-router-dom';
 import { TimeSheet } from './components/TimeSheet';
 import { Login } from './components/Login';
 import { Reports } from './components/Reports';
+import { NewProjectForm } from './components/NewProjectForm';
 
 
 function App() {
@@ -28,6 +29,8 @@ function App() {
         <Route exact path='/projects' element={<Projects/>}></Route>
         <Route exact path='/categories' element={<Categories/>}></Route>
         <Route exact path='/newMemberForm' element={<NewMemberForm/>}></Route>
+        <Route exact path='/newProjectForm' element={<NewProjectForm/>}></Route>
+
         <Route exact path='/timeSheet' element={<TimeSheet/>}></Route>
         <Route exact path='/login' element={<Login/>}></Route>
         <Route exact path='/reports' element={<Reports/>}></Route>

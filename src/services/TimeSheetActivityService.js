@@ -4,12 +4,16 @@ const TIMESHEET_REST_APLI_URL = 'http://localhost:8080/api/timeSheetActivities';
 
 class TimeSheetActivityService {
 
-    getTeamMembers(){
+    getTimeSheets(){
         return axios.get(TIMESHEET_REST_APLI_URL);
     }
 
-    getTeamMembersPaginate(){
-        return axios.get(TIMESHEET_REST_APLI_URL+"/pagination");
+    getTimeSheetsByProjectId(projectId){
+        return axios.get(TIMESHEET_REST_APLI_URL+"/projectId/"+projectId);
+    }
+
+    getTimeSheetsByThreeParameters(projectId,teamMemberId, categoryId){
+        return axios.get(TIMESHEET_REST_APLI_URL+"/projectId/"+projectId+"/teamMemberId/" + teamMemberId + "/categoryId/" + categoryId);
     }
 }
 

@@ -5,6 +5,7 @@ import axios from 'axios'
 import Pagination from './Pagination';
 import { Footer } from './Footer';
 
+
 export const Clients = () => {
 
 	const [clients, setClients] = useState([]);
@@ -15,8 +16,8 @@ export const Clients = () => {
 	const [clientsPerPage, setClientsPerPage] = useState(2);
 	const [display, setDisplay] = useState(false);
 	const [client, setClient] = useState({});
-	const [clientZaBrisanje, setClientZaBrisanje] = useState({});
 
+	
     useEffect(() => {
 
 		console.log(pageNumber);
@@ -69,12 +70,8 @@ export const Clients = () => {
 
 	function deleteClient(id){
 		ClientService.deleteClient(id).then(response => {
-			ClientService.getClientById(id).then(response => {
-				setClientZaBrisanje(response.data)
-			})
-			paginatedClients.pop(clientZaBrisanje);
-			paginatedClients.filter(paginatedClients => client.id !== id)
-			console.log('delete')
+			paginatedClients.pop(client => client.id == id);
+			paginatedClients.filter(client => client.id !== id)
 		});
 
 	}
@@ -139,86 +136,7 @@ export const Clients = () => {
 					</div>
 				</div>
 				<div class="alpha">
-					<ul>
-						<li>
-							<a href="javascript:;">a</a>
-						</li>
-						<li>
-							<a href="javascript:;">b</a>
-						</li>
-						<li>
-							<a href="javascript:;">c</a>
-						</li>
-						<li>
-							<a href="javascript:;">d</a>
-						</li>
-						<li>
-							<a href="javascript:;">e</a>
-						</li>
-						<li class="active">
-							<a href="javascript:;">f</a>
-						</li>
-						<li>
-							<a href="javascript:;">g</a>
-						</li>
-						<li>
-							<a href="javascript:;">h</a>
-						</li>
-						<li>
-							<a href="javascript:;">i</a>
-						</li>
-						<li>
-							<a href="javascript:;">j</a>
-						</li>
-						<li>
-							<a href="javascript:;">k</a>
-						</li>
-						<li>
-							<a href="javascript:;">l</a>
-						</li>
-						<li class="disabled">
-							<a href="javascript:;">m</a>
-						</li>
-						<li>
-							<a href="javascript:;">n</a>
-						</li>
-						<li>
-							<a href="javascript:;">o</a>
-						</li>
-						<li>
-							<a href="javascript:;">p</a>
-						</li>
-						<li>
-							<a href="javascript:;">q</a>
-						</li>
-						<li>
-							<a href="javascript:;">r</a>
-						</li>
-						<li>
-							<a href="javascript:;">s</a>
-						</li>
-						<li>
-							<a href="javascript:;">t</a>
-						</li>
-						<li>
-							<a href="javascript:;">u</a>
-						</li>
-						<li>
-							<a href="javascript:;">v</a>
-						</li>
-						<li>
-							<a href="javascript:;">w</a>
-						</li>
-						<li>
-							<a href="javascript:;">x</a>
-						</li>
-						<li>
-							<a href="javascript:;">y</a>
-						</li>
-						<li class="last">
-							<a href="javascript:;">z</a>
-						</li>					
-					</ul>
+					
 				</div>
 				<div class="accordion-wrap clients">
                 
