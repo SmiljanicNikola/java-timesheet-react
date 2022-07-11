@@ -11,6 +11,7 @@ import org.springframework.web.bind.annotation.DeleteMapping;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 
 import vega.it.TimeSheetApp.DTO.ClientDTO;
@@ -21,7 +22,6 @@ import vega.it.TimeSheetApp.model.TimeSheetActivity;
 import vega.it.TimeSheetApp.service.TimeSheetActivityService;
 
 @RestController
-@CrossOrigin(origins="http://localhost:3000")
 @RequestMapping(value = "api/timeSheetActivities")
 public class TimeSheetActivityController {
 
@@ -63,11 +63,11 @@ public class TimeSheetActivityController {
 
 	}
 	
-	@GetMapping(value="/projectId/{projectId}/teamMemberId/{teamMemberId}/categoryId/{categoryId}")
+	@GetMapping(value="/search")
 	public ResponseEntity<List<TimeSheetActivityDTO>> getTimeSheetActivityByThreeParameters(
-			@PathVariable("projectId") Integer projectId, 
-			@PathVariable("teamMemberId") Integer teamMemberId, 
-			@PathVariable("categoryId") Integer categoryId){
+			@RequestParam(required=false) Integer projectId, 
+			@RequestParam(required=false) Integer teamMemberId, 
+			@RequestParam(required=false) Integer categoryId){
 		
 		List<TimeSheetActivityDTO> timesheetActivitiesDTO = timeSheetActivityService.findAllByThreeParameters(projectId, teamMemberId, categoryId)
 				.stream()

@@ -20,7 +20,6 @@ import vega.it.TimeSheetApp.service.CategoryService;
 import vega.it.TimeSheetApp.service.CountryService;
 
 @RestController
-@CrossOrigin(origins="http://localhost:3000")
 @RequestMapping(value = "api/countries")
 public class CountryController {
 

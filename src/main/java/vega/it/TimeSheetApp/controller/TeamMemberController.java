@@ -15,6 +15,7 @@ import org.springframework.web.bind.annotation.DeleteMapping;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
+import org.springframework.web.bind.annotation.PutMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
@@ -32,7 +33,6 @@ import vega.it.TimeSheetApp.model.TimeSheetActivity;
 import vega.it.TimeSheetApp.service.TeamMemberService;
 
 @RestController
-@CrossOrigin(origins="http://localhost:3000")
 @RequestMapping(value = "api/teamMembers")
 public class TeamMemberController {
 	
@@ -95,11 +95,31 @@ public class TeamMemberController {
         teamMember.setHoursPerWeek(teamMemberDTO.getHoursPerWeek());
         teamMember.setEmail(teamMemberDTO.getEmail());
         teamMember.setBlocked(false);
+        teamMember.setDeleted(false);
         teamMember.setRole(Roles.WORKER);
         
         teamMember = teamMemberService.save(teamMember);
         return new ResponseEntity<>(new TeamMemberDTO(teamMember), HttpStatus.CREATED);
 	        	
 	 }
+	
+	@PutMapping(value = "/{id}")
+    public ResponseEntity<TeamMemberDTO> updateTeamMember(@RequestBody TeamMemberDTO teamMemberDTO, @PathVariable("id") Integer id) {
+	
+        TeamMember teamMember = teamMemberService.findById(id);
+
+        if (teamMember == null) {
+            return new ResponseEntity<>(HttpStatus.BAD_REQUEST);
+        }
+
+        teamMember.setFirstname(teamMemberDTO.getFirstname());
+        teamMember.setHoursPerWeek(teamMemberDTO.getHoursPerWeek());
+        teamMember.setEmail(teamMemberDTO.getEmail());
+        
+
+        teamMember = teamMemberService.save(teamMember);
+
+        return new ResponseEntity<>(new TeamMemberDTO(teamMember), HttpStatus.OK);
+    }
 
 }

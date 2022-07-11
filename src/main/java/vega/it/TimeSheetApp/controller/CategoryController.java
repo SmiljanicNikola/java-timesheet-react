@@ -26,7 +26,6 @@ import vega.it.TimeSheetApp.model.Project;
 import vega.it.TimeSheetApp.service.CategoryService;
 
 @RestController
-@CrossOrigin(origins="http://localhost:3000")
 @RequestMapping(value = "api/categories")
 public class CategoryController {
 	

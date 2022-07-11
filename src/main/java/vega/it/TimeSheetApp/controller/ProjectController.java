@@ -27,7 +27,6 @@ import vega.it.TimeSheetApp.service.ProjectService;
 import vega.it.TimeSheetApp.service.TeamMemberService;
 
 @RestController
-@CrossOrigin(origins="http://localhost:3000")
 @RequestMapping(value = "api/projects")
 public class ProjectController {
 	

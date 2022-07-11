@@ -28,7 +28,6 @@ import vega.it.TimeSheetApp.service.ClientService;
 import vega.it.TimeSheetApp.service.CountryService;
 
 @RestController
-@CrossOrigin(origins="http://localhost:3000")
 @RequestMapping(value = "api/clients")
 public class ClientController {
 
