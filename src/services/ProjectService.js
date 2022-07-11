@@ -1,6 +1,7 @@
 import axios from 'axios'
+import httpClient from "../auth/JwtInterceptors"
 
-const PROJECTS_REST_API_URL = 'http://localhost:8080/api/projects';
+const PROJECTS_REST_API_URL = `${process.env.REACT_APP_BACKEND_URL}/api/projects`;
 
 class ProjectService {
 

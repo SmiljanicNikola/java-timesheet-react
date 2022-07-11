@@ -914,6 +914,15 @@ select.error {
   padding: 15px;
   background: #f7f7f7;
 }
+
+.accordion-wrap .details2 {
+  display: none;
+  float: left;
+  width: 100%;
+  padding: 15px;
+  background: #f7f7f7;
+}
+
 .accordion-wrap .details .buttons {
   width: 100%;
   float: left;

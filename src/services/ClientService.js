@@ -1,6 +1,6 @@
 import axios from 'axios'
 
-const CLIENTS_REST_API_URL = 'http://localhost:8080/api/clients';
+const CLIENTS_REST_API_URL =  `${process.env.REACT_APP_BACKEND_URL}/api/clients`;
 
 class ClientService {
 

@@ -139,7 +139,7 @@ export const Projects = () => {
 							<ul class="form">
 								<li>
 									<label>Project Name:</label>
-									<input type="text" onChange={HandleProjectName} value={project.projectName}  class="in-text" />
+									<input type="text" onChange={HandleProjectName} defaultValue={project.projectName}  class="in-text" />
 								</li>
 								<li>
 									<label>Lead:</label>
@@ -151,7 +151,7 @@ export const Projects = () => {
 							<ul class="form">
 								<li>
 									<label>Description:</label>
-									<input type="text" value={project.description} class="in-text" />
+									<input type="text" defaultValue={project.description} class="in-text" />
 								</li>
 								
 							</ul>
