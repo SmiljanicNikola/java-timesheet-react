@@ -14,6 +14,11 @@ export const TeamMembers = () => {
 	const [teamMembersPerPage, setTeamMembersPerPage] = useState(2);
 	const [pageNumber, setPageNumber] = useState(0);
 
+	const [name, setName] = useState('')
+	const [hoursPerWeek, setHoursPerWeek] = useState('')
+	const [email, setEmail] = useState('')
+	const [teamMember, setTeamMember] = useState({})
+	let updatedTeamMember = {}
 
     useEffect(() => {
 
@@ -35,7 +40,23 @@ export const TeamMembers = () => {
     }, []);
 
     function saveTeamMember(id){
-        console.log('save')
+		
+		TeamMemberService.getTeamMemberById(id).then(response => {
+			setTeamMember(response.data)
+			console.log(teamMember.data);
+
+			updatedTeamMember = {
+				id:teamMember.id,
+				firstname: name,
+				hoursPerWeek: hoursPerWeek,
+				username: response.data.username,
+				email: email
+			}
+
+			TeamMemberService.updateTeamMember(id,updatedTeamMember);
+
+			console.log(updatedTeamMember);
+		})
     }
 
     function deleteTeamMember(id){
@@ -52,6 +73,21 @@ export const TeamMembers = () => {
 
     function toggleModal(){
         setDisplay(true)
+	}
+
+	const handleNameChange = (e) =>{
+		setName(e.target.value)
+		console.log(name);
+	}
+
+	const handleHoursPerWeekChange = (e) =>{
+		setHoursPerWeek(e.target.value)
+		console.log(hoursPerWeek);
+	}
+
+	const handleEmailChange = (e) =>{
+		setEmail(e.target.value)
+		console.log(email);
 	}
 	
 	const nextPage = async () => {
@@ -103,12 +139,13 @@ export const TeamMembers = () => {
                 <NewMemberForm display={display}>
 
                 </NewMemberForm>
-				
+
+
+
 				<div class="accordion-wrap">
 					
                 {paginatedTeamMembers.map((member) => (
                     <tr key={member.id}>
-
 
               <div class="item">
 						<div class="heading">
@@ -119,21 +156,21 @@ export const TeamMembers = () => {
 							<ul class="form">
 								<li>
 									<label>Name:</label>
-									<input type="text" value={member.firstname} class="in-text" />
+									<input type="text" defaultValue={member.firstname} onChange={handleNameChange} class="in-text" />
 								</li>								
 								<li>
 									<label>Hours per week:</label>
-									<input type="text" value={member.hoursPerWeek} class="in-text" />
+									<input type="text" defaultValue={member.hoursPerWeek} onChange={handleHoursPerWeekChange} class="in-text" />
 								</li>
 							</ul>
 							<ul class="form">
 								<li>
 									<label>Username:</label>
-									<input type="text" value={member.username} class="in-text" />
+									<input type="text" defaultValue={member.username} class="in-text" />
 								</li>
 								<li>
 									<label>Email:</label>
-									<input type="text" value={member.email} class="in-text" />
+									<input type="text" defaultValue={member.email} onChange={handleEmailChange} class="in-text" />
 								</li>								
 							</ul>
 							<ul class="form last">
@@ -171,9 +208,7 @@ export const TeamMembers = () => {
 					</div>
             </tr> 
           ))}
-        
-
-				</div>
+			</div>
 				<div class="pagination">
 					<ul>
 						<li>

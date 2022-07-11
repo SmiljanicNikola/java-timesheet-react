@@ -1,6 +1,6 @@
 import axios from 'axios'
 
-const TIMESHEET_REST_APLI_URL = 'http://localhost:8080/api/timeSheetActivities';
+const TIMESHEET_REST_APLI_URL = `${process.env.REACT_APP_BACKEND_URL}/api/timeSheetActivities`;
 
 class TimeSheetActivityService {
 

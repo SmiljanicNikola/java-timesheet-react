@@ -4,6 +4,8 @@ import TeamMemberService from '../services/TeamMemberService';
 import axios from 'axios'
 import Pagination from './Pagination';
 import { Footer } from './Footer';
+import './style.css'
+import { NewClientForm } from './NewClientForm';
 
 
 export const Clients = () => {
@@ -16,6 +18,9 @@ export const Clients = () => {
 	const [clientsPerPage, setClientsPerPage] = useState(2);
 	const [display, setDisplay] = useState(false);
 	const [client, setClient] = useState({});
+	const alphabet = ["a","b","c","d","e","f","g","h","i","j","k","l","m","n","o","p","q","r","s","t","u","v","w","x","y","z"];
+
+	const [close,setClose] = useState('details');
 
 	
     useEffect(() => {
@@ -38,6 +43,20 @@ export const Clients = () => {
         })
         
 	}, []);
+
+	const changeStyle = () =>{
+		console.log('e')
+		setClose('details2')
+	}
+
+	const openCard = () =>{
+		console.log('e')
+		setClose('details')
+	}
+
+	function toggleModal(){
+		setDisplay(true)
+	}
 	
 	const nextPage = async () => {
 
@@ -65,7 +84,7 @@ export const Clients = () => {
 
 
 	function saveTeamMember(id){
-		console.log('save')
+		console.log('save');
 	}
 
 	function deleteClient(id){
@@ -73,7 +92,10 @@ export const Clients = () => {
 			paginatedClients.pop(client => client.id == id);
 			paginatedClients.filter(client => client.id !== id)
 		});
+	}
 
+	const handleLetterClick = (letter) =>{
+		
 	}
 
 	const paginate = (pageNumber) => {
@@ -96,11 +118,14 @@ export const Clients = () => {
 			<section class="content">
 				<h2><i class="ico clients"></i>Clients</h2>
 				<div class="grey-box-wrap reports">
-					<a href="#new-member" class="link new-member-popup">Create new client</a>
+					<a class="link new-member-popup">Create new client</a>
 					<div class="search-page">
 						<input type="search" name="search-clients" class="in-search" />
 					</div>
 				</div>
+				<NewClientForm display={display}>
+					
+				</NewClientForm>
 				<div class="new-member-wrap">
 					<div id="new-member" class="new-member-inner">
 						<h2>Create new client</h2>
@@ -136,46 +161,55 @@ export const Clients = () => {
 					</div>
 				</div>
 				<div class="alpha">
-					
+					<ul>	
+							{alphabet.map((letter) => (
+                				<li>
+									<a onClick={handleLetterClick()}>{letter}</a>
+								</li>
+							))}
+
+						<li class="last">
+							<a href="javascript:;">z</a>
+						</li>					
+					</ul>
 				</div>
 				<div class="accordion-wrap clients">
-                
 					
                 {paginatedClients.map((client) => (
                 <tr key={client.id}>
 
 
-					<div class="item">
-						<div class="heading">
+					<div class="item" >
+						<div class="heading" onClick={changeStyle} onDoubleClick={openCard}>
 							<span>{client.clientName}</span>
 							<i>+</i>
 						</div>
-							<div class="details">
+							<div class={close} >
 								<ul class="form">
 									<li>
 										<label>Client Name:</label>
-										<input type="text" value={client.clientName} class="in-text" />
+										<input type="text" defaultValue={client.clientName} class="in-text" />
 									</li>								
 									<li>
 										<label>Zip-Postal code:</label>
-										<input type="text" value={client.address} class="in-text" />
+										<input type="text" defaultValue={client.address} class="in-text" />
 									</li>
 									
 								</ul>
 								<ul class="form">
 									<li>
 										<label>Adress:</label>
-										<input type="text" value={client.city} class="in-text" />
+										<input type="text" defaultValue={client.city} class="in-text" />
 									</li>
 									<li>
 										<label>Country:</label>
-										<input type="text" value={client.zipCode} class="in-text" />
+										<input type="text" defaultValue={client.zipCode} class="in-text" />
 									</li>								
 								</ul>
 								<ul class="form last">
 								<li>
 										<label>City:</label>
-										<input type="text" value={client.city} class="in-text" />
+										<input type="text" defaultValue={client.city} class="in-text" />
 									</li>
 									
 								</ul>

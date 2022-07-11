@@ -1,6 +1,6 @@
 import axios from 'axios'
 
-const CATEGORIES_REST_API_URL = 'http://localhost:8080/api/categories';
+const CATEGORIES_REST_API_URL =  `${process.env.REACT_APP_BACKEND_URL}/api/categories`;
 
 class CategoryService {
 

@@ -1,6 +1,9 @@
 import axios from 'axios'
 
-const TeamMembers_REST_API_URL = 'http://localhost:8080/api/teamMembers';
+
+const TeamMembers_REST_API_URL = `${process.env.REACT_APP_BACKEND_URL}/api/teamMembers`;
+
+
 
 class TeamMemberService {
 
@@ -12,7 +15,7 @@ class TeamMemberService {
         return axios.get(TeamMembers_REST_API_URL+"/pagination");
     }
 
-    updateTeamMember(teamMember, teamMemberId){
+    updateTeamMember(teamMemberId, teamMember){
         return axios.put(TeamMembers_REST_API_URL+ '/' + teamMemberId, teamMember);
     }
 
@@ -20,11 +23,11 @@ class TeamMemberService {
         return axios.delete(TeamMembers_REST_API_URL+ "/" + teamMemberId);
     }
 
-    createProject(teamMember){
+    createTeamMember(teamMember){
         return axios.post(TeamMembers_REST_API_URL, teamMember);
     }
 
-    getProjectById(teamMemberId){
+    getTeamMemberById(teamMemberId){
         return axios.get(TeamMembers_REST_API_URL + '/' + teamMemberId);
     }
 }
