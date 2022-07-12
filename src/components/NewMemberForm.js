@@ -27,7 +27,6 @@ export const NewMemberForm = (props) => {
 
 		TeamMemberService.createTeamMember(newMember);
 
-		navigate(`teamMembers`);	
     }
 
 

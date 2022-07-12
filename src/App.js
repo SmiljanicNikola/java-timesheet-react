@@ -14,14 +14,16 @@ import { Login } from './components/Login';
 import { Reports } from './components/Reports';
 import { NewProjectForm } from './components/NewProjectForm';
 import { NewClientForm } from './components/NewClientForm';
+import { Days } from './components/Days';
+import { NewCategoryForm } from './components/NewCategoryForm';
 
 
 function App() {
   return (
     <div className="App">
       <Header />
-      <Footer />
       <Router>
+      <Footer />
 
         
       <Routes>
@@ -32,10 +34,12 @@ function App() {
         <Route exact path='/newMemberForm' element={<NewMemberForm/>}></Route>
         <Route exact path='/newProjectForm' element={<NewProjectForm/>}></Route>
         <Route exact path='/newClientForm' element={<NewClientForm/>}></Route>
+        <Route exact path='/newCategoryForm' element={<NewCategoryForm/>}></Route>
 
         <Route exact path='/timeSheet' element={<TimeSheet/>}></Route>
         <Route exact path='/login' element={<Login/>}></Route>
         <Route exact path='/reports' element={<Reports/>}></Route>
+        <Route exact path='/day' element={<Days/>}></Route>
 
 
       </Routes>

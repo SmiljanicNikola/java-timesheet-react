@@ -2,18 +2,25 @@ import React, {useState, useEffect} from 'react'
 import axios from 'axios';
 import Pagination from './Pagination';
 import CategoryService from '../services/CategoryService';
+import { NewCategoryForm } from './NewCategoryForm';
+
 
 
 export const Categories = () => {
+
     const [categories, setCategories] = useState([]);
     const[pageNumber, setPageNumber] = useState(0);
     const [currentPage, setCurrentPage] = useState(1);
     const [paginatedCategories, setPaginatedCategories] = useState([])
 	const [categoriesPerPage, setCategoriesPerPage] = useState(2);
 	const [category, setCategory] = useState({})
+	const [type, setType] = useState('')
+	const [display, setDisplay] = useState(false);
+	const alphabet = ["a","b","c","d","e","f","g","h","i","j","k","l","m","n","o","p","q","r","s","t","u","v","w","x","y","z"];
+
 
     useEffect(() => {
-
+		
 		console.log(pageNumber);
 		const fetchPaginatedCategories = async () =>{
 		axios.get("http://localhost:8080/api/categories/paginate?page="+currentPage+"&size=2")
@@ -27,9 +34,13 @@ export const Categories = () => {
 		axios.get("http://localhost:8080/api/categories/paginate")
         .then(response => {
 			setCategories(response.data.content);
-        })
-        
-    }, []);
+		})
+		
+	}, []);
+	
+	const handleLetterClick = (letter) =>{
+		
+	}
 
     const nextPage = async () => {
 
@@ -56,7 +67,12 @@ export const Categories = () => {
 	}	
     
     function saveCategory(id){
-		console.log('save')
+		
+		let updatedCategory = {
+			type: type
+		}
+
+		CategoryService.updateCategory(id, updatedCategory);
 	}
 
 	function deleteCategory(id){
@@ -68,7 +84,12 @@ export const Categories = () => {
 	}
 
 	function toggleModal(){
-        
+		setDisplay(true)
+
+	}
+
+	const handleTypeChange = (e) => {
+		setType(e.target.value);
 	}
 
 	const paginate = (pageNumber) => {
@@ -91,11 +112,15 @@ export const Categories = () => {
 			<section class="content">
 				<h2><i class="ico clients"></i>Categories</h2>
 				<div class="grey-box-wrap reports">
-					<a href="#new-member" class="link new-member-popup">Create new category</a>
+					<a onClick={ () => toggleModal()} class="link new-member-popup">Create new category</a>
 					<div class="search-page">
 						<input type="search" name="search-clients" class="in-search" />
 					</div>
 				</div>
+				<NewCategoryForm display={display}>
+
+                </NewCategoryForm>
+
 				<div class="new-member-wrap">
 					<div id="new-member" class="new-member-inner">
 						<h2>Create new client</h2>
@@ -131,8 +156,16 @@ export const Categories = () => {
 					</div>
 				</div>
 				<div class="alpha">
-					<ul>
-											
+					<ul>	
+							{alphabet.map((letter) => (
+                				<li>
+									<a onClick={handleLetterClick()}>{letter}</a>
+								</li>
+							))}
+
+						<li class="last">
+							<a href="javascript:;">z</a>
+						</li>					
 					</ul>
 				</div>
 				<div class="accordion-wrap clients">
@@ -151,7 +184,7 @@ export const Categories = () => {
 								<ul class="form">
 									<li>
 										<label>Type:</label>
-										<input type="text" value={category.type} class="in-text" />
+										<input type="text" onChange={handleTypeChange} defaultValue={category.type} class="in-text" />
 									</li>								
 								
 									
@@ -166,7 +199,6 @@ export const Categories = () => {
 					</div>
             	</tr> 
           		))}
-        
       
 				</div>
 				<div class="pagination">

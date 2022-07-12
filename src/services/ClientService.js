@@ -12,7 +12,7 @@ class ClientService {
         return axios.get(CLIENTS_REST_API_URL+"/paginate");
     }
 
-    updateClient(client, clientId){
+    updateClient(clientId, client){
         return axios.put(CLIENTS_REST_API_URL+ '/' + clientId, client);
     }
 

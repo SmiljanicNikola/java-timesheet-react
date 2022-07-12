@@ -1021,6 +1021,11 @@ select.error {
   float: left;
   margin-bottom: 10px;
 }
+.month-table tr {
+  display: flex;
+  flex-direction: row;
+  flex-wrap: wrap;
+}
 .month-table tr.mobile-head {
   display: none;
 }

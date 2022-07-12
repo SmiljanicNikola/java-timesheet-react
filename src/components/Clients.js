@@ -6,21 +6,23 @@ import Pagination from './Pagination';
 import { Footer } from './Footer';
 import './style.css'
 import { NewClientForm } from './NewClientForm';
+import { TeamMembers } from './TeamMembers';
 
 
 export const Clients = () => {
 
 	const [clients, setClients] = useState([]);
+	const [client, setClient] = useState({});
 	const [loading, setLoading] = useState(false);
 	const [pageNumber, setPageNumber] = useState(0);
 	const [currentPage, setCurrentPage] = useState(1);
 	const [paginatedClients, setPaginatedClients] = useState([])
 	const [clientsPerPage, setClientsPerPage] = useState(2);
 	const [display, setDisplay] = useState(false);
-	const [client, setClient] = useState({});
 	const alphabet = ["a","b","c","d","e","f","g","h","i","j","k","l","m","n","o","p","q","r","s","t","u","v","w","x","y","z"];
-
 	const [close,setClose] = useState('details');
+	const [clientName, setClientName] = useState('');
+	const [address, setAddress] = useState('');
 
 	
     useEffect(() => {
@@ -83,8 +85,22 @@ export const Clients = () => {
 	}	
 
 
-	function saveTeamMember(id){
-		console.log('save');
+	function saveClient(id){
+		ClientService.getClientById(id).then(response => {
+			setClient(response.data);
+			console.log(client);
+		})
+
+		let updatedClient = {
+			id: client.id,
+			clientName: clientName,
+			address: address,
+			city: client.city,
+			country: client.country
+		}
+
+		ClientService.updateClient(id, updatedClient);
+		console.log(updatedClient);
 	}
 
 	function deleteClient(id){
@@ -97,6 +113,24 @@ export const Clients = () => {
 	const handleLetterClick = (letter) =>{
 		
 	}
+
+	const handleZipCodeChange = (e) => {
+		
+	}
+
+	const handleAddressChange = (e) => {
+		setAddress(e.target.value);
+
+	}
+
+	const handleCityChange = (e) => {
+		
+	}
+
+	const handleClientNameChange = (e) => {
+		setClientName(e.target.value);
+	}
+
 
 	const paginate = (pageNumber) => {
 		setCurrentPage(pageNumber);
@@ -188,34 +222,34 @@ export const Clients = () => {
 								<ul class="form">
 									<li>
 										<label>Client Name:</label>
-										<input type="text" defaultValue={client.clientName} class="in-text" />
+										<input type="text" name="clientName" defaultValue={client.clientName} onChange={handleClientNameChange} class="in-text" />
 									</li>								
 									<li>
-										<label>Zip-Postal code:</label>
-										<input type="text" defaultValue={client.address} class="in-text" />
+										<label>Address:</label>
+										<input type="text" name="address" defaultValue={client.address} onChange={handleAddressChange} class="in-text" />
 									</li>
 									
 								</ul>
 								<ul class="form">
 									<li>
-										<label>Adress:</label>
-										<input type="text" defaultValue={client.city} class="in-text" />
+										<label>City:</label>
+										<input type="text" defaultValue={client.city} onChange={handleCityChange} class="in-text" />
 									</li>
 									<li>
-										<label>Country:</label>
-										<input type="text" defaultValue={client.zipCode} class="in-text" />
+										<label>ZipCode:</label>
+										<input type="text" defaultValue={client.zipCode} onChange={handleZipCodeChange} class="in-text" />
 									</li>								
 								</ul>
 								<ul class="form last">
 								<li>
-										<label>City:</label>
-										<input type="text" defaultValue={client.city} class="in-text" />
+										<label>Country:</label>
+										<input type="text" defaultValue={client.country.name} onChange={handleClientNameChange} class="in-text" />
 									</li>
 									
 								</ul>
 								<div class="buttons">
 									<div class="inner">
-										<a href="javascript:;" onClick={ () => saveTeamMember(client.id)} class="btn green">Save</a>
+										<a href="javascript:;" onClick={ () => saveClient(client.id)} class="btn green">Save</a>
 										<a href="#" onClick={ () => deleteClient(client.id)} class="btn green" class="btn red">Delete</a>
 									</div>
 								</div>
@@ -224,7 +258,6 @@ export const Clients = () => {
             	</tr> 
           		))}
         
-      
 				</div>
 				<div class="pagination">
 					<ul>

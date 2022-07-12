@@ -47,10 +47,10 @@ export const TeamMembers = () => {
 
 			updatedTeamMember = {
 				id:teamMember.id,
-				firstname: name,
+				firstname: teamMember.firstname,
 				hoursPerWeek: hoursPerWeek,
-				username: response.data.username,
-				email: email
+				username: teamMember.username,
+				email: teamMember.email
 			}
 
 			TeamMemberService.updateTeamMember(id,updatedTeamMember);
@@ -85,10 +85,6 @@ export const TeamMembers = () => {
 		console.log(hoursPerWeek);
 	}
 
-	const handleEmailChange = (e) =>{
-		setEmail(e.target.value)
-		console.log(email);
-	}
 	
 	const nextPage = async () => {
 
@@ -145,7 +141,7 @@ export const TeamMembers = () => {
 				<div class="accordion-wrap">
 					
                 {paginatedTeamMembers.map((member) => (
-                    <tr key={member.id}>
+			<tr key={member.id}>
 
               <div class="item">
 						<div class="heading">
@@ -156,7 +152,7 @@ export const TeamMembers = () => {
 							<ul class="form">
 								<li>
 									<label>Name:</label>
-									<input type="text" defaultValue={member.firstname} onChange={handleNameChange} class="in-text" />
+									<input type="text" defaultValue={member.firstname} onChange={e => setTeamMember({...member, firstname:e.target.value})} class="in-text" />
 								</li>								
 								<li>
 									<label>Hours per week:</label>
@@ -166,11 +162,11 @@ export const TeamMembers = () => {
 							<ul class="form">
 								<li>
 									<label>Username:</label>
-									<input type="text" defaultValue={member.username} class="in-text" />
+									<input type="text" onChange={e => setTeamMember({...member, username:e.target.value})} defaultValue={member.username} class="in-text" />
 								</li>
 								<li>
 									<label>Email:</label>
-									<input type="text" defaultValue={member.email} onChange={handleEmailChange} class="in-text" />
+									<input type="text" defaultValue={member.email} onChange={e => setTeamMember({...member, email:e.target.value})} class="in-text" />
 								</li>								
 							</ul>
 							<ul class="form last">

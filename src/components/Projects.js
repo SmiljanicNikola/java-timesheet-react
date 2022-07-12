@@ -4,6 +4,8 @@ import axios from 'axios'
 import Pagination from './Pagination';
 import { NewMemberForm } from './NewMemberForm';
 import { NewProjectForm } from './NewProjectForm';
+import ClientService from '../services/ClientService';
+import TeamMemberService from '../services/TeamMemberService';
 
 export const Projects = () => {
     
@@ -14,8 +16,38 @@ export const Projects = () => {
 	const [projectsPerPage, setprojectsPerPage] = useState(2);
 	const [display, setDisplay] = useState(false);
 	const [project, setProject] = useState({})
+	const alphabet = ["a","b","c","d","e","f","g","h","i","j","k","l","m","n","o","p","q","r","s","t","u","v","w","x","y","z"];
+	const [clients, setClients] = useState([])
+	const [teamMembers, setTeamMembers] = useState([])
+	const [valueTeamMember, setValueTeamMember] = useState([])
+	const [valueClient, setValueClient] = useState('');
 
-    
+	const handleLetterClick = (letter) =>{
+		
+	}
+	
+	const handleChangeClient = client =>{
+		setValueClient(client.target.value);
+		console.log(valueClient);
+	}
+
+	const handleChangeTeamMember = teamMember =>{
+		setValueTeamMember(teamMember.target.value);
+		console.log(valueTeamMember);
+	}
+
+	const fetchClients = () => {
+		ClientService.getClients().then(( response ) => {
+			setClients(response.data);
+		})
+	}
+
+	const fetchTeamMembers = () => {
+		TeamMemberService.getTeamMembers().then(( response ) => {
+			setTeamMembers(response.data);
+		})
+	}
+
     useEffect(() => {
 
 		console.log(pageNumber);
@@ -126,6 +158,20 @@ export const Projects = () => {
 
 				</NewProjectForm>
 			
+				<div class="alpha">
+					<ul>	
+							{alphabet.map((letter) => (
+                				<li>
+									<a onClick={handleLetterClick()}>{letter}</a>
+								</li>
+							))}
+
+						<li class="last">
+							<a href="javascript:;">z</a>
+						</li>					
+					</ul>
+				</div>
+
 				<div class="accordion-wrap clients">	
                 {paginatedProjects.map((project) => (
                 <tr key={project.id}>
@@ -143,8 +189,21 @@ export const Projects = () => {
 								</li>
 								<li>
 									<label>Lead:</label>
-									<select>
-										<option>Sladjana Miljanovic</option>
+									<select name="teamMember"
+										onClick={fetchTeamMembers}
+
+									>
+										<option>{project.lead.firstname}</option>
+										{
+											teamMembers.map((teamMember) => (
+												<option
+												onClick={handleChangeTeamMember}
+												getOptionValue={teamMember => teamMember.id}
+												value={teamMember.id}
+												key={teamMember.id}
+												> {teamMember.firstname} </option>
+											))
+										}
 									</select>
 								</li>
 							</ul>
@@ -158,11 +217,21 @@ export const Projects = () => {
 							<ul class="form last">
 								<li>
 									<label>Customer:</label>
-									<select>
-										<option>Select customer</option>
-										<option>Adam Software NV</option>
-										<option>Clockwork</option>
-										<option>Emperor Design</option>
+									<select name="client"
+										onClick={fetchClients}
+
+									>
+										<option>{project.client.clientName}</option>
+										{
+											clients.map((client) => (
+												<option
+												onClick={handleChangeClient}
+												getOptionValue={client => client.id}
+												value={client.id}
+												key={client.id}
+												> {client.clientName} </option>
+											))
+										}
 									</select>
 								</li>
 								<li class="inline">
@@ -211,6 +280,8 @@ export const Projects = () => {
 				</div>
 			</section>			
 		</div>
+		
         </div>
+		
     )
 }

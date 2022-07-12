@@ -12,7 +12,7 @@ class CategoryService {
         return axios.get(CATEGORIES_REST_API_URL+"/paginate");
     }
 
-    updateCategory(category, categoryId){
+    updateCategory(categoryId, category){
         return axios.put(CATEGORIES_REST_API_URL+ '/' + categoryId, category);
     }
 
