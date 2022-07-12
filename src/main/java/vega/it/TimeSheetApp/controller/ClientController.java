@@ -13,6 +13,7 @@ import org.springframework.web.bind.annotation.DeleteMapping;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
+import org.springframework.web.bind.annotation.PutMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
@@ -21,6 +22,7 @@ import vega.it.TimeSheetApp.DTO.AddClientRequestDTO;
 import vega.it.TimeSheetApp.DTO.AddProjectRequestDTO;
 import vega.it.TimeSheetApp.DTO.ClientDTO;
 import vega.it.TimeSheetApp.DTO.ProjectDTO;
+import vega.it.TimeSheetApp.DTO.TeamMemberDTO;
 import vega.it.TimeSheetApp.model.Client;
 import vega.it.TimeSheetApp.model.Project;
 import vega.it.TimeSheetApp.model.TeamMember;
@@ -97,6 +99,30 @@ public class ClientController {
         return new ResponseEntity<>(new ClientDTO(client), HttpStatus.CREATED);
 	        	
 	 }
+	
+	@PutMapping(value = "/{id}")
+    public ResponseEntity<ClientDTO> updateClient(@RequestBody AddClientRequestDTO addClientRequestDTO, @PathVariable("id") Integer id) {
+	
+        Client client = clientService.findById(id);
+
+        if (client == null) {
+            return new ResponseEntity<>(HttpStatus.BAD_REQUEST);
+        }
+        
+        if(client.getClientName() != null) {
+        	client.setClientName(addClientRequestDTO.getClientName());
+        }else {
+        	client.setClientName(client.getClientName());
+        }
+        
+        client.setAddress(addClientRequestDTO.getAddress());
+        client.setCity(client.getCity());
+        
+
+        client = clientService.save(client);
+
+        return new ResponseEntity<>(new ClientDTO(client), HttpStatus.OK);
+    }
 	
 	
 	

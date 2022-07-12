@@ -119,6 +119,7 @@ public class ProjectController {
         project.setLead(this.teamMemberService.findById(addProjectRequestDTO.getTeamMemberId()));
         //artikal.setProdavac(this.prodavacService.findOne(addArtikalRequest.getProdavacId()));
         project.setFinished(false);
+        project.setDeleted(false);
 
         project = projectService.save(project);
         return new ResponseEntity<>(new ProjectDTO(project), HttpStatus.CREATED);

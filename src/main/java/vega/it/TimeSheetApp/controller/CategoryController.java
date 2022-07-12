@@ -13,12 +13,15 @@ import org.springframework.web.bind.annotation.DeleteMapping;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
+import org.springframework.web.bind.annotation.PutMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
+import vega.it.TimeSheetApp.DTO.AddClientRequestDTO;
 import vega.it.TimeSheetApp.DTO.AddProjectRequestDTO;
 import vega.it.TimeSheetApp.DTO.CategoryDTO;
+import vega.it.TimeSheetApp.DTO.ClientDTO;
 import vega.it.TimeSheetApp.DTO.ProjectDTO;
 import vega.it.TimeSheetApp.model.Category;
 import vega.it.TimeSheetApp.model.Client;
@@ -36,11 +39,6 @@ public class CategoryController {
 	public ResponseEntity<Page<Category>> findAll(Pageable pageable){
 		return new ResponseEntity<>(categoryService.findAll(pageable), HttpStatus.OK);
 	}
-	
-	/*@GetMapping("/paginate")
-	public ResponseEntity<Page<CategoryDTO>> findAll(Pageable pageable){
-		return new ResponseEntity<>(categoryService.findAllPaginate(pageable), HttpStatus.OK);
-	}*/
 	
 	@GetMapping
 	public ResponseEntity<List<CategoryDTO>> getCategories(){
@@ -86,5 +84,21 @@ public class CategoryController {
         return new ResponseEntity<>(new CategoryDTO(category), HttpStatus.CREATED);
 	        	
 	 }
+	
+	@PutMapping(value = "/{id}")
+    public ResponseEntity<CategoryDTO> updateCategory(@RequestBody CategoryDTO categoryDTO, @PathVariable("id") Integer id) {
+	
+        Category category = categoryService.findById(id);
+
+        if (category == null) {
+            return new ResponseEntity<>(HttpStatus.BAD_REQUEST);
+        }
+        
+        category.setType(categoryDTO.getType());
+
+        category = categoryService.save(category);
+
+        return new ResponseEntity<>(new CategoryDTO(category), HttpStatus.OK);
+    }
 
 }

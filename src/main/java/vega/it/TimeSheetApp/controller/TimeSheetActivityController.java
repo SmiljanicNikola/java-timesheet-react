@@ -1,9 +1,13 @@
 package vega.it.TimeSheetApp.controller;
 
+import java.time.LocalDate;
 import java.util.ArrayList;
 import java.util.List;
+import java.util.stream.Collectors;
 
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.format.annotation.DateTimeFormat;
+import org.springframework.format.annotation.DateTimeFormat.ISO;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.CrossOrigin;
@@ -48,6 +52,29 @@ public class TimeSheetActivityController {
 		}
 		
         return new ResponseEntity<>(new TimeSheetActivityDTO(timeSheetActivity), HttpStatus.OK);
+
+	}
+	
+	/*@GetMapping(value="byDate/{date}")
+	public ResponseEntity<List<TimeSheetActivityDTO>> getTimeSheetActivityByDate(@PathVariable("date") LocalDate date){
+		//LocalDate specificDate = LocalDate.parse(date); 
+		List<TimeSheetActivity> timesheetActivities = timeSheetActivityService.findAllByDate(date);
+		
+		List<TimeSheetActivityDTO> timeSheetActivitesDTO = timesheetActivities.stream().map(tsa -> new TimeSheetActivityDTO(tsa)).toList();
+        return new ResponseEntity<>(timeSheetActivitesDTO, HttpStatus.OK);
+
+	}*/
+	
+	@GetMapping(value="byDate/{date}")
+	public ResponseEntity<List<TimeSheetActivityDTO>> getTimeSheetActivityByDate(
+		@RequestParam(name = "date")
+	       @DateTimeFormat(iso = ISO.DATE)
+	       LocalDate date){
+		
+		//List<TimeSheetActivity> timesheetActivities = timeSheetActivityService.findAll().stream().filter(tsa -> tsa.getDate().toString().equals(date.toString())).collect(Collectors.toList());
+		List<TimeSheetActivity> timesheetActivities = timeSheetActivityService.findAllByDate(date);
+		List<TimeSheetActivityDTO> timeSheetActivitesDTO = timesheetActivities.stream().map(tsa -> new TimeSheetActivityDTO(tsa)).toList();
+        return new ResponseEntity<>(timeSheetActivitesDTO, HttpStatus.OK);
 
 	}
 	

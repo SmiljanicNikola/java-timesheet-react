@@ -111,11 +111,18 @@ public class TeamMemberController {
         if (teamMember == null) {
             return new ResponseEntity<>(HttpStatus.BAD_REQUEST);
         }
-
-        teamMember.setFirstname(teamMemberDTO.getFirstname());
-        teamMember.setHoursPerWeek(teamMemberDTO.getHoursPerWeek());
-        teamMember.setEmail(teamMemberDTO.getEmail());
         
+        if(teamMemberDTO.getFirstname() != null) {
+        	teamMember.setFirstname(teamMemberDTO.getFirstname());
+        }
+        
+        if(teamMemberDTO.getHoursPerWeek() != null) {
+        	teamMember.setHoursPerWeek(teamMemberDTO.getHoursPerWeek());
+        }
+        
+        if(teamMemberDTO.getEmail() != null) {
+        	teamMember.setEmail(teamMemberDTO.getEmail());
+        }
 
         teamMember = teamMemberService.save(teamMember);
 

@@ -1,5 +1,6 @@
 package vega.it.TimeSheetApp.service;
 
+import java.time.LocalDate;
 import java.util.List;
 
 import vega.it.TimeSheetApp.model.TimeSheetActivity;
@@ -19,5 +20,6 @@ public interface TimeSheetActivityService {
 
 	List<TimeSheetActivity> findAllByThreeParameters(Integer projectId, Integer teamMemberId, Integer categoryId);
 
-	
+	List<TimeSheetActivity> findAllByDate(LocalDate date);
+
 }
