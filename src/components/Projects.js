@@ -21,10 +21,8 @@ export const Projects = () => {
 	const [teamMembers, setTeamMembers] = useState([])
 	const [valueTeamMember, setValueTeamMember] = useState([])
 	const [valueClient, setValueClient] = useState('');
+	let updatedProject = {}
 
-	const handleLetterClick = (letter) =>{
-		
-	}
 	
 	const handleChangeClient = client =>{
 		setValueClient(client.target.value);
@@ -80,14 +78,7 @@ export const Projects = () => {
 			console.log('delete')
 		});
 	}
-
-	function HandleProjectName(e){
-		setProject({
-			...project,
-			[e.target.projectName]: e.target.value
-		})
-	}
-		
+	
 	const nextPage = async () => {
 
 		console.log('NEXT')
@@ -112,12 +103,29 @@ export const Projects = () => {
 		})
 	}	
 
-	function saveTeamMember(id){
-		console.log('save')
+	function updateProject(id){
+		
+		ProjectService.getProjectById(id).then(response => {
+			setProject(response.data)
+
+			updatedProject = {
+				projectName: project.projectName,
+				description: project.description
+			}
+
+			ProjectService.updateProject(id, updatedProject);
+
+			console.log(updatedProject);
+		})
+		
 	}
 
-	function deleteTeamMember(id){
-		console.log('delete')
+	function handleLetterClick(letter){
+		console.log(letter);
+		ProjectService.filterProjectsByFirstLetters(letter).then(response => {
+			setPaginatedProjects(response.data)
+		})
+
 	}
 
 	function resetPassword(id){
@@ -162,10 +170,9 @@ export const Projects = () => {
 					<ul>	
 							{alphabet.map((letter) => (
                 				<li>
-									<a onClick={handleLetterClick()}>{letter}</a>
+									<a onClick={() => handleLetterClick(letter)}>{letter}</a>
 								</li>
 							))}
-
 						<li class="last">
 							<a href="javascript:;">z</a>
 						</li>					
@@ -185,7 +192,7 @@ export const Projects = () => {
 							<ul class="form">
 								<li>
 									<label>Project Name:</label>
-									<input type="text" onChange={HandleProjectName} defaultValue={project.projectName}  class="in-text" />
+									<input type="text" name="projectName" onChange={e => setProject({...project, projectName:e.target.value})} defaultValue={project.projectName}  class="in-text" />
 								</li>
 								<li>
 									<label>Lead:</label>
@@ -210,7 +217,7 @@ export const Projects = () => {
 							<ul class="form">
 								<li>
 									<label>Description:</label>
-									<input type="text" defaultValue={project.description} class="in-text" />
+									<input type="text" name="description" defaultValue={project.description} onChange={e => setProject({...project, description:e.target.value})} class="in-text" />
 								</li>
 								
 							</ul>
@@ -280,8 +287,6 @@ export const Projects = () => {
 				</div>
 			</section>			
 		</div>
-		
-        </div>
-		
+    </div>
     )
 }

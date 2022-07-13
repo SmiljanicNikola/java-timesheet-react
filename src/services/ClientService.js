@@ -27,6 +27,10 @@ class ClientService {
     getClientById(clientId){
         return axios.get(CLIENTS_REST_API_URL + '/' + clientId);
     }
+
+    filterClientsByFirstLetters(letters){
+        return axios.get(CLIENTS_REST_API_URL + '/filterBy/' + letters);
+    }
 }
 
 export default new ClientService();

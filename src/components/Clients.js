@@ -81,8 +81,16 @@ export const Clients = () => {
 		axios.get("http://localhost:8080/api/clients/paginate?page="+previousPage+"&size=2")
 		.then(response => {
 			setPaginatedClients(response.data.content);
-			})
-	}	
+		})
+	}
+
+	function handleLetterClick(letter){
+		console.log(letter);
+		ClientService.filterClientsByFirstLetters(letter).then(response => {
+			setPaginatedClients(response.data)
+		})
+
+	}
 
 
 	function saveClient(id){
@@ -93,9 +101,10 @@ export const Clients = () => {
 
 		let updatedClient = {
 			id: client.id,
-			clientName: clientName,
-			address: address,
+			clientName: client.clientName,
+			address: client.address,
 			city: client.city,
+			zipCode: client.zipCode,
 			country: client.country
 		}
 
@@ -108,27 +117,6 @@ export const Clients = () => {
 			paginatedClients.pop(client => client.id == id);
 			paginatedClients.filter(client => client.id !== id)
 		});
-	}
-
-	const handleLetterClick = (letter) =>{
-		
-	}
-
-	const handleZipCodeChange = (e) => {
-		
-	}
-
-	const handleAddressChange = (e) => {
-		setAddress(e.target.value);
-
-	}
-
-	const handleCityChange = (e) => {
-		
-	}
-
-	const handleClientNameChange = (e) => {
-		setClientName(e.target.value);
 	}
 
 
@@ -198,13 +186,11 @@ export const Clients = () => {
 					<ul>	
 							{alphabet.map((letter) => (
                 				<li>
-									<a onClick={handleLetterClick()}>{letter}</a>
+									<a onClick={() => handleLetterClick(letter)}>{letter}</a>
 								</li>
 							))}
 
-						<li class="last">
-							<a href="javascript:;">z</a>
-						</li>					
+										
 					</ul>
 				</div>
 				<div class="accordion-wrap clients">
@@ -222,28 +208,28 @@ export const Clients = () => {
 								<ul class="form">
 									<li>
 										<label>Client Name:</label>
-										<input type="text" name="clientName" defaultValue={client.clientName} onChange={handleClientNameChange} class="in-text" />
+										<input type="text" name="clientName" defaultValue={client.clientName} onChange={e => setClient({...client, clientName:e.target.value})} class="in-text" />
 									</li>								
 									<li>
 										<label>Address:</label>
-										<input type="text" name="address" defaultValue={client.address} onChange={handleAddressChange} class="in-text" />
+										<input type="text" name="address" defaultValue={client.address} onChange={e => setClient({...client, address:e.target.value})} class="in-text" />
 									</li>
 									
 								</ul>
 								<ul class="form">
 									<li>
 										<label>City:</label>
-										<input type="text" defaultValue={client.city} onChange={handleCityChange} class="in-text" />
+										<input type="text" name="city" defaultValue={client.city} onChange={e => setClient({...client, city:e.target.value})} class="in-text" />
 									</li>
 									<li>
 										<label>ZipCode:</label>
-										<input type="text" defaultValue={client.zipCode} onChange={handleZipCodeChange} class="in-text" />
+										<input type="text" name="zipCode" defaultValue={client.zipCode} onChange={e => setClient({...client, zipCode:e.target.value})} class="in-text" />
 									</li>								
 								</ul>
 								<ul class="form last">
 								<li>
 										<label>Country:</label>
-										<input type="text" defaultValue={client.country.name} onChange={handleClientNameChange} class="in-text" />
+										<input type="text" defaultValue={client.country.name} onChange={e => setClient({...client, country:e.target.value})} class="in-text" />
 									</li>
 									
 								</ul>

@@ -13,7 +13,7 @@ class ProjectService {
         return axios.get(PROJECTS_REST_API_URL+"/paginate");
     }
 
-    updateProject(project, projectId){
+    updateProject(projectId, project){
         return axios.put(PROJECTS_REST_API_URL+ '/' + projectId, project);
     }
 
@@ -27,6 +27,10 @@ class ProjectService {
 
     getProjectById(projectId){
         return axios.get(PROJECTS_REST_API_URL + '/' + projectId);
+    }
+
+    filterProjectsByFirstLetters(letters){
+        return axios.get(PROJECTS_REST_API_URL + '/filterBy/' + letters);
     }
 
 }
