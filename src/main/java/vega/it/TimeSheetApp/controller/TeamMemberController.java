@@ -19,12 +19,15 @@ import org.springframework.web.bind.annotation.PutMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.server.ResponseStatusException;
 
 import net.bytebuddy.description.modifier.EnumerationState;
 import vega.it.TimeSheetApp.DTO.AddProjectRequestDTO;
 import vega.it.TimeSheetApp.DTO.ClientDTO;
 import vega.it.TimeSheetApp.DTO.ProjectDTO;
 import vega.it.TimeSheetApp.DTO.TeamMemberDTO;
+import vega.it.TimeSheetApp.exceptions.EntityNotFoundException;
+import vega.it.TimeSheetApp.exceptions.ResourceNotFoundException;
 import vega.it.TimeSheetApp.model.Client;
 import vega.it.TimeSheetApp.model.Project;
 import vega.it.TimeSheetApp.model.Roles;
@@ -51,37 +54,41 @@ public class TeamMemberController {
 		return new ResponseEntity<>(teamMembersDTO, HttpStatus.OK);
 	}
 	
-	@GetMapping(value="/{id}")
-	public ResponseEntity<TeamMemberDTO> getTeamMemberById(@PathVariable("id") Integer id){
-		TeamMember teamMember = teamMemberService.findById(id);
-		if(teamMember == null) {
-            return new ResponseEntity<>(HttpStatus.NOT_FOUND); 
-		}
-		
-        return new ResponseEntity<>(new TeamMemberDTO(teamMember), HttpStatus.OK);
-
-	}
-	
-	@DeleteMapping(value = "/{id}")
-    public ResponseEntity<?> delete(@PathVariable("id") Integer id) {
-		
-        TeamMember teamMember = teamMemberService.findById(id);
-        
-        if (teamMember == null) {
-        	return new ResponseEntity<>(HttpStatus.NOT_FOUND);
-        } 
-        
-        teamMember.setDeleted(true);
-    	teamMemberService.save(teamMember);
-    	
-        return new ResponseEntity<>(HttpStatus.OK);
-        
-	}
-	
 	@GetMapping("/paginate")
 	public ResponseEntity<Page<TeamMember>> findAll(Pageable pageable){
 		return new ResponseEntity<>(teamMemberService.findAllTeamMembersPaginate(pageable), HttpStatus.OK);
 	}
+	
+	@GetMapping(value="/{id}")
+	public ResponseEntity<TeamMemberDTO> getTeamMemberById(@PathVariable("id") Integer id) throws ResourceNotFoundException{
+		try 
+		{
+			TeamMember teamMember = teamMemberService.findById(id);
+	        return new ResponseEntity<>(new TeamMemberDTO(teamMember), HttpStatus.OK);
+
+		}catch(ResourceNotFoundException resourceNotFoundException)
+		{	
+			throw new ResponseStatusException(HttpStatus.NOT_FOUND, "TeamMember with that id: "+ id ,resourceNotFoundException);		
+		}
+	}
+	
+	@DeleteMapping(value = "/{id}")
+    public ResponseEntity<?> delete(@PathVariable("id") Integer id) {	
+		try 
+		{
+	        TeamMember teamMember = teamMemberService.findById(id);
+	        
+	        teamMember.setDeleted(true);
+	    	teamMemberService.save(teamMember);
+	    	
+	        return new ResponseEntity<>(HttpStatus.OK);
+		}
+		catch(ResourceNotFoundException resourceNotFoundException)
+		{
+			throw new ResponseStatusException(HttpStatus.NOT_FOUND, "TeamMember with that id: "+ id ,resourceNotFoundException);
+		}
+	}
+	
 	
 	@PostMapping()
     public ResponseEntity<TeamMemberDTO> saveTeamMember(@RequestBody TeamMemberDTO teamMemberDTO) {

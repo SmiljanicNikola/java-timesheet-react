@@ -15,4 +15,6 @@ public interface TeamMemberRepository extends JpaRepository<TeamMember, Integer>
 	@Query(value = "SELECT * from team_members where team_members.deleted = false",nativeQuery = true )
 	Page<TeamMember> findAllTeamMembersWithPagination(Pageable pageable);
 	
+	
+	
 }

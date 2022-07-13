@@ -23,5 +23,5 @@ public interface ProjectService {
 	
 	Page<Project> findAllProjectsPaginate(Pageable pageable);
 
-
+	List<Project> filterAllProjectsByFirstLetter(String letter);
 }

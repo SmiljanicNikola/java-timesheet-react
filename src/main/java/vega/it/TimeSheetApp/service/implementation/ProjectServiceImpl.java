@@ -51,4 +51,9 @@ public class ProjectServiceImpl implements ProjectService {
 		return projectRepository.findAllProjectsWithPagination(pageable);
 	}
 
+	@Override
+	public List<Project> filterAllProjectsByFirstLetter(String letter) {
+		return projectRepository.filterAllProjectsByFirstLetter(letter);
+	}
+
 }

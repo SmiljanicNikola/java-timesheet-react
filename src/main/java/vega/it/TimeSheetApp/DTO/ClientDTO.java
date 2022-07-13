@@ -19,12 +19,53 @@ public class ClientDTO {
 	private String city;
 	
 	private String zipCode;
+	
+	private CountryDTO country;
 
 	public ClientDTO(Client client) {
-		this(client.getId(), client.getClientName(), client.getAddress(), client.getCity(), client.getZipCode());
+		this(client.getId(), client.getClientName(), client.getAddress(), client.getCity(), client.getZipCode(), new CountryDTO(client.getCountry()));
 	}
 
 	
+	
+	public ClientDTO(String clientName, String address, String city, String zipCode, CountryDTO country) {
+		super();
+		this.clientName = clientName;
+		this.address = address;
+		this.city = city;
+		this.zipCode = zipCode;
+		this.country = country;
+	}
+	
+	
+
+
+
+	public ClientDTO(Integer id, String clientName, String address, String city, String zipCode, CountryDTO country) {
+		super();
+		this.id = id;
+		this.clientName = clientName;
+		this.address = address;
+		this.city = city;
+		this.zipCode = zipCode;
+		this.country = country;
+	}
+
+	
+
+
+	public CountryDTO getCountry() {
+		return country;
+	}
+
+
+
+	public void setCountry(CountryDTO country) {
+		this.country = country;
+	}
+
+
+
 	public Integer getId() {
 		return id;
 	}

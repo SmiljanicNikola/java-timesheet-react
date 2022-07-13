@@ -14,6 +14,8 @@ import javax.persistence.Table;
 
 import com.fasterxml.jackson.annotation.JsonIgnore;
 
+import vega.it.TimeSheetApp.exceptions.ResourceNotFoundException;
+
 @Entity
 @Table(name="team_members")
 public class TeamMember {
@@ -209,6 +211,10 @@ public class TeamMember {
 		return "TeamMember [id=" + id + ", firstname=" + firstname + ", lastname=" + lastname + ", username=" + username
 				+ ", password=" + password + ", hoursPerWeek=" + hoursPerWeek + ", email=" + email + ", blocked="
 				+ blocked + ", role=" + role + "]";
-	}	
+	}
+
+	/*public TeamMember orElseThrow(Object object) {
+		return orElseThrow(new ResourceNotFoundException("User not found with id :"));
+	}	*/
 
 }

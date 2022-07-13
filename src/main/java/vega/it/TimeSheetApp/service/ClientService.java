@@ -19,6 +19,8 @@ public interface ClientService {
 	void remove(Integer id);
 	
 	Page<Client> findAllClientsPagination(Pageable pageable);
+	
+	List<Client> filterAllClientsByFirstLetter(String letter);
 
 	
 }

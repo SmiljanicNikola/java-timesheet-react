@@ -18,9 +18,12 @@ import org.springframework.web.bind.annotation.PutMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.server.ResponseStatusException;
 
 import vega.it.TimeSheetApp.DTO.AddProjectRequestDTO;
+import vega.it.TimeSheetApp.DTO.ClientDTO;
 import vega.it.TimeSheetApp.DTO.ProjectDTO;
+import vega.it.TimeSheetApp.exceptions.ResourceNotFoundException;
 import vega.it.TimeSheetApp.model.Project;
 import vega.it.TimeSheetApp.service.ClientService;
 import vega.it.TimeSheetApp.service.ProjectService;
@@ -51,80 +54,71 @@ public class ProjectController {
 		return new ResponseEntity<>(projectsDTO, HttpStatus.OK);
 	}
 	
-	/*@GetMapping("/paginate")
-	public ResponseEntity<Page<Project>> findAll(Pageable pageable){
-		
-		return new ResponseEntity<>(projectService.findAll(pageable), HttpStatus.OK);
-	}*/
 	
 	@GetMapping("/paginate")
 	public ResponseEntity<Page<Project>> findAll(Pageable pageable){
 		
-		return new ResponseEntity<>(projectService.findAllProjectsPaginate(pageable), HttpStatus.OK);	}
-	
-	
-	
-	/*@GetMapping("/paginate/real")
-	public ResponseEntity<Page<Project>> findAllProjectsPagination(Pageable pageable){
+		return new ResponseEntity<>(projectService.findAllProjectsPaginate(pageable), HttpStatus.OK);	
 		
-		return new ResponseEntity<>(projectService.findAllProjectPaginate(pageable), HttpStatus.OK);
-	}*/
+	}
+	
+	@GetMapping(value="filterBy/{letter}")
+	public ResponseEntity<List<ProjectDTO>> getProjectByFirstLetter(@PathVariable("letter") String letter){
+		
+			List<ProjectDTO> projectsDTO = projectService.filterAllProjectsByFirstLetter(letter).stream().map(p -> new ProjectDTO(p)).toList();
+			
+			
+	        return new ResponseEntity<>(projectsDTO, HttpStatus.OK);
+		
+	}
 	
 	
 	@GetMapping(value="/{id}")
 	public ResponseEntity<ProjectDTO> getProjectById(@PathVariable("id") Integer id){
-		Project project = projectService.findById(id);
-		if(project == null) {
-            return new ResponseEntity<>(HttpStatus.NOT_FOUND); 
+		try 
+		{	
+			Project project = projectService.findById(id);
+	        return new ResponseEntity<>(new ProjectDTO(project), HttpStatus.OK);
 		}
-		
-        return new ResponseEntity<>(new ProjectDTO(project), HttpStatus.OK);
-
+		catch(ResourceNotFoundException resourceNotFoundException) 
+		{	
+			throw new ResponseStatusException(HttpStatus.NOT_FOUND, "Project with that id: "+ id ,resourceNotFoundException);	
+		}
 	}
 	
-	/*@DeleteMapping(value = "/{id}")
-    public ResponseEntity<?> delete(@PathVariable("id") Integer id) {
-        Project project = projectService.findOne(id);
-        if (project != null) {
-        	projectService.remove(id);
-            return new ResponseEntity<>(HttpStatus.OK);
-        } else {
-            return new ResponseEntity<>(HttpStatus.NOT_FOUND);
-        }
-    }*/
 	
 	@DeleteMapping(value = "/{id}")
     public ResponseEntity<?> delete(@PathVariable("id") Integer id) {
-		
-        Project project = projectService.findById(id);
-        
-        if (project == null) {
-        	return new ResponseEntity<>(HttpStatus.NOT_FOUND);
-        } 
-        
-        project.setDeleted(true);
-    	projectService.save(project);
-    	
-        return new ResponseEntity<>(HttpStatus.OK);
-        
+		try
+		{	
+	        Project project = projectService.findById(id);
+	        project.setDeleted(true);
+	    	projectService.save(project);
+	        return new ResponseEntity<>(HttpStatus.OK);
+		}
+		catch(ResourceNotFoundException resourceNotFoundException) 
+		{	
+			throw new ResponseStatusException(HttpStatus.NOT_FOUND, "TeamMember with that id: "+ id ,resourceNotFoundException);	
+		}    
 	}
     
 	
 	@PostMapping()
     public ResponseEntity<ProjectDTO> saveProject(@RequestBody AddProjectRequestDTO addProjectRequestDTO) {
+		
         Project project = new Project();
         project.setDescription(addProjectRequestDTO.getDescription());
         project.setProjectName(addProjectRequestDTO.getProjectName());
         project.setClient(this.clientService.findById(addProjectRequestDTO.getClientId()));
         project.setLead(this.teamMemberService.findById(addProjectRequestDTO.getTeamMemberId()));
-        //artikal.setProdavac(this.prodavacService.findOne(addArtikalRequest.getProdavacId()));
         project.setFinished(false);
         project.setDeleted(false);
 
         project = projectService.save(project);
         return new ResponseEntity<>(new ProjectDTO(project), HttpStatus.CREATED);
 	        	
-	 }
+	}
+	
 	
 	@PutMapping(value = "/{id}")
 	    public ResponseEntity<ProjectDTO> updateProject(@RequestBody AddProjectRequestDTO addProjectRequestDTO, @PathVariable("id") Integer id) {
@@ -143,8 +137,7 @@ public class ProjectController {
 	        project = projectService.save(project);
 
 	        return new ResponseEntity<>(new ProjectDTO(project), HttpStatus.OK);
+	        
 	    }
-	
-
 
 }

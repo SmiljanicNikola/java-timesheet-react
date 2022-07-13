@@ -46,4 +46,9 @@ public class ClientServiceImpl implements ClientService {
 
 	}
 
+	@Override
+	public List<Client> filterAllClientsByFirstLetter(String letter) {
+		return clientRepository.filterAllClientsByFirstLetter(letter);
+	}
+
 }
