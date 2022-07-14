@@ -15,16 +15,10 @@ export const NewProjectForm = (props) => {
 	const [valueClient, setValueClient] = useState('');
 	const [valueTeamMember, setValueTeamMember] = useState('');
 
-
-    
     useState(() =>{
         setTakenProps(props.display)
     })
 
-	function closePopup(){
-		props.display = false;
-    }
-    
 	const fetchClients = () => {
 		ClientService.getClients().then(( response ) => {
 			setClients(response.data);
@@ -36,6 +30,11 @@ export const NewProjectForm = (props) => {
 			setTeamMembers(response.data);
 		})
 	}
+
+	function closePopup(){
+		props.display = false;
+    }
+    
 
 	const handleChangeClient = client =>{
 		setValueClient(client.target.value);

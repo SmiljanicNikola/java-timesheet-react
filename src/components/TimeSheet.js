@@ -1,12 +1,13 @@
 import React,{useState, useEffect} from 'react'
 import TimeSheetActivityService from '../services/TimeSheetActivityService';
+import { CalendarComponent } from './CalendarComponent';
 
 export const TimeSheet = () => {
+
 	const [date, setDate] = useState(new Date());
 	const [month, setMonth] = useState(date.getMonth())
 	const [time, setTime] = useState(date.getTime())
 	const [year, setYeat] = useState(date.getFullYear())
-
 	const [days, setDays] = useState([]);
 	const [timeSheetActivities, setTimeSheetActivities] = useState([]);
 
@@ -14,11 +15,9 @@ export const TimeSheet = () => {
 		
 		TimeSheetActivityService.getTimeSheets().then(response => {
 			setTimeSheetActivities(response.data)
-
 		})
 		
-		console.log(month)
-
+		
 		getDaysInMonth(month,year)
 		//setDays(getDaysInMonth(month,year));
 
@@ -32,8 +31,7 @@ export const TimeSheet = () => {
 			//console.log('evo')
 			//days.push(new Date(date));
 			
-			date.setDate(date.getDate() +1);
-			
+			date.setDate(date.getDate() +1);	
 		}
 	}
 
@@ -48,7 +46,6 @@ export const TimeSheet = () => {
 			date.setDate(date.getDate() -1);
 			/*console.log('POSLE')
 			console.log(date)*/
-
 		}
 	}
 
@@ -62,6 +59,9 @@ export const TimeSheet = () => {
 			
 			date.setDate(date.getDate() +1);
 		}
+
+		
+
 		console.log(days)
 		setDays(days);
 		return days
@@ -69,7 +69,7 @@ export const TimeSheet = () => {
 
     return (
         <div>
-            <div class="wrapper">
+            {/*<div class="wrapper">
 				
 			<section class="content">
 				<h2><i class="ico timesheet"></i>TimeSheet</h2>
@@ -115,14 +115,22 @@ export const TimeSheet = () => {
 					</tr>
 				</table>
 				<table >
-				{/*<Calendar value={date}  onChange={date => setDate(date)}/>*/}
+				
 
 				</table>
 				<div class="total">
 					<span>Total hours: <em>90</em></span>
 				</div>
 			</section>			
-		</div>
+			</div>*/}
+
+
+		<br></br><br></br>
+
+		
+			<CalendarComponent />
+			
+		
         </div>
     )
 }

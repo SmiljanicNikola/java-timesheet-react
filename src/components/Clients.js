@@ -23,6 +23,8 @@ export const Clients = () => {
 	const [close,setClose] = useState('details');
 	const [clientName, setClientName] = useState('');
 	const [address, setAddress] = useState('');
+	const [listOfLetters, setListOfLetters] = useState('')
+	const [letters, setLetters] = useState('')
 
 	
     useEffect(() => {
@@ -35,6 +37,8 @@ export const Clients = () => {
 			setLoading(false);
 			})
 		};
+
+	
 
 		fetchPaginatedClients();
         
@@ -92,6 +96,13 @@ export const Clients = () => {
 
 	}
 
+	function handleSearchChange(e){
+		setLetters(e.target.value)
+		ClientService.filterClientsByFirstLetters(letters).then(response => {
+			setPaginatedClients(response.data)
+		})
+	}
+
 
 	function saveClient(id){
 		ClientService.getClientById(id).then(response => {
@@ -140,9 +151,9 @@ export const Clients = () => {
 			<section class="content">
 				<h2><i class="ico clients"></i>Clients</h2>
 				<div class="grey-box-wrap reports">
-					<a class="link new-member-popup">Create new client</a>
+					<a onClick={() => toggleModal()} class="link new-member-popup">Create new client</a>
 					<div class="search-page">
-						<input type="search" name="search-clients" class="in-search" />
+						<input type="search" onChange={handleSearchChange} name="search-clients" class="in-search" />
 					</div>
 				</div>
 				<NewClientForm display={display}>

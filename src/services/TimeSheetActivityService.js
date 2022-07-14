@@ -15,6 +15,10 @@ class TimeSheetActivityService {
     getTimeSheetsByThreeParameters(projectId,teamMemberId, categoryId){
         return axios.get(TIMESHEET_REST_APLI_URL+"/projectId/"+projectId+"/teamMemberId/" + teamMemberId + "/categoryId/" + categoryId);
     }
+
+    exportPDFReport(report){
+        return axios.post(TIMESHEET_REST_APLI_URL+"/reports/export", report);
+    }
 }
 
 export default new TimeSheetActivityService();

@@ -6,6 +6,7 @@ import {Clients} from './components/Clients'
 import {Projects} from './components/Projects'
 import {Categories} from './components/Categories'
 import {NewMemberForm} from './components/NewMemberForm'
+import {Calendar} from './components/Calendar'
 
 
 import {BrowserRouter as Router, Routes, Route, Outlet} from 'react-router-dom';
@@ -23,7 +24,9 @@ function App() {
     <div className="App">
       <Header />
       <Router>
-      <Footer />
+
+        
+      <Footer style={{display:'none'}}/>
 
         
       <Routes>
@@ -40,9 +43,12 @@ function App() {
         <Route exact path='/login' element={<Login/>}></Route>
         <Route exact path='/reports' element={<Reports/>}></Route>
         <Route exact path='/day' element={<Days/>}></Route>
+        <Route exact path='/calendar' element={<Calendar/>}></Route>
 
 
       </Routes>
+      <Footer />
+
       </Router>
     </div>
   );

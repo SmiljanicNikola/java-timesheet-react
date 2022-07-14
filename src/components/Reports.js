@@ -16,6 +16,8 @@ export const Reports = () => {
 	const [inputValue, setValue]= useState('');
 
 	const [valueProject, setValueProject] = useState('');
+	const [valueStartDate, setValueStartDate] = useState('');
+	const [valueEndDate, setValueEndDate] = useState('');
 	const [valueTeamMember, setValueTeamMember] = useState('');
 	const [valueCategory, setValueCategory] = useState('');
 	const [valueClient, setValueClient] = useState('');
@@ -26,6 +28,7 @@ export const Reports = () => {
 	const [selectedValueCategory, setSelectedValueCategory] = useState(null);
 	const [selectedValueTeamMember, setSelectedValueTeamMember] = useState(null);
 	const [timeSheets, setTimeSheets] = useState([]);
+	const [API_SEARCH, SET_API_SEARCH] = useState('')
 
 	useEffect(() => {
 		
@@ -84,6 +87,17 @@ export const Reports = () => {
 		console.log(valueTeamMember);
 	}
 
+	const handleStartDateChange = e =>{
+		setValueStartDate(e.target.value);
+		console.log(valueStartDate);
+	}
+
+	const handleEndDateChange = e =>{
+		setValueEndDate(e.target.value);
+		console.log(valueEndDate);
+	}
+
+
 	const handleChangeClient = client =>{
 		setValueClient(client.target.value);
 		console.log(valueClient);
@@ -101,40 +115,85 @@ export const Reports = () => {
 		})
 	}
 
-	function searchByThreeParameters(valueProject, valueTeamMember, valueCategory){
-		console.log(valueProject, valueTeamMember, valueCategory);
+	function searchByProjectMemberCategoryAndDates(valueProject, valueTeamMember, valueCategory, valueStartDate, valueEndDate){
+
 		let TARGETED_API = "http://localhost:8080/api/timeSheetActivities/search?";
+
 		if(valueProject != null && valueProject != '' && valueProject != 'Select Project'){
 			TARGETED_API = TARGETED_API + "projectId=" + valueProject;
-			console.log('PROJECT')
-			console.log(TARGETED_API);
-		}else{
-			TARGETED_API = TARGETED_API
 		}
 
 		if(valueTeamMember != null && valueTeamMember != '' && valueTeamMember != 'Select TeamMember'){
 			TARGETED_API = TARGETED_API + "&teamMemberId=" + valueTeamMember;
-			console.log('TEAM')
 
-			console.log(TARGETED_API);
-		}else{
-			TARGETED_API = TARGETED_API;
 		}
 		
 		if(valueCategory != null && valueCategory != '' && valueCategory != 'Select Category'){
 			TARGETED_API = TARGETED_API + "&categoryId=" + valueCategory;
-			console.log(TARGETED_API);
-		}else{
-			TARGETED_API = TARGETED_API;
 		}
-		console.log(TARGETED_API)
+
+		if(valueStartDate != null && valueStartDate != '' && valueStartDate != 'Select Category'){
+			TARGETED_API = TARGETED_API + "&startDate=" + valueStartDate;
+		}
+
+		if(valueEndDate != null && valueEndDate != '' && valueEndDate != 'Select Category'){
+			TARGETED_API = TARGETED_API + "&endDate=" + valueEndDate;
+		}
+		
 		axios.get(TARGETED_API).then(response => {
 			setTimeSheets(response.data)
 		})
-		/*axios.get("http://localhost:8080/api/timeSheetActivities/search?projectId="+valueProject+"&teamMemberId="+valueTeamMember+"&categoryId="+ valueCategory).then(response => {
-			setTimeSheets(response.data);
-			console.log(timeSheets);
-		})*/
+		
+	}
+
+	/*function buildInitialTargetedSearchAPI(argument, value){
+		SET_API_SEARCH("http://localhost:8080/api/timeSheetActivities/search?")
+		let TARGET_API_SEARCH = "http://localhost:8080/api/timeSheetActivities/search?" + `${argument}=` + `${value}`;
+		SET_API_SEARCH(TARGET_API_SEARCH);
+		console.log(API_SEARCH)
+	}
+
+	function buildTargetedSearchAPI(path, argument, value){
+		let additionalAttribute = `${argument}=` + `${value}`;
+		SET_API_SEARCH(path + additionalAttribute);
+	}*/
+
+	
+
+	const exportPDF = async (timeSheet) => {
+
+		let report = {
+			id:1,
+			description: timeSheet.description,
+			teamMember: timeSheet.teamMember,
+			client: timeSheet.project.client,
+			project: timeSheet.project,
+			category: timeSheet.category,
+			time: timeSheet.time,
+			overtime: timeSheet.overtime,
+			date: timeSheet.date
+
+		}
+		console.log('REP')
+		console.log(report)
+		axios.post(`http://localhost:8080/api/timeSheetActivities/reports/export`,{report},{
+		//TimeSheetActivityService.exportPDFReport(report), {
+			params: {
+				cacheBustTimestamp: Date.now(),
+				
+			},
+			  responseType: 'blob',
+			  timeout: 120,
+		}).then((response) => {
+			console.log('>>>', { response });
+			const url = window.URL.createObjectURL(new Blob([response.data]));
+			const link = document.createElement('a');
+			link.href = url;
+			link.setAttribute('download', 'file.pdf'); //or any other extension
+			document.body.appendChild(link);
+			link.click();
+		}).catch(err => alert(err));
+		console.log('click')
 	}
 
 	
@@ -202,7 +261,7 @@ export const Reports = () => {
 						</li>						
 						<li>
 							<label>Start date:</label>
-							<input type="date" class="in-text datepicker" />
+							<input onClick={handleStartDateChange} onChange={handleStartDateChange}  type="date" class="in-text datepicker" />
 						</li>
 					</ul>
 					<ul class="form last">
@@ -211,7 +270,7 @@ export const Reports = () => {
 								onChange={handleChangeCategory}
 								onClick={fetchCategories}
 							>
-								<option>Select Category</option>
+								<option value={undefined}>Select Category</option>
 
 								{
 									categories.map((category) => (
@@ -226,11 +285,11 @@ export const Reports = () => {
 						</li>
 						<li>
 							<label>End date:</label>
-							<input type="date" class="in-text datepicker" />
+							<input type="date" onChange={handleEndDateChange} class="in-text datepicker" />
 						</li>
 						<li>
 							<a onClick={() => reset()} class="btn orange right">Reset</a>
-							<a onClick={() => searchByThreeParameters(valueProject,valueTeamMember, valueCategory)} class="btn green right">Search</a>
+							<a onClick={() => searchByProjectMemberCategoryAndDates(valueProject,valueTeamMember, valueCategory, valueStartDate, valueEndDate)} class="btn green right">Search</a>
 						</li>
 					</ul>
 				</div>
@@ -271,7 +330,7 @@ export const Reports = () => {
 							{timeSheet.time}
 						</td>
 						<td>
-							<button>Download PDF</button>
+							<button onClick={() => exportPDF(timeSheet)}>Download PDF</button>
 						</td>
 					</tr>
 				

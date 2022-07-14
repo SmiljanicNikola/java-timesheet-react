@@ -1,29 +1,45 @@
 import React,{useEffect, useState} from 'react'
 import ClientService from '../services/ClientService';
+import CountryService from '../services/CountryService';
 import './style.css'
 
 export const NewClientForm = (props) => {
-    const [takenProps, setTakenProps] = useState(true);
-    const [client, setClient] = useState({})
+	const [takenProps, setTakenProps] = useState(props.display);   
+	const [client, setClient] = useState({})
+	const [display, setDisplay] = useState(false);
+	const [countries, setCountries] = useState([])
+	const [valueCountry, setValueCountry] = useState('')
 
 
-
+	const fetchCountries = () => {
+		CountryService.getCountries().then((response) => {
+			setCountries(response.data);
+		})
+	}
 
     function closePopup(){
 		setTakenProps(false);
-    }
+	}
+	
+	const handleChangeCountry = country =>{
+		setValueCountry(country.target.value);
+		console.log(valueCountry);
+	}
 
     function saveClient(client){
-        /*let newClient ={
-            clientName: client.clientName
-        }
-        ClientService.createClient(client);*/
+        let newClient ={
+			clientName: client.clientName,
+			address: client.address,
+			city: client.city,
+			zipCode: client.zipCode,
+			countryId: client.countryId
+		}
+		
+        ClientService.createClient(newClient);
 
-        closePopup();
     }
 
     return (
-        (takenProps == true)?(
         (props.display == true)?(
         <div>
             <div class="popup">
@@ -32,24 +48,38 @@ export const NewClientForm = (props) => {
 						<ul class="form">
 							<li>
 								<label>Client name:</label>
-								<input type="text" class="in-text" />
+								<input type="text" name="clientName" id="clientName" value={client.clientName} onChange={e => setClient({...client, clientName:e.target.value})} class="in-text" />
 							</li>								
 							<li>
 								<label>Address:</label>
-								<input type="text" class="in-text" />
+								<input name="address" id="address" value={client.address} onChange={e => setClient({...client, address:e.target.value})} type="text" class="in-text" />
 							</li>
 							<li>
 								<label>City:</label>
-								<input type="text" class="in-text" />
+								<input name="city" id="city" value={client.city} onChange={e => setClient({...client, city:e.target.value})} type="text" class="in-text" />
 							</li>
 							<li>
 								<label>Zip/Postal code:</label>
-								<input type="text" class="in-text" />
+								<input name="zipCode" id="zipCode" value={client.zipCode} onChange={e => setClient({...client, zipCode:e.target.value})} type="text" class="in-text" />
 							</li>
 							<li>
 								<label>Country:</label>
-								<select>
+								<select
+									name="country"
+									onChange={handleChangeCountry}
+									onClick={fetchCountries}
+								>
 									<option>Select country</option>
+									{
+									countries.map((country) => (
+										<option
+										onClick={handleChangeCountry}
+										getOptionValue={country => country.id}
+										value={country.id}
+										key={country.id}
+										> {country.name} </option>
+										))
+									}
 								</select>
 							</li>
 						</ul>
@@ -60,6 +90,6 @@ export const NewClientForm = (props) => {
 						</div>
 					</div>
 				</div>
-        </div>):<div></div>):<div></div>
+        </div>):<div></div>
     )
 }

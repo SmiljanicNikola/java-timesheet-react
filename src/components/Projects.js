@@ -21,6 +21,8 @@ export const Projects = () => {
 	const [teamMembers, setTeamMembers] = useState([])
 	const [valueTeamMember, setValueTeamMember] = useState([])
 	const [valueClient, setValueClient] = useState('');
+	const [letters, setLetters] = useState('')
+
 	let updatedProject = {}
 
 	
@@ -128,6 +130,13 @@ export const Projects = () => {
 
 	}
 
+	function handleSearchChange(e){
+		setLetters(e.target.value)
+		ProjectService.filterProjectsByFirstLetters(letters).then(response => {
+			setPaginatedProjects(response.data)
+		})
+	}
+
 	function resetPassword(id){
 		console.log('delete')
 
@@ -159,7 +168,7 @@ export const Projects = () => {
 				<div class="grey-box-wrap reports">
 					<a onClick={() => toggleModal()} class="link new-member-popup">Create new Project</a>
 					<div class="search-page">
-						<input type="search" name="search-clients" class="in-search" />
+						<input type="search" onChange={handleSearchChange} name="search-clients" class="in-search" />
 					</div>
 				</div>
 				<NewProjectForm display={display}>
