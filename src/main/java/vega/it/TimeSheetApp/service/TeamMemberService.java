@@ -22,4 +22,6 @@ public interface TeamMemberService {
 
 	Page<TeamMember> findAllTeamMembersPaginate(Pageable pageable);
 	
+	List<TeamMember> filterMembersByUsername(String letter);
+	
 }

@@ -45,6 +45,11 @@ public class TeamMemberServiceImpl implements TeamMemberService {
 		return teamMemberRepository.findAllTeamMembersWithPagination(pageable);
 	}
 
+	@Override
+	public List<TeamMember> filterMembersByUsername(String letter) {
+		return teamMemberRepository.filterAllTeamMembersByUsername(letter);
+	}
+
 	
 
 }

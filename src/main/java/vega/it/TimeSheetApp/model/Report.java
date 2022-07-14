@@ -124,6 +124,12 @@ public class Report {
 		this.overtime = overtime;
 		this.date = date;
 	}
+	
+	
+
+	public Report() {
+		super();
+	}
 
 	@Override
 	public String toString() {

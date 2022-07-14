@@ -25,9 +25,12 @@ public interface TimeSheetActivityRepository extends JpaRepository<TimeSheetActi
 			+ " and (:categoryId is null or timesheet_activity.category_id = :categoryId ",nativeQuery = true)
 	List<TimeSheetActivity> findAllByThreeParameters(Integer projectId, int teamMemberId, int categoryId);*/
 	
-	@Query(value= "SELECT * FROM timesheet_activity where timesheet_activity.project_id = :projectId and(:teamMemberId is null or timesheet_activity.team_member_id = :teamMemberId) and (:categoryId is null or timesheet_activity.category_id = :categoryId) ",nativeQuery = true)
-	List<TimeSheetActivity> findAllByThreeParameters(@Param("projectId")Integer projectId, @Param("teamMemberId")Integer teamMemberId,@Param("categoryId")Integer categoryId);
+	@Query(value= "SELECT * FROM timesheet_activity where timesheet_activity.project_id = :projectId and(:teamMemberId is null or timesheet_activity.team_member_id = :teamMemberId) and (:categoryId is null or timesheet_activity.category_id = :categoryId) and (:startDate is null or timesheet_activity.date >= :startDate) and (:endDate is null or timesheet_activity.date <= :endDate)",nativeQuery = true)
+	List<TimeSheetActivity> findAllByThreeParameters(@Param("projectId")Integer projectId, @Param("teamMemberId")Integer teamMemberId,@Param("categoryId")Integer categoryId,
+													@Param("startDate") LocalDate startDate, @Param("endDate") LocalDate endDate);
 	
 	@Query(value= "SELECT * FROM timesheet_activity where timesheet_activity.date = :'date'",nativeQuery = true)
 	List<TimeSheetActivity> findAllByDate(LocalDate date);
+	
+	
 }

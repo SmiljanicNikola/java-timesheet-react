@@ -33,6 +33,8 @@ import vega.it.TimeSheetApp.DTO.ReportDTO;
 import vega.it.TimeSheetApp.DTO.TeamMemberDTO;
 import vega.it.TimeSheetApp.DTO.TimeSheetActivityDTO;
 import vega.it.TimeSheetApp.model.Project;
+import vega.it.TimeSheetApp.model.Report;
+import vega.it.TimeSheetApp.model.ReportPDFExporter;
 import vega.it.TimeSheetApp.model.ReportsPDFExporter;
 import vega.it.TimeSheetApp.model.TeamMember;
 import vega.it.TimeSheetApp.model.TimeSheetActivity;
@@ -107,9 +109,12 @@ public class TimeSheetActivityController {
 	public ResponseEntity<List<TimeSheetActivityDTO>> getTimeSheetActivityByThreeParameters(
 			@RequestParam(required=false) Integer projectId, 
 			@RequestParam(required=false) Integer teamMemberId, 
-			@RequestParam(required=false) Integer categoryId){
+			@RequestParam(required=false) Integer categoryId,
+			@RequestParam(required=false) @DateTimeFormat(iso = DateTimeFormat.ISO.DATE) LocalDate startDate,
+			@RequestParam(required=false) @DateTimeFormat(iso = DateTimeFormat.ISO.DATE) LocalDate endDate
+			){
 		
-		List<TimeSheetActivityDTO> timesheetActivitiesDTO = timeSheetActivityService.findAllByThreeParameters(projectId, teamMemberId, categoryId)
+		List<TimeSheetActivityDTO> timesheetActivitiesDTO = timeSheetActivityService.findAllByThreeParameters(projectId, teamMemberId, categoryId, startDate, endDate)
 				.stream()
 				.map(tsa -> new TimeSheetActivityDTO(tsa))
 				.toList();
@@ -131,8 +136,8 @@ public class TimeSheetActivityController {
         return new ResponseEntity<>(HttpStatus.OK);
     }
 	
-	@PostMapping("/reports/export/{id}")
-    public void exportToPDFKlijent(HttpServletResponse response,@RequestBody ReportDTO reportDTO) throws DocumentException, IOException {
+	@PostMapping("/reports/export")
+    public void exportToPDFKlijent(HttpServletResponse response,@RequestBody Report report) throws DocumentException, IOException {
     	response.setContentType("application/pdf");
     	DateFormat dateFormatter = new SimpleDateFormat("yyyy-MM-dd_HH:mm:ss");
     	String currentDateTime = dateFormatter.format(new Date());
@@ -157,8 +162,8 @@ public class TimeSheetActivityController {
         log.debug("REST request to delete IzlaznaFaktura : {}", listaIzlaznihFakturaPartnera);*/
 
 
-    	/*ReportsPDFExporter exporter = new ReportsPDFExporter(reportDTO);
-    	exporter.export(response);*/
+    	ReportPDFExporter exporter = new ReportPDFExporter(report);
+    	exporter.export(response);
     }
 	
 	

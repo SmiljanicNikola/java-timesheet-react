@@ -18,7 +18,7 @@ public interface TimeSheetActivityService {
 	
 	List<TimeSheetActivity> findAllByProjectId(Integer projectId);
 
-	List<TimeSheetActivity> findAllByThreeParameters(Integer projectId, Integer teamMemberId, Integer categoryId);
+	List<TimeSheetActivity> findAllByThreeParameters(Integer projectId, Integer teamMemberId, Integer categoryId, LocalDate startDate, LocalDate endDate);
 
 	List<TimeSheetActivity> findAllByDate(LocalDate date);
 
