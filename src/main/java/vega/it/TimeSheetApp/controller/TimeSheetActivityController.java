@@ -32,6 +32,7 @@ import vega.it.TimeSheetApp.DTO.ClientDTO;
 import vega.it.TimeSheetApp.DTO.ReportDTO;
 import vega.it.TimeSheetApp.DTO.TeamMemberDTO;
 import vega.it.TimeSheetApp.DTO.TimeSheetActivityDTO;
+import vega.it.TimeSheetApp.model.ActivitiesPDFExporter;
 import vega.it.TimeSheetApp.model.Project;
 import vega.it.TimeSheetApp.model.Report;
 import vega.it.TimeSheetApp.model.ReportPDFExporter;
@@ -93,6 +94,19 @@ public class TimeSheetActivityController {
 
 	}
 	
+	@GetMapping(value="searchByDate/{date}")
+	public ResponseEntity<List<TimeSheetActivityDTO>> getTimeSheetActivityByDate2(
+		@PathVariable(name = "date")
+	       @DateTimeFormat(iso = ISO.DATE)
+	       LocalDate date){
+		
+		//List<TimeSheetActivity> timesheetActivities = timeSheetActivityService.findAll().stream().filter(tsa -> tsa.getDate().toString().equals(date.toString())).collect(Collectors.toList());
+		List<TimeSheetActivity> timesheetActivities = timeSheetActivityService.findAllByDate(date);
+		List<TimeSheetActivityDTO> timeSheetActivitesDTO = timesheetActivities.stream().map(tsa -> new TimeSheetActivityDTO(tsa)).toList();
+        return new ResponseEntity<>(timeSheetActivitesDTO, HttpStatus.OK);
+
+	}
+	
 	@GetMapping(value="/projectId/{projectId}")
 	public ResponseEntity<List<TimeSheetActivityDTO>> getTimeSheetActivityByProjectId(@PathVariable("projectId") Integer projectId){
 		
@@ -104,6 +118,8 @@ public class TimeSheetActivityController {
 		return new ResponseEntity<>(timesheetActivitiesDTO, HttpStatus.OK);
 
 	}
+	
+	
 	
 	@GetMapping(value="/search")
 	public ResponseEntity<List<TimeSheetActivityDTO>> getTimeSheetActivityByThreeParameters(
@@ -165,6 +181,38 @@ public class TimeSheetActivityController {
     	ReportPDFExporter exporter = new ReportPDFExporter(report);
     	exporter.export(response);
     }
+	
+	@PostMapping("/export")
+    public void exportToPDF(HttpServletResponse response,@RequestBody List<TimeSheetActivity> timeSheetActivities) throws DocumentException, IOException {
+    	response.setContentType("application/pdf");
+    	DateFormat dateFormatter = new SimpleDateFormat("yyyy-MM-dd_HH:mm:ss");
+    	String currentDateTime = dateFormatter.format(new Date());
+    	
+    	
+    	String headerKey = "Content-Disposition";
+    	String headerValue = "attachment; filename=reports_" + currentDateTime + ".pdf";
+    	
+    	response.setHeader(headerKey, headerValue);
+    	
+    	//List<TimeSheetActivity> listOfActivities = timeSheetActivityService.fin
+
+    	/*List<IzlaznaFaktura> listaIzlaznihFakturaPartnera = new ArrayList<IzlaznaFaktura>();
+    	
+    	for(IzlaznaFaktura izlazna : listaIzlaznihFaktura) {
+    		if(izlazna.getPoslovniPartner().getId() == id) {
+    			listaIzlaznihFakturaPartnera.add(izlazna);
+    		}
+    		
+    	}*/
+    	/*System.out.println(listaIzlaznihFakturaPartnera);
+        log.debug("REST request to delete IzlaznaFaktura : {}", listaIzlaznihFakturaPartnera);*/
+
+
+    	ActivitiesPDFExporter exporter = new ActivitiesPDFExporter(timeSheetActivities);
+    	exporter.export(response);
+    }
+	
+	
 	
 	
 	

@@ -1,5 +1,6 @@
 package vega.it.TimeSheetApp.DTO;
 
+import vega.it.TimeSheetApp.model.Roles;
 import vega.it.TimeSheetApp.model.TeamMember;
 
 public class TeamMemberDTO {
@@ -19,6 +20,8 @@ public class TeamMemberDTO {
 	private String email;
 	
 	private boolean blocked;
+	
+	private Roles role;
 
 	public TeamMemberDTO() {
 		
@@ -40,8 +43,31 @@ public class TeamMemberDTO {
 		this.email = email;
 		this.blocked = blocked;
 	}
+	
+	
 
 
+
+	public TeamMemberDTO(String firstname, String lastname, String username, String password, Integer hoursPerWeek,
+			String email, boolean blocked, Roles role) {
+		super();
+		this.firstname = firstname;
+		this.lastname = lastname;
+		this.username = username;
+		this.password = password;
+		this.hoursPerWeek = hoursPerWeek;
+		this.email = email;
+		this.blocked = blocked;
+		this.role = role;
+	}
+
+	public Roles getRole() {
+		return role;
+	}
+
+	public void setRole(Roles role) {
+		this.role = role;
+	}
 
 	public TeamMemberDTO(String firstname, String lastname, String username, String password, Integer hoursPerWeek,
 			String email, boolean blocked) {

@@ -2,6 +2,7 @@ package vega.it.TimeSheetApp.model;
 
 import java.awt.Color;
 import java.io.IOException;
+import java.util.List;
 
 import javax.servlet.http.HttpServletResponse;
 
@@ -16,22 +17,20 @@ import com.lowagie.text.pdf.PdfPCell;
 import com.lowagie.text.pdf.PdfPTable;
 import com.lowagie.text.pdf.PdfWriter;
 
-public class ReportPDFExporter {
-	
-	private Report report;
+public class ActivitiesPDFExporter {
 
-	public ReportPDFExporter(Report report) {
+	private List<TimeSheetActivity> timeSheetActivities;
+
+	
+	
+	public ActivitiesPDFExporter(List<TimeSheetActivity> timeSheetActivities) {
 		super();
-		this.report = report;
-	}
-	
-	
-	
-	public ReportPDFExporter() {
-		super();
+		this.timeSheetActivities = timeSheetActivities;
 	}
 
-
+	public ActivitiesPDFExporter() {
+		super();
+	}
 
 	private void writeTableHeader(PdfPTable table) {
 		PdfPCell cell = new PdfPCell();
@@ -68,33 +67,20 @@ public class ReportPDFExporter {
 		
 	}
 	
-	 private void writeTableData(PdfPTable table) {
+	private void writeTableData(PdfPTable table) {
+		for(TimeSheetActivity activity : timeSheetActivities) {
+			table.addCell(String.valueOf(activity.getId()));
+			table.addCell(activity.getDescription());
+			table.addCell(String.valueOf(activity.getTeamMember()));
+			table.addCell(String.valueOf(activity.getProject().getClient()));
+			table.addCell(String.valueOf(activity.getProject()));
+			table.addCell(String.valueOf(activity.getCategory()));
 
-		 table.addCell(String.valueOf(report.getId()));
-			table.addCell(report.getDescription());
-			if(report.getTeamMember() == null) {
-				table.addCell(String.valueOf(report.getTeamMember()));
-				table.addCell("/");
-			}
-			if(report.getClient() == null) {
-				table.addCell(String.valueOf(report.getClient()));
-				table.addCell("/");
-			}
-			if(report.getProject() == null) {
-				table.addCell(String.valueOf(report.getProject()));
-				table.addCell("/");
-			}
-			if(report.getCategory() == null) {
-				table.addCell(String.valueOf(report.getCategory()));
-				table.addCell("/");
-			}
-
-			table.addCell(String.valueOf(report.getTime()));
-			table.addCell(String.valueOf(report.getOvertime()));
-			table.addCell(String.valueOf(report.getDate()));
-
-
- }
+			table.addCell(String.valueOf(activity.getTime()));
+			table.addCell(String.valueOf(activity.getOvertime()));
+			table.addCell(String.valueOf(activity.getDate()));
+		}
+	}
 	
 	public void export(HttpServletResponse response) throws DocumentException, IOException {
 		Document document = new Document(PageSize.A4);
@@ -108,7 +94,7 @@ public class ReportPDFExporter {
 		font.setSize(18);
 		
 		
-		Paragraph title = new Paragraph("Report",font);
+		Paragraph title = new Paragraph("PDF List of Reports",font);
 		title.setAlignment(Paragraph.ALIGN_CENTER);
 		document.add(title);
 		
@@ -126,5 +112,4 @@ public class ReportPDFExporter {
 		document.close();
 	}
 	
-
 }

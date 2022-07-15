@@ -29,7 +29,7 @@ public interface TimeSheetActivityRepository extends JpaRepository<TimeSheetActi
 	List<TimeSheetActivity> findAllByThreeParameters(@Param("projectId")Integer projectId, @Param("teamMemberId")Integer teamMemberId,@Param("categoryId")Integer categoryId,
 													@Param("startDate") LocalDate startDate, @Param("endDate") LocalDate endDate);
 	
-	@Query(value= "SELECT * FROM timesheet_activity where timesheet_activity.date = :'date'",nativeQuery = true)
+	@Query(value= "SELECT * FROM timesheet_activity where timesheet_activity.date = :date",nativeQuery = true)
 	List<TimeSheetActivity> findAllByDate(LocalDate date);
 	
 	
