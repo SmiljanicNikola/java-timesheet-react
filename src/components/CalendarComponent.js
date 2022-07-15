@@ -2,14 +2,25 @@ import React, {useEffect,useState,Fragment} from 'react'
 import TimeSheetActivityService from '../services/TimeSheetActivityService';
 import {Calendar} from './Calendar'
 import {format} from 'date-fns'
+import { useNavigate } from "react-router-dom";
+
 
 export const CalendarComponent = () => {
+    
     const {calendarRows, selectedDate, todayFormatted, daysShort, monthNames, getNextMonth, getPrevMonth} = Calendar();
     const [days, setDays] = useState([]);
     const [timeSheetActivities, setTimeSheetActivities] = useState([]);
+    const [totalHours, setTotalHours] = useState(0);
+    const navigate = useNavigate();
+    const [hours, setHours] = useState(0);
 
     const dateClickHandler = date =>{
         console.log(date);
+    }
+
+    const viewDays = date => {
+        console.log(date);
+        navigate(`/day/${date}`, JSON.stringify(date))
     }
 
     useEffect(() => {
@@ -19,7 +30,16 @@ export const CalendarComponent = () => {
 		})
 		console.log(timeSheetActivities)
 
-	}, [])
+    }, [])
+    
+    for(let a = 0; a< Object.keys(timeSheetActivities).length; a++){
+        for(let b = a+1; b < Object.keys(timeSheetActivities).length; b++){
+            if(timeSheetActivities[a].date == timeSheetActivities[b].date ){
+                timeSheetActivities[a].time += timeSheetActivities[b].time;
+                timeSheetActivities[b].time = null;
+            }
+        }
+    }
 
     return (
         <Fragment>
@@ -35,10 +55,7 @@ export const CalendarComponent = () => {
 					<div class="bottom">
 						
 					</div>
-				</div>
-
-
-                
+				</div>   
                 <table className="table">
                     <thead>
                         <tr>
@@ -57,27 +74,56 @@ export const CalendarComponent = () => {
                                                 ?
                                                 <td key={col.date} className={`${col.classes} today`} onClick={() => dateClickHandler(col.date)}>
                                                     {col.value}
+                                                    
                                                 </td>
                                                 :
                                                 <td key={col.date} className={col.classes} onClick={() => dateClickHandler(col.date)}>
+                                                    {col.value+'.'}
+                                                    
+                                                    <br></br><br></br>
+                                                    <div style={{textAlign:'center'}}>
+                                                        <p>Hours:</p>
+                                                    </div>
                                                     {timeSheetActivities.map(activity => (
                                                         <div>
-                                                            {console.log((col.date.split('-').reverse().join('-')).split(7,8)[0]+'0' + col.date.split(1,6)[0] + '-' + col.date.split('-')[0])}
-                                                            {console.log('Col date')}
-                                                            {console.log(col.date.split(4,1)[1])}
-                                                           {console.log((col.date.split('-').reverse().join('-')).slice(0,5)[0]+'0' + col.date.split(1,6)[0] + '-' + col.date.split('-')[0])}
-                                                            {activity.date.toLocaleString() == (col.date.split('-').reverse().join('-')).split(7,8)[0]+'0' + col.date.split(1,6)[0] + '-' + col.date.split('-')[0] ? (
-                                                                <div><p>AAAAAAA</p></div>
+                                                           
+                                                            {/*{console.log('////////////////Col date:')}*/}
+                                                            {/*{console.log((col.date.split('-').reverse().join('-').slice(0,4)+'-0'+col.date.split('-').reverse().join('-').slice(5,9)))}*/}
+                                                            {/*{console.log(((col.date.split('-').reverse().join('-').slice(0,4)+'-0'+col.date.split('-').reverse().join('-').slice(5,7)+'0')+col.date.slice(7,8)))}*/}
+                                                           {/*{console.log(activity.date.toLocaleString() == ((col.date.split('-').reverse().join('-').slice(0,4)+'-0'+col.date.split('-').reverse().join('-').slice(5,9))))}*/}
+                                                           {console.log(activity.date.toLocaleString() == ((col.date.split('-').reverse().join('-').slice(0,4)+'-0'+col.date.split('-').reverse().join('-').slice(5,9))))}
+
+                                                            {(activity.date.toLocaleString() == ((col.date.split('-').reverse().join('-').slice(0,4)+'-0'+col.date.split('-').reverse().join('-').slice(5,9))))
+                                                                || (activity.date.toLocaleString() == ((col.date.split('-').reverse().join('-').slice(0,4)+'-0'+col.date.split('-').reverse().join('-').slice(5,7)+'0')+col.date.slice(7,8)))
+                                                            ? (
+                                                                <div>
+                                                                    
+
+                                                                    <div style={{color:'black',backgroundColor:'#90EE90'}} onClick={() => viewDays(activity.date)}>{activity.time}</div>
+
+                                                                {/*{activity.time > 4 ?
+                                                                        (
+                                                                        <div style={{color:'black',backgroundColor:'#90EE90'}} onClick={() => viewDays(activity.date)}>{'Hours:'+activity.time}</div>
+                                                                        ):
+                                                                        <div style={{color:'black',backgroundColor:'#FA8072'}}  onClick={() => viewDays(activity.date)}>{'Hours:'+activity.time}</div>    
+                                                                
+                                                                }*/}
+                                                                    
+                                                                </div>
                                                             
-                                                            ) : (<div></div>)}
-                                                            {console.log('activity date')}
-                                                            {console.log(activity.date.toLocaleString())}
+                                                            ) : (
+                                                            <div>
+                                                                <div></div>
+
+                                                            </div>
+                                                            )}
+                                                            {/*{console.log('Activity date:')}
+                                                            {console.log(activity.date.toLocaleString())}*/}
+                                                            
                                                         </div> 
 
                                                     ))}
-                                                    {col.value+'.'}
-                                                    <br></br>
-                                                    {'Hours: '}
+                                                    {}
                                                 
                                                 </td>
                                             ))}

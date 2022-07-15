@@ -1,12 +1,9 @@
 import React, { useState, useEffect } from 'react'
 import ClientService from '../services/ClientService';
-import TeamMemberService from '../services/TeamMemberService';
 import axios from 'axios'
 import Pagination from './Pagination';
-import { Footer } from './Footer';
 import './style.css'
 import { NewClientForm } from './NewClientForm';
-import { TeamMembers } from './TeamMembers';
 
 
 export const Clients = () => {
@@ -159,106 +156,69 @@ export const Clients = () => {
 				<NewClientForm display={display}>
 					
 				</NewClientForm>
-				<div class="new-member-wrap">
-					<div id="new-member" class="new-member-inner">
-						<h2>Create new client</h2>
-						<ul class="form">
-							<li>
-								<label>Client name:</label>
-								<input type="text" class="in-text" />
-							</li>								
-							<li>
-								<label>Address:</label>
-								<input type="text" class="in-text" />
-							</li>
-							<li>
-								<label>City:</label>
-								<input type="text" class="in-text" />
-							</li>
-							<li>
-								<label>Zip/Postal code:</label>
-								<input type="text" class="in-text" />
-							</li>
-							<li>
-								<label>Country:</label>
-								<select>
-									<option>Select country</option>
-								</select>
-							</li>
-						</ul>
-						<div class="buttons">
-							<div class="inner">
-								<a href="javascript:;" class="btn green">Save</a>
-							</div>
-						</div>
-					</div>
-				</div>
+				
 				<div class="alpha">
 					<ul>	
-							{alphabet.map((letter) => (
-                				<li>
-									<a onClick={() => handleLetterClick(letter)}>{letter}</a>
-								</li>
-							))}
-
-										
+						{alphabet.map((letter) => (
+							<li>
+								<a onClick={() => handleLetterClick(letter)}>{letter}</a>
+							</li>
+						))}				
 					</ul>
 				</div>
+
 				<div class="accordion-wrap clients">
-					
-                {paginatedClients.map((client) => (
-                <tr key={client.id}>
+					{paginatedClients.map((client) => (
+					<tr key={client.id}>
 
 
-					<div class="item" >
-						<div class="heading" onClick={changeStyle} onDoubleClick={openCard}>
-							<span>{client.clientName}</span>
-							<i>+</i>
-						</div>
-							<div class={close} >
-								<ul class="form">
+						<div class="item" >
+							<div class="heading" onClick={changeStyle} onDoubleClick={openCard}>
+								<span>{client.clientName}</span>
+								<i>+</i>
+							</div>
+								<div class={close} >
+									<ul class="form">
+										<li>
+											<label>Client Name:</label>
+											<input type="text" name="clientName" defaultValue={client.clientName} onChange={e => setClient({...client, clientName:e.target.value})} class="in-text" />
+										</li>								
+										<li>
+											<label>Address:</label>
+											<input type="text" name="address" defaultValue={client.address} onChange={e => setClient({...client, address:e.target.value})} class="in-text" />
+										</li>
+										
+									</ul>
+									<ul class="form">
+										<li>
+											<label>City:</label>
+											<input type="text" name="city" defaultValue={client.city} onChange={e => setClient({...client, city:e.target.value})} class="in-text" />
+										</li>
+										<li>
+											<label>ZipCode:</label>
+											<input type="text" name="zipCode" defaultValue={client.zipCode} onChange={e => setClient({...client, zipCode:e.target.value})} class="in-text" />
+										</li>								
+									</ul>
+									<ul class="form last">
 									<li>
-										<label>Client Name:</label>
-										<input type="text" name="clientName" defaultValue={client.clientName} onChange={e => setClient({...client, clientName:e.target.value})} class="in-text" />
-									</li>								
-									<li>
-										<label>Address:</label>
-										<input type="text" name="address" defaultValue={client.address} onChange={e => setClient({...client, address:e.target.value})} class="in-text" />
-									</li>
-									
-								</ul>
-								<ul class="form">
-									<li>
-										<label>City:</label>
-										<input type="text" name="city" defaultValue={client.city} onChange={e => setClient({...client, city:e.target.value})} class="in-text" />
-									</li>
-									<li>
-										<label>ZipCode:</label>
-										<input type="text" name="zipCode" defaultValue={client.zipCode} onChange={e => setClient({...client, zipCode:e.target.value})} class="in-text" />
-									</li>								
-								</ul>
-								<ul class="form last">
-								<li>
-										<label>Country:</label>
-										<input type="text" defaultValue={client.country.name} onChange={e => setClient({...client, country:e.target.value})} class="in-text" />
-									</li>
-									
-								</ul>
-								<div class="buttons">
-									<div class="inner">
-										<a href="javascript:;" onClick={ () => saveClient(client.id)} class="btn green">Save</a>
-										<a href="#" onClick={ () => deleteClient(client.id)} class="btn green" class="btn red">Delete</a>
+											<label>Country:</label>
+											<input type="text" defaultValue={client.country.name} onChange={e => setClient({...client, country:e.target.value})} class="in-text" />
+										</li>
+										
+									</ul>
+									<div class="buttons">
+										<div class="inner">
+											<a href="javascript:;" onClick={ () => saveClient(client.id)} class="btn green">Save</a>
+											<a href="#" onClick={ () => deleteClient(client.id)} class="btn green" class="btn red">Delete</a>
+										</div>
 									</div>
 								</div>
-							</div>
-					</div>
-            	</tr> 
-          		))}
-        
+						</div>
+					</tr> 
+					))}
 				</div>
 				<div class="pagination">
 					<ul>
-						
 						<li>
 							<button onClick={() => previousPage()} style={{marginTop:'15px', marginRight:'5px'}}>Pervious</button>
 						</li>

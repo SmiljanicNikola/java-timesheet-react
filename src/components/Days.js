@@ -1,6 +1,33 @@
-import React from 'react'
+import React,{useState, useEffect} from 'react'
+import { useNavigate, useParams } from 'react-router-dom'
+import ClientService from '../services/ClientService';
+import ProjectService from '../services/ProjectService';
+import TimeSheetActivityService from '../services/TimeSheetActivityService';
+import { Calendar } from './Calendar';
 
 export const Days = () => {
+	const [timeSheets, setTimeSheets] = useState([])
+	const navigate = useNavigate();
+	const params = useParams();
+	const [clients, setClients] = useState([])
+	const [projects, setProjects] = useState([])
+
+	useEffect(() => {
+		TimeSheetActivityService.searchByDate(params.date).then((response => {
+			setTimeSheets(response.data);
+			console.log(timeSheets)
+		}))
+
+		ClientService.getClients().then((response => {
+			setClients(response.data);
+		}))
+
+		ProjectService.getProjects().then((response => {
+			setProjects(response.data);
+		}))
+		
+	  }, []);
+
     return (
         <div>
             <div class="container">
@@ -85,6 +112,39 @@ export const Days = () => {
 						</th>
 						<th class="small">Overtime</th>
 					</tr>
+					{timeSheets.map((activity) => (
+
+					
+					<tr>
+						<td>
+							<select>
+							<option>{}</option>
+
+							</select>
+						</td>
+						<td>
+							<select>
+								<option>{activity.project.projectName}</option>
+							</select>
+						</td>
+						<td>
+							<select>
+								<option>{activity.category.type}</option>
+							</select>
+						</td>
+						<td>
+							<input type="text" defaultValue={activity.description} class="in-text medium" />
+						</td>
+						<td class="small">
+							<input type="text" defaultValue={activity.time} class="in-text xsmall" />
+						</td>
+						<td class="small">
+							<input type="text" defaultValue={activity.overtime} class="in-text xsmall" />
+						</td>
+					</tr>
+					))}
+					
+					
 					<tr>
 						<td>
 							<select>
@@ -117,198 +177,7 @@ export const Days = () => {
 							<input type="text" class="in-text xsmall" />
 						</td>
 					</tr>
-					<tr>
-						<td>
-							<select>
-								<option>Choose client</option>
-								<option>Client 1</option>
-								<option>Client 2</option>
-							</select>
-						</td>
-						<td>
-							<select>
-								<option>Choose project</option>
-								<option>Project 1</option>
-								<option>Project 2</option>
-							</select>
-						</td>
-						<td>
-							<select>
-								<option>Choose category</option>
-								<option>Front-End Development</option>
-								<option>Design</option>
-							</select>
-						</td>
-						<td>
-							<input type="text" class="in-text medium" />
-						</td>
-						<td class="small">
-							<input type="text" class="in-text xsmall" />
-						</td>
-						<td class="small">
-							<input type="text" class="in-text xsmall" />
-						</td>
-					</tr>
-					<tr>
-						<td>
-							<select>
-								<option>Choose client</option>
-								<option>Client 1</option>
-								<option>Client 2</option>
-							</select>
-						</td>
-						<td>
-							<select>
-								<option>Choose project</option>
-								<option>Project 1</option>
-								<option>Project 2</option>
-							</select>
-						</td>
-						<td>
-							<select>
-								<option>Choose category</option>
-								<option>Front-End Development</option>
-								<option>Design</option>
-							</select>
-						</td>
-						<td>
-							<input type="text" class="in-text medium" />
-						</td>
-						<td class="small">
-							<input type="text" class="in-text xsmall" />
-						</td>
-						<td class="small">
-							<input type="text" class="in-text xsmall" />
-						</td>
-					</tr>
-					<tr>
-						<td>
-							<select>
-								<option>Choose client</option>
-								<option>Client 1</option>
-								<option>Client 2</option>
-							</select>
-						</td>
-						<td>
-							<select>
-								<option>Choose project</option>
-								<option>Project 1</option>
-								<option>Project 2</option>
-							</select>
-						</td>
-						<td>
-							<select>
-								<option>Choose category</option>
-								<option>Front-End Development</option>
-								<option>Design</option>
-							</select>
-						</td>
-						<td>
-							<input type="text" class="in-text medium" />
-						</td>
-						<td class="small">
-							<input type="text" class="in-text xsmall" />
-						</td>
-						<td class="small">
-							<input type="text" class="in-text xsmall" />
-						</td>
-					</tr>
-					<tr>
-						<td>
-							<select>
-								<option>Choose client</option>
-								<option>Client 1</option>
-								<option>Client 2</option>
-							</select>
-						</td>
-						<td>
-							<select>
-								<option>Choose project</option>
-								<option>Project 1</option>
-								<option>Project 2</option>
-							</select>
-						</td>
-						<td>
-							<select>
-								<option>Choose category</option>
-								<option>Front-End Development</option>
-								<option>Design</option>
-							</select>
-						</td>
-						<td>
-							<input type="text" class="in-text medium" />
-						</td>
-						<td class="small">
-							<input type="text" class="in-text xsmall" />
-						</td>
-						<td class="small">
-							<input type="text" class="in-text xsmall" />
-						</td>
-					</tr>
-					<tr>
-						<td>
-							<select>
-								<option>Choose client</option>
-								<option>Client 1</option>
-								<option>Client 2</option>
-							</select>
-						</td>
-						<td>
-							<select>
-								<option>Choose project</option>
-								<option>Project 1</option>
-								<option>Project 2</option>
-							</select>
-						</td>
-						<td>
-							<select>
-								<option>Choose category</option>
-								<option>Front-End Development</option>
-								<option>Design</option>
-							</select>
-						</td>
-						<td>
-							<input type="text" class="in-text medium" />
-						</td>
-						<td class="small">
-							<input type="text" class="in-text xsmall" />
-						</td>
-						<td class="small">
-							<input type="text" class="in-text xsmall" />
-						</td>
-					</tr>
-					<tr>
-						<td>
-							<select>
-								<option>Choose client</option>
-								<option>Client 1</option>
-								<option>Client 2</option>
-							</select>
-						</td>
-						<td>
-							<select>
-								<option>Choose project</option>
-								<option>Project 1</option>
-								<option>Project 2</option>
-							</select>
-						</td>
-						<td>
-							<select>
-								<option>Choose category</option>
-								<option>Front-End Development</option>
-								<option>Design</option>
-							</select>
-						</td>
-						<td>
-							<input type="text" class="in-text medium" />
-						</td>
-						<td class="small">
-							<input type="text" class="in-text xsmall" />
-						</td>
-						<td class="small">
-							<input type="text" class="in-text xsmall" />
-						</td>
-					</tr>
+					
 				</table>
 				<div class="total">
 					<a href="index.html"><i></i>back to monthly view</a>

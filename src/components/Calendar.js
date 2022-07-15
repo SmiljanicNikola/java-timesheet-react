@@ -18,12 +18,26 @@ const monthNamesArr = [
     const todayFormatted = `${today.getDate()}-${+today.getMonth() + 1}-${today.getFullYear()}`;
     const daysInWeek = [1, 2, 3, 4, 5, 6, 0];
     const [selectedDate, setSelectedDate] = useState(today);
+    console.log('SELECTED DATE')
+    console.log(selectedDate)
     const selectedMonthLastDate = new Date(selectedDate.getFullYear(), selectedDate.getMonth() + 1, 0);
+    console.log('SELECTED MONTH')
+    console.log(selectedMonthLastDate)
     const prevMonthLastDate = new Date(selectedDate.getFullYear(), selectedDate.getMonth(), 0);
+    console.log('PREVMONTH LASTDATE')
+    console.log(prevMonthLastDate)
     const daysInMonth = selectedMonthLastDate.getDate();
+    console.log('Days in month');
+    console.log(daysInMonth)
     const firstDayInMonth = new Date(selectedDate.getFullYear(), selectedDate.getMonth(), 1).getDay();
+    console.log('First day i nmonth');
+    console.log(firstDayInMonth)
     const startingPoint = daysInWeek.indexOf(firstDayInMonth) + 1;
+    console.log('STARTING POINT');
+    console.log(startingPoint)
     let prevMonthStartingPoint = prevMonthLastDate.getDate() - daysInWeek.indexOf(firstDayInMonth) + 1;
+    console.log('PREV MONTH STARTING POINT');
+    console.log(prevMonthStartingPoint)
     let currentMonthCounter = 1;
     let nextMonthCounter = 1;
     const rows = 5;

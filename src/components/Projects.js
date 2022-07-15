@@ -252,17 +252,19 @@ export const Projects = () => {
 								</li>
 								<li class="inline">
 								<label>Status:</label>
+
+								{console.log(project.finished)}
 								<span class="radio">
 									<label for="inactive">Active:</label>
-									<input type="radio" value="1" name="status" id="inactive" />
+									<input type="radio" value={project.finished} name="status" id="inactive" />
 								</span>
 								<span class="radio">
 									<label for="active">Inactive:</label>
-									<input type="radio" value="2" name="status" id="active" />
+									<input type="radio" defaultValue={project.finished} name="status" id="active" />
 								</span>
 								<span class="radio">
 									<label for="active">Archive:</label>
-									<input type="radio" value="3" name="status" id="active" />
+									<input type="radio" defaultValue={project.finished} checked={project.deleted} name="status" id="active" />
 								</span>
 							</li>
 							</ul>

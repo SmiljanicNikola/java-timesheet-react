@@ -38,6 +38,7 @@ function App() {
         <Route exact path='/newProjectForm' element={<NewProjectForm/>}></Route>
         <Route exact path='/newClientForm' element={<NewClientForm/>}></Route>
         <Route exact path='/newCategoryForm' element={<NewCategoryForm/>}></Route>
+        <Route exact path='/day/:date' element={<Days/>}></Route>
 
         <Route exact path='/timeSheet' element={<TimeSheet/>}></Route>
         <Route exact path='/login' element={<Login/>}></Route>
