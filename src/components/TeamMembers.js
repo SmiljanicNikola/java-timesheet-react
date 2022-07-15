@@ -118,6 +118,18 @@ export const TeamMembers = () => {
 			})
 	}
 
+	const handleRoleInputWorker = () => {
+
+	}
+
+	const handleRoleInputAdmin = () => {
+
+	}
+
+	const handleActiveInput = () => {
+
+	}
+
 	const indexOfLastClient = currentPage * teamMembersPerPage;
 	const indexOfFirstClient = indexOfLastClient - teamMembersPerPage;
 	const currentClients = teamMembers.slice(indexOfFirstClient, indexOfLastClient); 
@@ -174,22 +186,22 @@ export const TeamMembers = () => {
 									<label>Status:</label>
 									<span class="radio">
 										<label for="inactive">Inactive:</label>
-										<input type="radio" value="1" name="status" id="inactive" />
+										<input type="radio" defaultValue={member.deleted} checked={member.blocked} onChange={handleActiveInput} id="inactive" />
 									</span>
 									<span class="radio">
 										<label for="active">Active:</label>
-										<input type="radio" value="2" name="status" id="active" />
+										<input type="radio" checked={member.blocked} onChange={handleActiveInput} defaultValue={member.blocked}  id="active" />
 									</span>
 								</li>
 								<li>
 									<label>Role:</label>
 									<span class="radio">
 										<label for="admin">Admin:</label>
-										<input type="radio" value="1" name="status" id="admin" />
+										<input type="radio" defaultValue={member.role} onChange={handleRoleInputAdmin} value={member.blocked} checked={member.role == 'ADMIN'}  id="admin" />
 									</span>
 									<span class="radio">
 										<label for="worker">Worker:</label>
-										<input type="radio" value="2" name="status" id="worker" />
+										<input type="radio" defaultValue={member.role} onChange={handleRoleInputWorker} checked={member.role == 'WORKER'} id="worker" />
 									</span>
 								</li>
 							</ul>

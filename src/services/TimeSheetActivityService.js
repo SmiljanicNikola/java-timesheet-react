@@ -19,6 +19,10 @@ class TimeSheetActivityService {
     exportPDFReport(report){
         return axios.post(TIMESHEET_REST_APLI_URL+"/reports/export", report);
     }
+
+    searchByDate(date){
+        return axios.get(TIMESHEET_REST_APLI_URL+"/searchByDate/"+date);
+    }
 }
 
 export default new TimeSheetActivityService();

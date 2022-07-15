@@ -174,9 +174,47 @@ export const Reports = () => {
 			date: timeSheet.date
 
 		}
+
+		const requestOptions = {
+			method: 'POST',
+			headers: { 'Content-Type': 'application/json' },
+			body: JSON.stringify({report})
+		};
+
 		console.log('REP')
 		console.log(report)
-		axios.post(`http://localhost:8080/api/timeSheetActivities/reports/export`,{report},{
+		axios.post(`http://localhost:8080/api/timeSheetActivities/reports/export`,requestOptions,{
+		//TimeSheetActivityService.exportPDFReport(report), {
+			params: {
+				cacheBustTimestamp: Date.now(),
+				
+			},
+			  responseType: 'blob',
+			  timeout: 120,
+		}).then((response) => {
+			console.log('>>>', { response });
+			const url = window.URL.createObjectURL(new Blob([response.data]));
+			const link = document.createElement('a');
+			link.href = url;
+			link.setAttribute('download', 'file.pdf'); //or any other extension
+			document.body.appendChild(link);
+			link.click();
+		}).catch(err => alert(err));
+		console.log('click')
+	}
+
+	const exportPDFListOfTimeSheets = async (timeSheets) => {
+
+	
+
+		const requestOptions = {
+			method: 'POST',
+			headers: { 'Content-Type': 'application/json' },
+			body: JSON.stringify({timeSheets})
+		};
+
+
+		axios.post(`http://localhost:8080/api/timeSheetActivities/export`,timeSheets,{
 		//TimeSheetActivityService.exportPDFReport(report), {
 			params: {
 				cacheBustTimestamp: Date.now(),
@@ -345,7 +383,7 @@ export const Reports = () => {
 						<a href="javascript:;" class="btn white">
 							<span>Print report</span>
 						</a>
-						<a href="javascript:;" class="btn white">
+						<a href="javascript:;" class="btn white" onClick={() => exportPDFListOfTimeSheets(timeSheets)}>
 							<span>Create PDF</span>
 						</a>
 						<a href="javascript:;" class="btn white">
