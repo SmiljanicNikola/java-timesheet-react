@@ -115,6 +115,30 @@ export const Reports = () => {
 		})
 	}
 
+	/*function searchByProjectMemberCategoryAndDates(valueProject, valueTeamMember, valueCategory, valueStartDate, valueEndDate){
+
+		let TARGETED_API = "http://localhost:8080/api/timeSheetActivities/search?";
+
+		let searchObject = {
+			projectId: valueProject,
+			teamMemberId: valueTeamMember,
+			categoryId: valueCategory,
+			startDate: valueStartDate,
+			endDate: valueEndDate
+		}
+
+		console.log(searchObject)
+
+		TARGETED_API = TARGETED_API + "searchObject=" + searchObject;
+		
+		console.log(TARGETED_API)
+	
+		axios.get(TARGETED_API).then(response => {
+			setTimeSheets(response.data)
+		})
+		
+	}*/
+
 	function searchByProjectMemberCategoryAndDates(valueProject, valueTeamMember, valueCategory, valueStartDate, valueEndDate){
 
 		let TARGETED_API = "http://localhost:8080/api/timeSheetActivities/search?";
@@ -145,6 +169,7 @@ export const Reports = () => {
 		})
 		
 	}
+
 
 	/*function buildInitialTargetedSearchAPI(argument, value){
 		SET_API_SEARCH("http://localhost:8080/api/timeSheetActivities/search?")

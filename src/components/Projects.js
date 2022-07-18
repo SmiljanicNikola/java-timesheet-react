@@ -6,6 +6,7 @@ import { NewMemberForm } from './NewMemberForm';
 import { NewProjectForm } from './NewProjectForm';
 import ClientService from '../services/ClientService';
 import TeamMemberService from '../services/TeamMemberService';
+import { set } from 'date-fns';
 
 export const Projects = () => {
     
@@ -137,6 +138,15 @@ export const Projects = () => {
 		})
 	}
 
+	const handleInactiveInput = () => {
+
+	}
+
+
+	const handleActiveInput = () => {
+		
+	}
+
 	function resetPassword(id){
 		console.log('delete')
 
@@ -250,22 +260,19 @@ export const Projects = () => {
 										}
 									</select>
 								</li>
+								Status:
 								<li class="inline">
-								<label>Status:</label>
-
-								{console.log(project.finished)}
+								
 								<span class="radio">
-									<label for="inactive">Active:</label>
-									<input type="radio" value={project.finished} name="status" id="inactive" />
+									<label for="inactive">Inactive:</label>
+								
+									<input type="radio" checked={project.finished == true} onChange={handleInactiveInput} id="inactive" />
 								</span>
 								<span class="radio">
-									<label for="active">Inactive:</label>
-									<input type="radio" defaultValue={project.finished} name="status" id="active" />
+									<label for="active">Active:</label>
+									<input type="radio" checked={project.finished == false} onChange={handleActiveInput} id="active" />
 								</span>
-								<span class="radio">
-									<label for="active">Archive:</label>
-									<input type="radio" defaultValue={project.finished} checked={project.deleted} name="status" id="active" />
-								</span>
+								
 							</li>
 							</ul>
 							<div class="buttons">

@@ -18,6 +18,7 @@ export const TeamMembers = () => {
 	const [hoursPerWeek, setHoursPerWeek] = useState('')
 	const [email, setEmail] = useState('')
 	const [teamMember, setTeamMember] = useState({})
+	const [blocked, setBlocked] = useState(false)
 	let updatedTeamMember = {}
 
     useEffect(() => {
@@ -127,7 +128,11 @@ export const TeamMembers = () => {
 	}
 
 	const handleActiveInput = () => {
+		setBlocked(true);
+	}
 
+	const handleInactiveInput = () => {
+		setBlocked(false);
 	}
 
 	const indexOfLastClient = currentPage * teamMembersPerPage;
@@ -183,25 +188,26 @@ export const TeamMembers = () => {
 							</ul>
 							<ul class="form last">
 								<li>
+									
 									<label>Status:</label>
 									<span class="radio">
 										<label for="inactive">Inactive:</label>
-										<input type="radio" defaultValue={member.deleted} checked={member.blocked} onChange={handleActiveInput} id="inactive" />
+										<input type="radio" checked={member.blocked == true} onChange={handleInactiveInput} id="inactive" />
 									</span>
 									<span class="radio">
 										<label for="active">Active:</label>
-										<input type="radio" checked={member.blocked} onChange={handleActiveInput} defaultValue={member.blocked}  id="active" />
+										<input type="radio" onChange={handleActiveInput} checked={member.blocked == false}  id="active" />
 									</span>
 								</li>
 								<li>
 									<label>Role:</label>
 									<span class="radio">
 										<label for="admin">Admin:</label>
-										<input type="radio" defaultValue={member.role} onChange={handleRoleInputAdmin} value={member.blocked} checked={member.role == 'ADMIN'}  id="admin" />
+										<input type="radio" onChange={handleRoleInputAdmin} checked={member.role == 'ADMIN'}  id="admin" />
 									</span>
 									<span class="radio">
 										<label for="worker">Worker:</label>
-										<input type="radio" defaultValue={member.role} onChange={handleRoleInputWorker} checked={member.role == 'WORKER'} id="worker" />
+										<input type="radio" onChange={handleRoleInputWorker} checked={member.role == 'WORKER'} id="worker" />
 									</span>
 								</li>
 							</ul>

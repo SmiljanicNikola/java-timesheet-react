@@ -23,6 +23,10 @@ class TimeSheetActivityService {
     searchByDate(date){
         return axios.get(TIMESHEET_REST_APLI_URL+"/searchByDate/"+date);
     }
+
+    searchByReportCriteria(){
+        return axios.get(TIMESHEET_REST_APLI_URL+"/search?");
+    }
 }
 
 export default new TimeSheetActivityService();

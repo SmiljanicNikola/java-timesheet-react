@@ -74,7 +74,6 @@ export const CalendarComponent = () => {
                                                 ?
                                                 <td key={col.date} className={`${col.classes} today`} onClick={() => dateClickHandler(col.date)}>
                                                     {col.value}
-                                                    
                                                 </td>
                                                 :
                                                 <td key={col.date} className={col.classes} onClick={() => dateClickHandler(col.date)}>
@@ -116,12 +115,8 @@ export const CalendarComponent = () => {
                                                                 <div></div>
 
                                                             </div>
-                                                            )}
-                                                            {/*{console.log('Activity date:')}
-                                                            {console.log(activity.date.toLocaleString())}*/}
-                                                            
+                                                            )}                                                     
                                                         </div> 
-
                                                     ))}
                                                     {}
                                                 
