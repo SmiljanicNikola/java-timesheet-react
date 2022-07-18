@@ -37,11 +37,13 @@ import vega.it.TimeSheetApp.model.Project;
 import vega.it.TimeSheetApp.model.Report;
 import vega.it.TimeSheetApp.model.ReportPDFExporter;
 import vega.it.TimeSheetApp.model.ReportsPDFExporter;
+import vega.it.TimeSheetApp.model.SearchObject;
 import vega.it.TimeSheetApp.model.TeamMember;
 import vega.it.TimeSheetApp.model.TimeSheetActivity;
 import vega.it.TimeSheetApp.service.TimeSheetActivityService;
 
 @RestController
+@CrossOrigin("*")
 @RequestMapping(value = "api/timeSheetActivities")
 public class TimeSheetActivityController {
 
@@ -121,8 +123,34 @@ public class TimeSheetActivityController {
 	
 	
 	
-	@GetMapping(value="/search")
+	/*@GetMapping(value="/search")
 	public ResponseEntity<List<TimeSheetActivityDTO>> getTimeSheetActivityByThreeParameters(
+			@RequestParam(required=false) Integer projectId, 
+			@RequestParam(required=false) Integer teamMemberId, 
+			@RequestParam(required=false) Integer categoryId,
+			@RequestParam(required=false) @DateTimeFormat(iso = DateTimeFormat.ISO.DATE) LocalDate startDate,
+			@RequestParam(required=false) @DateTimeFormat(iso = DateTimeFormat.ISO.DATE) LocalDate endDate
+			){
+		
+			SearchObject searchObject = new SearchObject();
+			searchObject.setProjectId(projectId);
+			searchObject.setTeamMemberId(teamMemberId);
+			searchObject.setCategoryId(categoryId);
+			searchObject.setStartDate(startDate);
+			searchObject.setEndDate(endDate);
+		
+			
+		List<TimeSheetActivityDTO> timesheetActivitiesDTO = timeSheetActivityService.findAllBySearchObjectCriteria(searchObject)
+				.stream()
+				.map(tsa -> new TimeSheetActivityDTO(tsa))
+				.toList();
+		
+		return new ResponseEntity<>(timesheetActivitiesDTO, HttpStatus.OK);
+
+	}*/
+	
+	@GetMapping(value="/search")
+	public ResponseEntity<List<TimeSheetActivityDTO>> getTimeSheetActivityByThreeParameterss(
 			@RequestParam(required=false) Integer projectId, 
 			@RequestParam(required=false) Integer teamMemberId, 
 			@RequestParam(required=false) Integer categoryId,
@@ -138,6 +166,21 @@ public class TimeSheetActivityController {
 		return new ResponseEntity<>(timesheetActivitiesDTO, HttpStatus.OK);
 
 	}
+
+	
+	/*@GetMapping(value="/search")
+	public ResponseEntity<List<TimeSheetActivityDTO>> getTimeSheetActivityByProjectTeamMemberCategoryDates(
+			@RequestParam(required = false) SearchObject searchObject
+			){
+		
+		List<TimeSheetActivityDTO> timesheetActivitiesDTO = timeSheetActivityService.findAllByThreeParameters(searchObject)
+				.stream()
+				.map(tsa -> new TimeSheetActivityDTO(tsa))
+				.toList();
+		
+		return new ResponseEntity<>(timesheetActivitiesDTO, HttpStatus.OK);
+
+	}*/
 	
 	@DeleteMapping(value = "/{id}")
     public ResponseEntity<?> delete(@PathVariable("id") Integer id) {

@@ -6,6 +6,7 @@ import java.util.List;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
+import vega.it.TimeSheetApp.model.SearchObject;
 import vega.it.TimeSheetApp.model.TimeSheetActivity;
 import vega.it.TimeSheetApp.repository.TimeSheetActivityRepository;
 import vega.it.TimeSheetApp.service.TimeSheetActivityService;
@@ -48,11 +49,17 @@ public class TimeSheetActivityServiceImpl implements TimeSheetActivityService {
 			Integer categoryId, LocalDate startDate, LocalDate endDate) {
 		return timeSheetActivityRepository.findAllByThreeParameters(projectId, teamMemberId, categoryId, startDate, endDate);
 	}
+	
+	/*public List<TimeSheetActivity> findAllByThreeParameters(SearchObject searchObject) {
+		return timeSheetActivityRepository.findAllByThreeParameters(searchObject);
+	}*/
 
 	@Override
 	public List<TimeSheetActivity> findAllByDate(LocalDate date) {
 		return timeSheetActivityRepository.findAllByDate(date);
 	}
+
+	
 
 	
 }
