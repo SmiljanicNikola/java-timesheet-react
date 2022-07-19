@@ -128,11 +128,22 @@ public class ProjectController {
 	        if (project == null) {
 	            return new ResponseEntity<>(HttpStatus.BAD_REQUEST);
 	        }
-
-	        project.setDescription(addProjectRequestDTO.getDescription());
-	        project.setProjectName(addProjectRequestDTO.getProjectName());
-	        project.setClient(this.clientService.findById(addProjectRequestDTO.getClientId()));
-	        project.setLead(this.teamMemberService.findById(addProjectRequestDTO.getTeamMemberId()));
+	        
+	        if(addProjectRequestDTO.getDescription() != null) {
+	        	project.setDescription(addProjectRequestDTO.getDescription());
+	        }
+	        
+	        if(addProjectRequestDTO.getProjectName() != null) {
+	        	project.setProjectName(addProjectRequestDTO.getProjectName());
+	        }
+	        
+	        if(addProjectRequestDTO.getClientId() != null) {
+		        project.setClient(this.clientService.findById(addProjectRequestDTO.getClientId()));
+	        }
+	        
+	        if(addProjectRequestDTO.getTeamMemberId() != null) {
+		        project.setLead(this.teamMemberService.findById(addProjectRequestDTO.getTeamMemberId()));
+	        }
 
 	        project = projectService.save(project);
 

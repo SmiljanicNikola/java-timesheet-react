@@ -29,6 +29,7 @@ import org.springframework.web.bind.annotation.RestController;
 import com.lowagie.text.DocumentException;
 
 import vega.it.TimeSheetApp.DTO.ClientDTO;
+import vega.it.TimeSheetApp.DTO.DayDTO;
 import vega.it.TimeSheetApp.DTO.ReportDTO;
 import vega.it.TimeSheetApp.DTO.TeamMemberDTO;
 import vega.it.TimeSheetApp.DTO.TimeSheetActivityDTO;
@@ -73,15 +74,6 @@ public class TimeSheetActivityController {
 
 	}
 	
-	/*@GetMapping(value="byDate/{date}")
-	public ResponseEntity<List<TimeSheetActivityDTO>> getTimeSheetActivityByDate(@PathVariable("date") LocalDate date){
-		//LocalDate specificDate = LocalDate.parse(date); 
-		List<TimeSheetActivity> timesheetActivities = timeSheetActivityService.findAllByDate(date);
-		
-		List<TimeSheetActivityDTO> timeSheetActivitesDTO = timesheetActivities.stream().map(tsa -> new TimeSheetActivityDTO(tsa)).toList();
-        return new ResponseEntity<>(timeSheetActivitesDTO, HttpStatus.OK);
-
-	}*/
 	
 	@GetMapping(value="byDate/{date}")
 	public ResponseEntity<List<TimeSheetActivityDTO>> getTimeSheetActivityByDate(
@@ -109,45 +101,25 @@ public class TimeSheetActivityController {
 
 	}
 	
-	@GetMapping(value="/projectId/{projectId}")
-	public ResponseEntity<List<TimeSheetActivityDTO>> getTimeSheetActivityByProjectId(@PathVariable("projectId") Integer projectId){
-		
-		List<TimeSheetActivityDTO> timesheetActivitiesDTO = timeSheetActivityService.findAllByProjectId(projectId)
-				.stream()
-				.map(tsa -> new TimeSheetActivityDTO(tsa))
-				.toList();
-		
-		return new ResponseEntity<>(timesheetActivitiesDTO, HttpStatus.OK);
-
-	}
 	
-	
-	
-	/*@GetMapping(value="/search")
-	public ResponseEntity<List<TimeSheetActivityDTO>> getTimeSheetActivityByThreeParameters(
-			@RequestParam(required=false) Integer projectId, 
-			@RequestParam(required=false) Integer teamMemberId, 
-			@RequestParam(required=false) Integer categoryId,
+	@GetMapping(value="/searchBetweenDates")
+	public ResponseEntity<List<DayDTO>> getTimeSheetActivityBetweenStartDateAndEndDate(
 			@RequestParam(required=false) @DateTimeFormat(iso = DateTimeFormat.ISO.DATE) LocalDate startDate,
 			@RequestParam(required=false) @DateTimeFormat(iso = DateTimeFormat.ISO.DATE) LocalDate endDate
 			){
 		
-			SearchObject searchObject = new SearchObject();
-			searchObject.setProjectId(projectId);
-			searchObject.setTeamMemberId(teamMemberId);
-			searchObject.setCategoryId(categoryId);
-			searchObject.setStartDate(startDate);
-			searchObject.setEndDate(endDate);
+		List<TimeSheetActivity> timeSheetActivities = timeSheetActivityService.findAllBetweenStartDateAndEndDate(startDate, endDate);
+		List<DayDTO> daysDTO = new ArrayList<DayDTO>();
 		
-			
-		List<TimeSheetActivityDTO> timesheetActivitiesDTO = timeSheetActivityService.findAllBySearchObjectCriteria(searchObject)
-				.stream()
-				.map(tsa -> new TimeSheetActivityDTO(tsa))
-				.toList();
+		for(TimeSheetActivity activity : timeSheetActivities){
+			DayDTO dayDTO = new DayDTO(activity.getTime(), activity.getOvertime(), activity.getDate());
+			daysDTO.add(dayDTO);
+		}
 		
-		return new ResponseEntity<>(timesheetActivitiesDTO, HttpStatus.OK);
+		return new ResponseEntity<>(daysDTO, HttpStatus.OK);
 
-	}*/
+	}
+	
 	
 	@GetMapping(value="/search")
 	public ResponseEntity<List<TimeSheetActivityDTO>> getTimeSheetActivityByThreeParameterss(
@@ -168,20 +140,6 @@ public class TimeSheetActivityController {
 	}
 
 	
-	/*@GetMapping(value="/search")
-	public ResponseEntity<List<TimeSheetActivityDTO>> getTimeSheetActivityByProjectTeamMemberCategoryDates(
-			@RequestParam(required = false) SearchObject searchObject
-			){
-		
-		List<TimeSheetActivityDTO> timesheetActivitiesDTO = timeSheetActivityService.findAllByThreeParameters(searchObject)
-				.stream()
-				.map(tsa -> new TimeSheetActivityDTO(tsa))
-				.toList();
-		
-		return new ResponseEntity<>(timesheetActivitiesDTO, HttpStatus.OK);
-
-	}*/
-	
 	@DeleteMapping(value = "/{id}")
     public ResponseEntity<?> delete(@PathVariable("id") Integer id) {
 		
@@ -194,6 +152,7 @@ public class TimeSheetActivityController {
         timeSheetActivityService.remove(id);
         return new ResponseEntity<>(HttpStatus.OK);
     }
+	
 	
 	@PostMapping("/reports/export")
     public void exportToPDFKlijent(HttpServletResponse response,@RequestBody Report report) throws DocumentException, IOException {

@@ -24,6 +24,7 @@ public interface TimeSheetActivityService {
 	//List<TimeSheetActivity> findAllByThreeParameters(SearchObject searchObject);
 
 	
+	List<TimeSheetActivity> findAllBetweenStartDateAndEndDate(LocalDate startDate, LocalDate endDate);
 
 
 	List<TimeSheetActivity> findAllByDate(LocalDate date);

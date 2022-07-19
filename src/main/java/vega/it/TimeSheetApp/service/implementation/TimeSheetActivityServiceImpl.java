@@ -59,6 +59,11 @@ public class TimeSheetActivityServiceImpl implements TimeSheetActivityService {
 		return timeSheetActivityRepository.findAllByDate(date);
 	}
 
+	@Override
+	public List<TimeSheetActivity> findAllBetweenStartDateAndEndDate(LocalDate startDate, LocalDate endDate) {
+		return timeSheetActivityRepository.findAllBetweenStartDateAndEndDate(startDate, endDate);
+	}
+
 	
 
 	
