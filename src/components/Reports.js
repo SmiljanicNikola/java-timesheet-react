@@ -114,31 +114,7 @@ export const Reports = () => {
 			console.log(timeSheets);
 		})
 	}
-
-	/*function searchByProjectMemberCategoryAndDates(valueProject, valueTeamMember, valueCategory, valueStartDate, valueEndDate){
-
-		let TARGETED_API = "http://localhost:8080/api/timeSheetActivities/search?";
-
-		let searchObject = {
-			projectId: valueProject,
-			teamMemberId: valueTeamMember,
-			categoryId: valueCategory,
-			startDate: valueStartDate,
-			endDate: valueEndDate
-		}
-
-		console.log(searchObject)
-
-		TARGETED_API = TARGETED_API + "searchObject=" + searchObject;
-		
-		console.log(TARGETED_API)
 	
-		axios.get(TARGETED_API).then(response => {
-			setTimeSheets(response.data)
-		})
-		
-	}*/
-
 	function searchByProjectMemberCategoryAndDates(valueProject, valueTeamMember, valueCategory, valueStartDate, valueEndDate){
 
 		let TARGETED_API = "http://localhost:8080/api/timeSheetActivities/search?";
@@ -182,8 +158,6 @@ export const Reports = () => {
 		let additionalAttribute = `${argument}=` + `${value}`;
 		SET_API_SEARCH(path + additionalAttribute);
 	}*/
-
-	
 
 	const exportPDF = async (timeSheet) => {
 
@@ -263,161 +237,157 @@ export const Reports = () => {
 
     return (
         <div class="container">
-		<div class="wrapper">
-			<section class="content">
-				<h2><i class="ico report"></i>Reports</h2>
-				<div class="grey-box-wrap reports">
-					<ul class="form">
-						<li>
-							<select name="project"
-								onChange={handleChangeProject}
-								onClick={fetchProjects}
+			<div class="wrapper">
+				<section class="content">
+					<h2><i class="ico report"></i>Reports</h2>
+					<div class="grey-box-wrap reports">
+						<ul class="form">
+							<li>
+								<select name="project"
+									onChange={handleChangeProject}
+									onClick={fetchProjects}
+								>
+									<option>Select Project</option>
+									{
+										projects.map((project) => (
+											<option
+											onClick={handleChangeProject}
+											getOptionValue={project => project.id}
+											value={project.id}
+											key={project.id}
+											> {project.projectName} </option>
+										))
+									}
+								</select>
+							</li>	
+							<li>
+								<select name="teamMember" style={{marginTop:'22px'}}
+									onChange={handleChangeTeamMember}
+									onClick={fetchTeamMembers}
+								>
+									<option>Select TeamMember</option>
+									{
+										teamMembers.map((member) => (
+											<option
+												onClick={handleChangeTeamMember}
+												getOptionValue={member => member.id}
+												value={member.id}
+											key={member.id}> {member.username} </option>
+										))
+									}
+									
+								</select>
+							</li>	
+						</ul>
+						<ul class="form">
+							<li>
+								<select name="client"
+									onChange={handleChangeClient}
+									onClick={fetchClients}
+								>
+									<option>Select Client</option>
+									{
+										clients.map((client) => (
+											<option key={client.id}> {client.clientName} </option>
+										))
+									}
+								</select>
+							</li>						
+							<li>
+								<label>Start date:</label>
+								<input onClick={handleStartDateChange} onChange={handleStartDateChange}  type="date" class="in-text datepicker" />
+							</li>
+						</ul>
+						<ul class="form last">
+							<li>
+								<select name="category"
+									onChange={handleChangeCategory}
+									onClick={fetchCategories}
+								>
+									<option value={undefined}>Select Category</option>
 
-							>
-								<option>Select Project</option>
-								{
-									projects.map((project) => (
-										<option
-										onClick={handleChangeProject}
-										getOptionValue={project => project.id}
-										value={project.id}
-										key={project.id}
-										> {project.projectName} </option>
-									))
-								}
-							</select>
-						</li>	
-						<li>
-							<select name="teamMember" style={{marginTop:'22px'}}
-								onChange={handleChangeTeamMember}
-								onClick={fetchTeamMembers}
-							>
-								<option>Select TeamMember</option>
-								{
-									teamMembers.map((member) => (
-										<option
-											onClick={handleChangeTeamMember}
-											getOptionValue={member => member.id}
-											value={member.id}
-										key={member.id}> {member.username} </option>
-									))
-								}
-								
-							</select>
-						</li>
-							
-					</ul>
-					<ul class="form">
-						<li>
-							<select name="client"
-								onChange={handleChangeClient}
-								onClick={fetchClients}
-							>
-								<option>Select Client</option>
-
-								{
-									clients.map((client) => (
-										<option key={client.id}> {client.clientName} </option>
-									))
-								}
-							</select>
-						</li>						
-						<li>
-							<label>Start date:</label>
-							<input onClick={handleStartDateChange} onChange={handleStartDateChange}  type="date" class="in-text datepicker" />
-						</li>
-					</ul>
-					<ul class="form last">
-						<li>
-							<select name="category"
-								onChange={handleChangeCategory}
-								onClick={fetchCategories}
-							>
-								<option value={undefined}>Select Category</option>
-
-								{
-									categories.map((category) => (
-										<option
-										onClick={handleChangeCategory}
-										value={category.id}
-										getOptionValue={category => category.type}
-										key={category.id}> {category.type} </option>
-									))
-								}
-							</select>
-						</li>
-						<li>
-							<label>End date:</label>
-							<input type="date" onChange={handleEndDateChange} class="in-text datepicker" />
-						</li>
-						<li>
-							<a onClick={() => reset()} class="btn orange right">Reset</a>
-							<a onClick={() => searchByProjectMemberCategoryAndDates(valueProject,valueTeamMember, valueCategory, valueStartDate, valueEndDate)} class="btn green right">Search</a>
-						</li>
-					</ul>
-				</div>
-				<table class="default-table" border="1" style={{}}>
-					<tr>
-						<th>
-							Date
-						</th>
-						<th>
-							Team member
-						</th>
-						<th>
-							Projects
-						</th>
-						<th>Categories</th>
-						<th>Description</th>
-						<th class="small">Time</th>
-						<th>Actions</th>
-					</tr>
-					<tbody>{timeSheets.map((timeSheet) => (
-					<tr key={timeSheet.id}>
-						<td>
-							{timeSheet.date}
-						</td>
-						<td>
-							{timeSheet.teamMember.firstname + timeSheet.teamMember.lastname}
-						</td>
-						<td>
-							{timeSheet.project.projectName}
-						</td>
-						<td>
-							{timeSheet.category.type}
-						</td>
-						<td>
-							{timeSheet.description}
-						</td>
-						<td class="small">
-							{timeSheet.time}
-						</td>
-						<td>
-							<button onClick={() => exportPDF(timeSheet)}>Download PDF</button>
-						</td>
-					</tr>
-				
-					))}
-					</tbody>
-				</table>
-				<div class="total">
-					<span>Report total: <em>7.5</em></span>
-				</div>
-				<div class="grey-box-wrap reports">
-					<div class="btns-inner">
-						<a href="javascript:;" class="btn white">
-							<span>Print report</span>
-						</a>
-						<a href="javascript:;" class="btn white" onClick={() => exportPDFListOfTimeSheets(timeSheets)}>
-							<span>Create PDF</span>
-						</a>
-						<a href="javascript:;" class="btn white">
-							<span>Export to excel</span>
-						</a>
+									{
+										categories.map((category) => (
+											<option
+											onClick={handleChangeCategory}
+											value={category.id}
+											getOptionValue={category => category.type}
+											key={category.id}> {category.type} </option>
+										))
+									}
+								</select>
+							</li>
+							<li>
+								<label>End date:</label>
+								<input type="date" onChange={handleEndDateChange} class="in-text datepicker" />
+							</li>
+							<li>
+								<a onClick={() => reset()} class="btn orange right">Reset</a>
+								<a onClick={() => searchByProjectMemberCategoryAndDates(valueProject,valueTeamMember, valueCategory, valueStartDate, valueEndDate)} class="btn green right">Search</a>
+							</li>
+						</ul>
 					</div>
-				</div>
-			</section>			
-		</div>
+					<table class="default-table" border="1" style={{}}>
+						<tr>
+							<th>
+								Date
+							</th>
+							<th>
+								Team member
+							</th>
+							<th>
+								Projects
+							</th>
+							<th>Categories</th>
+							<th>Description</th>
+							<th class="small">Time</th>
+							<th>Actions</th>
+						</tr>
+						<tbody>{timeSheets.map((timeSheet) => (
+						<tr key={timeSheet.id}>
+							<td>
+								{timeSheet.date}
+							</td>
+							<td>
+								{timeSheet.teamMember.firstname + timeSheet.teamMember.lastname}
+							</td>
+							<td>
+								{timeSheet.project.projectName}
+							</td>
+							<td>
+								{timeSheet.category.type}
+							</td>
+							<td>
+								{timeSheet.description}
+							</td>
+							<td class="small">
+								{timeSheet.time}
+							</td>
+							<td>
+								<button onClick={() => exportPDF(timeSheet)}>Download PDF</button>
+							</td>
+						</tr>
+						))}
+						</tbody>
+					</table>
+					<div class="total">
+						<span>Report total: <em>7.5</em></span>
+					</div>
+					<div class="grey-box-wrap reports">
+						<div class="btns-inner">
+							<a href="javascript:;" class="btn white">
+								<span>Print report</span>
+							</a>
+							<a href="javascript:;" class="btn white" onClick={() => exportPDFListOfTimeSheets(timeSheets)}>
+								<span>Create PDF</span>
+							</a>
+							<a href="javascript:;" class="btn white">
+								<span>Export to excel</span>
+							</a>
+						</div>
+					</div>
+				</section>			
+			</div>
         </div>
     )
 }

@@ -73,9 +73,10 @@ const monthNamesArr = [
       const getPrevMonth = () => {
           setSelectedDate(prevValue => new Date(prevValue.getFullYear(), prevValue.getMonth() - 1));
       }
+      
       const getNextMonth = () => {
         setSelectedDate(prevValue => new Date(prevValue.getFullYear(), prevValue.getMonth() + 1, 1));
-    }
+      }
 
     return {
         daysShort,

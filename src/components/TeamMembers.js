@@ -4,7 +4,6 @@ import { NewMemberForm } from './NewMemberForm';
 import Pagination from './Pagination';
 import axios from 'axios';
 
-
 export const TeamMembers = () => {
 
     const [teamMembers, setTeamMembers] = useState([]);

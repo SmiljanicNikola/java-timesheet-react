@@ -8,6 +8,7 @@ import ClientService from '../services/ClientService';
 import TeamMemberService from '../services/TeamMemberService';
 import { set } from 'date-fns';
 
+
 export const Projects = () => {
     
     const [projects, setProjects] = useState([]);
@@ -20,10 +21,9 @@ export const Projects = () => {
 	const alphabet = ["a","b","c","d","e","f","g","h","i","j","k","l","m","n","o","p","q","r","s","t","u","v","w","x","y","z"];
 	const [clients, setClients] = useState([])
 	const [teamMembers, setTeamMembers] = useState([])
-	const [valueTeamMember, setValueTeamMember] = useState([])
+	const [valueTeamMember, setValueTeamMember] = useState('')
 	const [valueClient, setValueClient] = useState('');
 	const [letters, setLetters] = useState('')
-
 	let updatedProject = {}
 
 	
@@ -68,12 +68,12 @@ export const Projects = () => {
         
 	}, []);
 
-	function updateProject(id){
+	/*function updateProject(id){
 		ProjectService.getProjectById(id).then(response => {
 			setProject(response.data)
 			console.log(project);
 		})
-	}
+	}*/
 
 	function deleteProject(id){
 		ProjectService.deleteProject(id).then(response => {
@@ -112,8 +112,11 @@ export const Projects = () => {
 			setProject(response.data)
 
 			updatedProject = {
+				id:project.id,
 				projectName: project.projectName,
-				description: project.description
+				description: project.description,
+				clientId: valueClient,
+				teamMemberId: valueTeamMember
 			}
 
 			ProjectService.updateProject(id, updatedProject);
@@ -139,17 +142,13 @@ export const Projects = () => {
 	}
 
 	const handleInactiveInput = () => {
-
 	}
 
-
 	const handleActiveInput = () => {
-		
 	}
 
 	function resetPassword(id){
 		console.log('delete')
-
 	}
 
 	function toggleModal(){
@@ -163,12 +162,9 @@ export const Projects = () => {
 			setPaginatedProjects(response.data.content.filter(project => project.deleted == false));
 		})
 	}
-	
-	console.log(currentPage);
 
 	const indexOfLastClient = currentPage * projectsPerPage;
 	const indexOfFirstClient = indexOfLastClient - projectsPerPage;
-	const currentProjects = projects.slice(indexOfFirstClient, indexOfLastClient); 
 
     return (
         <div>
@@ -216,6 +212,7 @@ export const Projects = () => {
 								<li>
 									<label>Lead:</label>
 									<select name="teamMember"
+										onChange={handleChangeTeamMember}
 										onClick={fetchTeamMembers}
 
 									>
@@ -244,6 +241,7 @@ export const Projects = () => {
 								<li>
 									<label>Customer:</label>
 									<select name="client"
+										onChange={handleChangeClient}
 										onClick={fetchClients}
 
 									>

@@ -1,15 +1,16 @@
 import React, { useEffect, useState } from 'react'
-import './style.css'
+import '../assets/css/popup.css'
 import {useNavigate} from 'react-router-dom'
 import TeamMemberService from '../services/TeamMemberService';
 
 
 export const NewMemberForm = (props) => {
+
 	const [display, setDisplay] = useState(props.value);
 	const navigate = useNavigate();
 	const [member, setMember] = useState({})
 
-	
+
 	function closePopup(){
 		setDisplay(false);
 	}
@@ -26,9 +27,7 @@ export const NewMemberForm = (props) => {
 		}
 
 		TeamMemberService.createTeamMember(newMember);
-
     }
-
 
     return (
 		(props.display == true)? (

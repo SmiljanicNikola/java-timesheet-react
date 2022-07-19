@@ -12,6 +12,10 @@ class TimeSheetActivityService {
         return axios.get(TIMESHEET_REST_APLI_URL+"/projectId/"+projectId);
     }
 
+    getTimeSheetsByDate(date){
+        return axios.get(TIMESHEET_REST_APLI_URL+"/searchByDate/"+date);
+    }
+
     getTimeSheetsByThreeParameters(projectId,teamMemberId, categoryId){
         return axios.get(TIMESHEET_REST_APLI_URL+"/projectId/"+projectId+"/teamMemberId/" + teamMemberId + "/categoryId/" + categoryId);
     }
@@ -26,6 +30,10 @@ class TimeSheetActivityService {
 
     searchByReportCriteria(){
         return axios.get(TIMESHEET_REST_APLI_URL+"/search?");
+    }
+
+    getTimeSheetsBetweenStartDateAndEndDate(startDate, endDate){
+        return axios.get(TIMESHEET_REST_APLI_URL+"/searchBetweenDates?startDate="+startDate+"&endDate="+endDate)
     }
 }
 

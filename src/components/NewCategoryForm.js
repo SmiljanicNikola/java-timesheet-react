@@ -8,11 +8,8 @@ export const NewCategoryForm = (props) => {
 		let newCategory = {
 			type: category.type,
 		}
-
 		CategoryService.createCategory(newCategory);
-
     }
-
 
     return (
 		(props.display == true)? (
@@ -38,6 +35,9 @@ export const NewCategoryForm = (props) => {
 						</div>
 					</div>
 				</div>
-        </div>) : <div></div>
+		</div>
+		) 
+		:
+		<div></div>
     )
 }

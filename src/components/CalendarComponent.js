@@ -78,44 +78,28 @@ export const CalendarComponent = () => {
                                                 :
                                                 <td key={col.date} className={col.classes} onClick={() => dateClickHandler(col.date)}>
                                                     {col.value+'.'}
-                                                    
                                                     <br></br><br></br>
                                                     <div style={{textAlign:'center'}}>
                                                         <p>Hours:</p>
                                                     </div>
                                                     {timeSheetActivities.map(activity => (
                                                         <div>
-                                                           
-                                                            {/*{console.log('////////////////Col date:')}*/}
-                                                            {/*{console.log((col.date.split('-').reverse().join('-').slice(0,4)+'-0'+col.date.split('-').reverse().join('-').slice(5,9)))}*/}
-                                                            {/*{console.log(((col.date.split('-').reverse().join('-').slice(0,4)+'-0'+col.date.split('-').reverse().join('-').slice(5,7)+'0')+col.date.slice(7,8)))}*/}
-                                                           {/*{console.log(activity.date.toLocaleString() == ((col.date.split('-').reverse().join('-').slice(0,4)+'-0'+col.date.split('-').reverse().join('-').slice(5,9))))}*/}
                                                            {console.log(activity.date.toLocaleString() == ((col.date.split('-').reverse().join('-').slice(0,4)+'-0'+col.date.split('-').reverse().join('-').slice(5,9))))}
 
-                                                            {(activity.date.toLocaleString() == ((col.date.split('-').reverse().join('-').slice(0,4)+'-0'+col.date.split('-').reverse().join('-').slice(5,9))))
+                                                            {
+                                                            (activity.date.toLocaleString() == ((col.date.split('-').reverse().join('-').slice(0,4)+'-0'+col.date.split('-').reverse().join('-').slice(5,9))))
                                                                 || (activity.date.toLocaleString() == ((col.date.split('-').reverse().join('-').slice(0,4)+'-0'+col.date.split('-').reverse().join('-').slice(5,7)+'0')+col.date.slice(7,8)))
-                                                            ? (
+                                                            ? 
+                                                            (
                                                                 <div>
-                                                                    
-
                                                                     <div style={{color:'black',backgroundColor:'#90EE90'}} onClick={() => viewDays(activity.date)}>{activity.time}</div>
-
-                                                                {/*{activity.time > 4 ?
-                                                                        (
-                                                                        <div style={{color:'black',backgroundColor:'#90EE90'}} onClick={() => viewDays(activity.date)}>{'Hours:'+activity.time}</div>
-                                                                        ):
-                                                                        <div style={{color:'black',backgroundColor:'#FA8072'}}  onClick={() => viewDays(activity.date)}>{'Hours:'+activity.time}</div>    
-                                                                
-                                                                }*/}
-                                                                    
                                                                 </div>
-                                                            
-                                                            ) : (
-                                                            <div>
-                                                                <div></div>
-
-                                                            </div>
-                                                            )}                                                     
+                                                            ): 
+                                                            (
+                                                            <>
+                                                            </>
+                                                            )
+                                                            }                                                     
                                                         </div> 
                                                     ))}
                                                     {}

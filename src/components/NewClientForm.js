@@ -1,7 +1,7 @@
 import React,{useEffect, useState} from 'react'
 import ClientService from '../services/ClientService';
 import CountryService from '../services/CountryService';
-import './style.css'
+import '../assets/css/popup.css'
 
 export const NewClientForm = (props) => {
 	const [takenProps, setTakenProps] = useState(props.display);   
@@ -15,10 +15,6 @@ export const NewClientForm = (props) => {
 		CountryService.getCountries().then((response) => {
 			setCountries(response.data);
 		})
-	}
-
-    function closePopup(){
-		setTakenProps(false);
 	}
 	
 	const handleChangeCountry = country =>{
@@ -36,7 +32,6 @@ export const NewClientForm = (props) => {
 		}
 		
         ClientService.createClient(newClient);
-
     }
 
     return (
@@ -90,6 +85,9 @@ export const NewClientForm = (props) => {
 						</div>
 					</div>
 				</div>
-        </div>):<div></div>
+		</div>
+		)
+		:
+		<div></div>
     )
 }

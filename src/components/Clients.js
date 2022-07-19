@@ -2,9 +2,8 @@ import React, { useState, useEffect } from 'react'
 import ClientService from '../services/ClientService';
 import axios from 'axios'
 import Pagination from './Pagination';
-import './style.css'
+import '../assets/css/popup.css'
 import { NewClientForm } from './NewClientForm';
-
 
 export const Clients = () => {
 
@@ -90,7 +89,6 @@ export const Clients = () => {
 		ClientService.filterClientsByFirstLetters(letter).then(response => {
 			setPaginatedClients(response.data)
 		})
-
 	}
 
 	function handleSearchChange(e){
@@ -104,7 +102,6 @@ export const Clients = () => {
 	function saveClient(id){
 		ClientService.getClientById(id).then(response => {
 			setClient(response.data);
-			console.log(client);
 		})
 
 		let updatedClient = {
@@ -156,7 +153,6 @@ export const Clients = () => {
 				<NewClientForm display={display}>
 					
 				</NewClientForm>
-				
 				<div class="alpha">
 					<ul>	
 						{alphabet.map((letter) => (
