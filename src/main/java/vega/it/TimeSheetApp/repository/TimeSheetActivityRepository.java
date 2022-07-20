@@ -36,7 +36,7 @@ public interface TimeSheetActivityRepository extends JpaRepository<TimeSheetActi
 	
 	@Query(value= "SELECT * FROM timesheet_activity where (:startDate is null or timesheet_activity.date >= :startDate) and (:endDate is null or timesheet_activity.date <= :endDate)",nativeQuery = true)
 	List<TimeSheetActivity> findAllBetweenStartDateAndEndDate(@Param("startDate") LocalDate startDate,
-													@Param("endDate") LocalDate endDate);
+															@Param("endDate") LocalDate endDate);
 	
 
 	

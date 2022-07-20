@@ -28,8 +28,11 @@ import org.springframework.web.bind.annotation.RestController;
 
 import com.lowagie.text.DocumentException;
 
+import vega.it.TimeSheetApp.DTO.AddActivityDTORequest;
+import vega.it.TimeSheetApp.DTO.AddProjectRequestDTO;
 import vega.it.TimeSheetApp.DTO.ClientDTO;
 import vega.it.TimeSheetApp.DTO.DayDTO;
+import vega.it.TimeSheetApp.DTO.ProjectDTO;
 import vega.it.TimeSheetApp.DTO.ReportDTO;
 import vega.it.TimeSheetApp.DTO.TeamMemberDTO;
 import vega.it.TimeSheetApp.DTO.TimeSheetActivityDTO;
@@ -41,15 +44,32 @@ import vega.it.TimeSheetApp.model.ReportsPDFExporter;
 import vega.it.TimeSheetApp.model.SearchObject;
 import vega.it.TimeSheetApp.model.TeamMember;
 import vega.it.TimeSheetApp.model.TimeSheetActivity;
+import vega.it.TimeSheetApp.service.CategoryService;
+import vega.it.TimeSheetApp.service.ClientService;
+import vega.it.TimeSheetApp.service.DayService;
+import vega.it.TimeSheetApp.service.ProjectService;
+import vega.it.TimeSheetApp.service.TeamMemberService;
 import vega.it.TimeSheetApp.service.TimeSheetActivityService;
 
 @RestController
-@CrossOrigin("*")
 @RequestMapping(value = "api/timeSheetActivities")
 public class TimeSheetActivityController {
 
 	@Autowired
 	private TimeSheetActivityService timeSheetActivityService;
+	
+	@Autowired
+	private ProjectService projectService;
+	
+	@Autowired
+	private DayService dayService;
+	
+	@Autowired
+	private CategoryService categoryService;
+	
+	@Autowired
+	private TeamMemberService teamMemberService;
+	
 	
 	@GetMapping
 	public ResponseEntity<List<TimeSheetActivityDTO>> getTimesheetActivities(){
@@ -88,36 +108,15 @@ public class TimeSheetActivityController {
 
 	}
 	
-	@GetMapping(value="searchByDate/{date}")
-	public ResponseEntity<List<TimeSheetActivityDTO>> getTimeSheetActivityByDate2(
-		@PathVariable(name = "date")
-	       @DateTimeFormat(iso = ISO.DATE)
-	       LocalDate date){
-		
-		//List<TimeSheetActivity> timesheetActivities = timeSheetActivityService.findAll().stream().filter(tsa -> tsa.getDate().toString().equals(date.toString())).collect(Collectors.toList());
-		List<TimeSheetActivity> timesheetActivities = timeSheetActivityService.findAllByDate(date);
-		List<TimeSheetActivityDTO> timeSheetActivitesDTO = timesheetActivities.stream().map(tsa -> new TimeSheetActivityDTO(tsa)).toList();
-        return new ResponseEntity<>(timeSheetActivitesDTO, HttpStatus.OK);
-
-	}
-	
 	
 	@GetMapping(value="/searchBetweenDates")
 	public ResponseEntity<List<DayDTO>> getTimeSheetActivityBetweenStartDateAndEndDate(
 			@RequestParam(required=false) @DateTimeFormat(iso = DateTimeFormat.ISO.DATE) LocalDate startDate,
-			@RequestParam(required=false) @DateTimeFormat(iso = DateTimeFormat.ISO.DATE) LocalDate endDate
-			){
+			@RequestParam(required=false) @DateTimeFormat(iso = DateTimeFormat.ISO.DATE) LocalDate endDate){
 		
-		List<TimeSheetActivity> timeSheetActivities = timeSheetActivityService.findAllBetweenStartDateAndEndDate(startDate, endDate);
-		List<DayDTO> daysDTO = new ArrayList<DayDTO>();
-		
-		for(TimeSheetActivity activity : timeSheetActivities){
-			DayDTO dayDTO = new DayDTO(activity.getTime(), activity.getOvertime(), activity.getDate());
-			daysDTO.add(dayDTO);
-		}
+		List<DayDTO> daysDTO = dayService.findAllBetweenStartDateAndEndDate(startDate, endDate);
 		
 		return new ResponseEntity<>(daysDTO, HttpStatus.OK);
-
 	}
 	
 	
@@ -138,6 +137,23 @@ public class TimeSheetActivityController {
 		return new ResponseEntity<>(timesheetActivitiesDTO, HttpStatus.OK);
 
 	}
+	
+	@PostMapping()
+    public ResponseEntity<TimeSheetActivityDTO> saveTimeSheetActivity(@RequestBody AddActivityDTORequest addActivityDTORequest) {
+		
+		TimeSheetActivity timeSheetActivity = new TimeSheetActivity();
+		timeSheetActivity.setDescription(addActivityDTORequest.getDescription());
+		timeSheetActivity.setProject(this.projectService.findById(addActivityDTORequest.getProjectId()));
+		timeSheetActivity.setTeamMember(this.teamMemberService.findById(addActivityDTORequest.getTeamMemberId()));
+		timeSheetActivity.setCategory(this.categoryService.findById(addActivityDTORequest.getCategoryId()));
+		timeSheetActivity.setTime(addActivityDTORequest.getTime());
+		timeSheetActivity.setOvertime(addActivityDTORequest.getOvertime());
+		timeSheetActivity.setDate(addActivityDTORequest.getDate());
+      
+        timeSheetActivity = timeSheetActivityService.save(timeSheetActivity);
+        return new ResponseEntity<>(new TimeSheetActivityDTO(timeSheetActivity), HttpStatus.CREATED);
+	        	
+	}
 
 	
 	@DeleteMapping(value = "/{id}")
@@ -152,6 +168,19 @@ public class TimeSheetActivityController {
         timeSheetActivityService.remove(id);
         return new ResponseEntity<>(HttpStatus.OK);
     }
+	
+	@GetMapping(value="searchByDate/{date}")
+	public ResponseEntity<List<TimeSheetActivityDTO>> getTimeSheetActivityByDate2(
+		@PathVariable(name = "date")
+	       @DateTimeFormat(iso = ISO.DATE)
+	       LocalDate date){
+		
+		//List<TimeSheetActivity> timesheetActivities = timeSheetActivityService.findAll().stream().filter(tsa -> tsa.getDate().toString().equals(date.toString())).collect(Collectors.toList());
+		List<TimeSheetActivity> timesheetActivities = timeSheetActivityService.findAllByDate(date);
+		List<TimeSheetActivityDTO> timeSheetActivitesDTO = timesheetActivities.stream().map(tsa -> new TimeSheetActivityDTO(tsa)).toList();
+        return new ResponseEntity<>(timeSheetActivitesDTO, HttpStatus.OK);
+
+	}
 	
 	
 	@PostMapping("/reports/export")
