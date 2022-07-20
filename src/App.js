@@ -1,28 +1,27 @@
 import './App.css';
-import { Header } from './components/Header';
-import { Footer } from './components/Footer';
-import {TeamMembers} from './components/TeamMembers'
-import {Clients} from './components/Clients'
-import {Projects} from './components/Projects'
-import {Categories} from './components/Categories'
-import {NewMemberForm} from './components/NewMemberForm'
-import {Calendar} from './components/Calendar'
+import { Header } from './components/layout/Header';
+import { Footer } from './components/layout/Footer';
+import {TeamMembers} from './components/pages/TeamMembers'
+import {Clients} from './components/pages/Clients'
+import {Projects} from './components/pages/Projects'
+import {Categories} from './components/pages/Categories'
+import {NewMemberForm} from './components/forms/NewMemberForm'
+import {Calendar} from './components/calendar-feature/Calendar'
 import {BrowserRouter as Router, Routes, Route, Outlet} from 'react-router-dom';
-import { TimeSheet } from './components/TimeSheet';
-import { Login } from './components/Login';
-import { Reports } from './components/Reports';
-import { NewProjectForm } from './components/NewProjectForm';
-import { NewClientForm } from './components/NewClientForm';
-import { Days } from './components/Days';
-import { NewCategoryForm } from './components/NewCategoryForm';
+import { TimeSheet } from './components/pages/TimeSheet';
+import { Login } from './components/pages/Login';
+import { Reports } from './components/pages/Reports';
+import { NewProjectForm } from './components/forms/NewProjectForm';
+import { NewClientForm } from './components/forms/NewClientForm';
+import { Days } from './components/pages/Days';
+import { NewCategoryForm } from './components/forms/NewCategoryForm';
 
 
 function App() {
   return (
     <div className="App">
-      <Header />
+      <Header /><br></br><br></br>
       <Router>
-      <Footer style={{display:'none'}}/>   
         <Routes>
 
           <Route exact path='/teamMembers' element={<TeamMembers/>}></Route>
@@ -42,9 +41,11 @@ function App() {
 
         </Routes>
         
-      <Footer />
 
       </Router>
+
+      <Footer />
+
     </div>
   );
 }

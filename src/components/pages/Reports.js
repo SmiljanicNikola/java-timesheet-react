@@ -1,11 +1,11 @@
 import axios from 'axios';
 import React, {useEffect, useState} from 'react'
 import AsyncSelect from 'react-select/async'
-import CategoryService from '../services/CategoryService';
-import ClientService from '../services/ClientService';
-import ProjectService from '../services/ProjectService';
-import TeamMemberService from '../services/TeamMemberService';
-import TimeSheetActivityService from '../services/TimeSheetActivityService';
+import CategoryService from '../../services/CategoryService';
+import ClientService from '../../services/ClientService';
+import ProjectService from '../../services/ProjectService';
+import TeamMemberService from '../../services/TeamMemberService';
+import TimeSheetActivityService from '../../services/TimeSheetActivityService';
 
 export const Reports = () => {
 
@@ -13,27 +13,15 @@ export const Reports = () => {
 	const [projects, setProjects] = useState([]);
 	const [teamMembers, setTeamMembers] = useState([]);
 	const [categories, setCategories] = useState([]);
-	const [inputValue, setValue]= useState('');
-
 	const [valueProject, setValueProject] = useState('');
 	const [valueStartDate, setValueStartDate] = useState('');
 	const [valueEndDate, setValueEndDate] = useState('');
 	const [valueTeamMember, setValueTeamMember] = useState('');
 	const [valueCategory, setValueCategory] = useState('');
 	const [valueClient, setValueClient] = useState('');
-
-
-	const [selectedValue, setSelectedValue] = useState(null);
-	const [selectedValueProject, setSelectedValueProject] = useState(null);
-	const [selectedValueCategory, setSelectedValueCategory] = useState(null);
-	const [selectedValueTeamMember, setSelectedValueTeamMember] = useState(null);
 	const [timeSheets, setTimeSheets] = useState([]);
 	const [API_SEARCH, SET_API_SEARCH] = useState('')
 
-	useEffect(() => {
-		
-		
-	})
 
 	const fetchTeamMembers = () =>{
 		TeamMemberService.getTeamMembers().then(( response ) => {
@@ -60,10 +48,11 @@ export const Reports = () => {
 	}
 
 	function reset(){
-		console.log('click')
+
 		setValueProject('');
 		setValueTeamMember('');
 		setValueCategory('');
+
 		setProjects([])
 		setTeamMembers([])
 		setProjects([])
@@ -195,7 +184,7 @@ export const Reports = () => {
 			const url = window.URL.createObjectURL(new Blob([response.data]));
 			const link = document.createElement('a');
 			link.href = url;
-			link.setAttribute('download', 'file.pdf'); //or any other extension
+			link.setAttribute('download', 'file.pdf');
 			document.body.appendChild(link);
 			link.click();
 		}).catch(err => alert(err));
@@ -204,14 +193,11 @@ export const Reports = () => {
 
 	const exportPDFListOfTimeSheets = async (timeSheets) => {
 
-	
-
 		const requestOptions = {
 			method: 'POST',
 			headers: { 'Content-Type': 'application/json' },
 			body: JSON.stringify({timeSheets})
 		};
-
 
 		axios.post(`http://localhost:8080/api/timeSheetActivities/export`,timeSheets,{
 		//TimeSheetActivityService.exportPDFReport(report), {
@@ -275,7 +261,6 @@ export const Reports = () => {
 											key={member.id}> {member.username} </option>
 										))
 									}
-									
 								</select>
 							</li>	
 						</ul>

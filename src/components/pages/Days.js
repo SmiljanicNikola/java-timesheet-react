@@ -1,9 +1,11 @@
 import React,{useState, useEffect} from 'react'
 import { useNavigate, useParams } from 'react-router-dom'
-import ClientService from '../services/ClientService';
-import ProjectService from '../services/ProjectService';
-import TimeSheetActivityService from '../services/TimeSheetActivityService';
-import { Calendar } from './Calendar';
+import ClientService from '../../services/ClientService';
+import ProjectService from '../../services/ProjectService';
+import TimeSheetActivityService from '../../services/TimeSheetActivityService';
+import { Calendar } from '../calendar-feature/Calendar';
+import { NewActivityForm } from '../forms/NewActivityForm';
+
 
 export const Days = () => {
 
@@ -12,6 +14,8 @@ export const Days = () => {
 	const params = useParams();
 	const [clients, setClients] = useState([])
 	const [projects, setProjects] = useState([])
+	const [totalHours, setTotalHours] = useState(0)
+	const [newTimeSheet, setNewTimeSheet] = useState({})
 
 	useEffect(() => {
 		TimeSheetActivityService.searchByDate(params.date).then((response => {
@@ -25,8 +29,26 @@ export const Days = () => {
 		ProjectService.getProjects().then((response => {
 			setProjects(response.data);
 		}))
+	
 		
-	  }, []);
+	}, []);
+
+	  
+	let totalTime = 0;
+	for(let i = 0; i < timeSheets.length; i++){
+		{
+			totalTime = totalTime + timeSheets[i].time
+		}
+	}
+
+
+	let totalOvertime = 0;
+	for(let i = 0; i < timeSheets.length; i++){
+		{
+			totalOvertime = totalOvertime + timeSheets[i].overtime
+		}
+	}
+
 
     return (
 		<div class="container">
@@ -109,6 +131,7 @@ export const Days = () => {
 								Time <em>*</em>
 							</th>
 							<th class="small">Overtime</th>
+							<th>Actions</th>
 						</tr>
 						{timeSheets.map((activity) => (	
 						<tr>
@@ -137,9 +160,13 @@ export const Days = () => {
 							<td class="small">
 								<input type="text" defaultValue={activity.overtime} class="in-text xsmall" />
 							</td>
+							<td>
+								<button class="btn-info">Update</button>
+							</td>
 						</tr>
 						))}
 						<tr>
+						
 							<td>
 								<select>
 									<option>Choose client</option>
@@ -162,19 +189,22 @@ export const Days = () => {
 								</select>
 							</td>
 							<td>
-								<input type="text" class="in-text medium" />
+								<input name="description" id="description" onChange={e => setNewTimeSheet({...newTimeSheet, description: e.target.value})} type="text" class="in-text medium" />
 							</td>
 							<td class="small">
-								<input type="text" class="in-text xsmall" />
+								<input name="time" id="time" type="text" onChange={e => setNewTimeSheet({...newTimeSheet, time: e.target.value})} class="in-text xsmall" />
 							</td>
 							<td class="small">
-								<input type="text" class="in-text xsmall" />
+								<input name="overtime" id="overtime" type="text" onChange={e => setNewTimeSheet({...newTimeSheet, overtime: e.target.value})} class="in-text xsmall" />
+							</td>
+							<td>
+								<button class="btn-success">Add</button>
 							</td>
 						</tr>
 					</table>
 					<div class="total">
 						<a href="index.html"><i></i>back to monthly view</a>
-						<span>Total hours: <em>7.5</em></span>
+						<span>Total hours: <em>{totalTime}</em></span>
 					</div>
 				</section>			
 			</div>

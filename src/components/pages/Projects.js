@@ -1,12 +1,10 @@
 import React, {useState, useEffect} from 'react'
-import ProjectService from '../services/ProjectService';
+import ProjectService from '../../services/ProjectService';
 import axios from 'axios'
-import Pagination from './Pagination';
-import { NewMemberForm } from './NewMemberForm';
-import { NewProjectForm } from './NewProjectForm';
-import ClientService from '../services/ClientService';
-import TeamMemberService from '../services/TeamMemberService';
-import { set } from 'date-fns';
+import Pagination from '../Pagination';
+import { NewProjectForm } from '../forms/NewProjectForm';
+import ClientService from '../../services/ClientService';
+import TeamMemberService from '../../services/TeamMemberService';
 
 
 export const Projects = () => {

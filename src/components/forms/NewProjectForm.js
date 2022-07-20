@@ -1,9 +1,9 @@
 import React, {useEffect, useState} from 'react'
-import '../assets/css/popup.css'
+import '../../assets/css/popup.css'
 import {useNavigate} from 'react-router-dom'
-import ClientService from '../services/ClientService';
-import TeamMemberService from '../services/TeamMemberService';
-import ProjectService from '../services/ProjectService';
+import ClientService from '../../services/ClientService';
+import TeamMemberService from '../../services/TeamMemberService';
+import ProjectService from '../../services/ProjectService';
 
 export const NewProjectForm = (props) => {
     const [takenProps, setTakenProps] = useState(props.display);

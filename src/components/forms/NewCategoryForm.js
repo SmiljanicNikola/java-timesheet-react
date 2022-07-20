@@ -1,5 +1,5 @@
 import React,{useState} from 'react'
-import CategoryService from '../services/CategoryService';
+import CategoryService from '../../services/CategoryService';
 
 export const NewCategoryForm = (props) => {
     const [category, setCategory] = useState({})
@@ -16,7 +16,7 @@ export const NewCategoryForm = (props) => {
         <div>
             <div class="popup">
 					<div class="popup-inner">
-						<h2>Create new team member</h2>
+						<h2>Create new Category</h2>
 						<ul class="form">
 							<li>
 								<label>Type:</label>

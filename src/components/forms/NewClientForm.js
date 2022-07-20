@@ -1,7 +1,7 @@
 import React,{useEffect, useState} from 'react'
-import ClientService from '../services/ClientService';
-import CountryService from '../services/CountryService';
-import '../assets/css/popup.css'
+import ClientService from '../../services/ClientService';
+import CountryService from '../../services/CountryService';
+import '../../assets/css/popup.css'
 
 export const NewClientForm = (props) => {
 	const [takenProps, setTakenProps] = useState(props.display);   

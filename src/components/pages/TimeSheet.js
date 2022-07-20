@@ -1,9 +1,8 @@
 import React,{useState, useEffect} from 'react'
-import TimeSheetActivityService from '../services/TimeSheetActivityService';
-import { CalendarComponent } from './CalendarComponent';
-import {Calendar} from './Calendar'
-import {format} from 'date-fns'
-import { Calendar2 } from './Calendar2';
+import TimeSheetActivityService from '../../services/TimeSheetActivityService';
+import { CalendarComponent } from '../calendar-feature/CalendarComponent';
+import {Calendar} from '../calendar-feature/Calendar'
+import { Calendar2 } from '../calendar-feature/Calendar2';
 
 export const TimeSheet = () => {
 
@@ -26,25 +25,13 @@ export const TimeSheet = () => {
 		selectedMonthLastDate} = Calendar();
 	const startingPoint = daysInWeek.indexOf(firstDayInMonth) + 1;
 
-	useEffect(() => {	
+	useEffect(() => {
+			
 		TimeSheetActivityService.getTimeSheets().then(response => {
 			setTimeSheetActivities(response.data)
 		})
-		getDaysInMonth(month,year)
-		
+
 	}, [])
-
-	function getDaysInMonth(month,year){
-		let date = new Date(year,month);
-		let days =[];
-		while(date.getMonth() === month){
-			days.push(new Date(date));			
-			date.setDate(date.getDate() +1);
-		}
-
-		setDays(days);
-		return days
-	}
 
     return (
         <div>

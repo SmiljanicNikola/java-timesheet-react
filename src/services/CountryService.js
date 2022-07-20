@@ -9,8 +9,6 @@ class CountryService {
         return axios.get(COUNTRY_REST_API_URL);
     }
 
-  
-
 }
 
 export default new CountryService();

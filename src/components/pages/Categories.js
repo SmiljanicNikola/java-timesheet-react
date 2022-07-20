@@ -1,9 +1,8 @@
 import React, {useState, useEffect} from 'react'
 import axios from 'axios';
-import Pagination from './Pagination';
-import CategoryService from '../services/CategoryService';
-import { NewCategoryForm } from './NewCategoryForm';
-
+import Pagination from '../Pagination';
+import CategoryService from '../../services/CategoryService';
+import { NewCategoryForm } from '../forms/NewCategoryForm';
 
 
 export const Categories = () => {
@@ -71,7 +70,6 @@ export const Categories = () => {
 		let updatedCategory = {
 			type: type
 		}
-
 		CategoryService.updateCategory(id, updatedCategory);
 	}
 
@@ -100,8 +98,6 @@ export const Categories = () => {
 			})
 	}
 	
-	console.log(currentPage);
-
 	const indexOfLastClient = currentPage * categoriesPerPage;
 	const indexOfFirstClient = indexOfLastClient - categoriesPerPage;
 	const currentClients = categories.slice(indexOfFirstClient, indexOfLastClient); 

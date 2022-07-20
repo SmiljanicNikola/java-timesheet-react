@@ -1,38 +1,25 @@
 import React,{useState, useEffect, useRef} from 'react'
 import { CalendarDays } from './CalendarDays';
 import {Calendar} from './Calendar';
-import TimeSheetActivityService from '../services/TimeSheetActivityService';
+import TimeSheetActivityService from '../../services/TimeSheetActivityService';
 
 export const Calendar2 = () => {
 
     const today = new Date();
-    const todayFormatted = `${today.getDate()}-${+today.getMonth() + 1}-${today.getFullYear()}`;
-    const daysInWeek = [1, 2, 3, 4, 5, 6, 0];
     const [selectedDate, setSelectedDate] = useState(today);
     const selectedMonthFirstDate = new Date(selectedDate.getFullYear(), selectedDate.getMonth(), 0);
     const selectedMonthLastDate = new Date(selectedDate.getFullYear(), selectedDate.getMonth() + 1, 0);
-    const firstDayInMonth = new Date(selectedDate.getFullYear(), selectedDate.getMonth(), 1).getDay();
     const {daysShort} = Calendar();
     const [hoursPerDay, setHoursPerDay] = useState(0)
     const [timeSheetActivities, setTimeSheetActivities] = useState([]);
-    const [rangeOne,setRangeOne] = useState();
-    const [rangeTwo,setRangeTwo] = useState();
-    const[initialMount, setInitialMount] = useState(true);
     const [totalMonthTime, setTotalMonthTime] = useState(0)
-
-    const firstDayOfTheMonth=new Date(selectedDate.getFullYear(),selectedDate.getMonth(),1);
-    console.log(firstDayOfTheMonth)
-    console.log('e')
-    console.log(selectedMonthLastDate)
-
-    const startDate = firstDayOfTheWeek(selectedMonthFirstDate)
+    const startDate = findFirstDayOfTheWeek(selectedMonthFirstDate)
     const dates = getDatesFromStartPointToEndPoint(startDate, selectedMonthLastDate);
-
+    let totalHours = 0;
 
     useEffect(() => {
-        console.log(dates[0])
         let startDate = (dates[0].toISOString().slice(0,10))
-        let endDate = (dates[34].toISOString().slice(0,10))
+        let endDate = (dates[dates.length-1].toISOString().slice(0,10))
         TimeSheetActivityService.getTimeSheetsBetweenStartDateAndEndDate(startDate, endDate).then(response => {
 			setTimeSheetActivities(response.data)
         })
@@ -42,34 +29,46 @@ export const Calendar2 = () => {
     }, []);
 
 
-    function firstDayOfTheWeek(selectedDate){//Ovde je svuda bilo date umesto selectedDate
+    function findFirstDayOfTheWeek(date){//Ovde je svuda bilo date umesto selectedDate
 
-        let dayOfTheWee = selectedDate.getDay();
+        let dayOfTheWeek = date.getDay() -1;
 
-        let firstDayOfTheWeek = selectedDate.getDate() +1 - dayOfTheWee;
+        let firstDayOfTheWeek = date.getDate() + 1 - dayOfTheWeek;
      
-        return new Date(selectedDate.setDate(firstDayOfTheWeek))
+        return new Date(date.setDate(firstDayOfTheWeek))
+
+    }
+
+    function findLastDayOfTheWeek(date){
+
+        let dayOfTheWeek = date.getDay()
+
+        let lastDayOfTheWeek = date.getDate() + 7 - dayOfTheWeek;
+     
+        return new Date(date.setDate(lastDayOfTheWeek))
 
     }
 
 
-    function getDatesFromStartPointToEndPoint(startDate, selectedMonthLastDate){
+    function getDatesFromStartPointToEndPoint(startDate, lastCalendarDate){
+        
         const dates =[];
 
-        for(let i = startDate; i<= selectedMonthLastDate; i.setDate(i.getDate() + 1)){
+        for(let i = startDate; i<= lastCalendarDate; i.setDate(i.getDate() + 1)){
             dates.push(new Date(i));
         }
         return dates;
     }
 
+
     const getPrevMonth = () => {
         setSelectedDate(prevValue => new Date(prevValue.getFullYear(), prevValue.getMonth() - 1));
-        let startDate = (dates[0].toISOString().slice(0,10))
-        let endDate = (dates[34].toISOString().slice(0,10))
+        
         TimeSheetActivityService.getTimeSheets().then(response => {
 			setTimeSheetActivities(response.data)
 		})
     }
+
 
     const getNextMonth = () => {
         setSelectedDate(prevValue => new Date(prevValue.getFullYear(), prevValue.getMonth() + 1, 1));
@@ -77,7 +76,8 @@ export const Calendar2 = () => {
         let endDate = (dates[34].toISOString().slice(0,10))
         TimeSheetActivityService.getTimeSheets().then(response => {
 			setTimeSheetActivities(response.data)
-		})
+        })
+        let totalHours = 0
     }
 
 
@@ -87,6 +87,13 @@ export const Calendar2 = () => {
             totalTime = totalTime + (timeSheetActivities[a].time)
             timeSheetActivities[a].time = null;
             setTotalMonthTime(totalMonthTime + totalTime);
+        }
+    }
+
+
+    for(let i = 0; i < timeSheetActivities.length; i++){
+        {
+            totalHours = totalHours + timeSheetActivities[i].time
         }
     }
 
@@ -129,7 +136,7 @@ export const Calendar2 = () => {
                 </table>
                 <br></br>
                 <div class="total">
-                    <span>Total hours: <em>{totalMonthTime}</em></span>
+                    <span>Total hours: <em></em></span>
                 </div>
             </section>
         </div>   

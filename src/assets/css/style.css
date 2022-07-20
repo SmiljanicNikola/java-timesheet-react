@@ -593,13 +593,9 @@ select.error {
   padding-left: 30px;
   width: 280px;
 }
-@font-face {
+/*@font-face {
   font-family: "svgicons";
-  /*src: url("../fonts/svgicons.eot");
-  src: url("../fonts/svgicons.eot?#iefix") format("eot"),
-    url("../fonts/svgicons.woff") format("woff"),
-    url("../fonts/svgicons.ttf") format("truetype");*/
-}
+}*/
 .font-ico-favorite-heart:before,
 .font-ico-heart:before {
   font-family: "svgicons";

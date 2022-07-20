@@ -1,7 +1,7 @@
 import React, { useState, useEffect } from 'react'
-import TeamMemberService from '../services/TeamMemberService';
-import { NewMemberForm } from './NewMemberForm';
-import Pagination from './Pagination';
+import TeamMemberService from '../../services/TeamMemberService';
+import { NewMemberForm } from '../forms/NewMemberForm';
+import Pagination from '../Pagination';
 import axios from 'axios';
 
 export const TeamMembers = () => {
@@ -12,10 +12,8 @@ export const TeamMembers = () => {
 	const [paginatedTeamMembers, setPaginatedTeamMembers] = useState([])
 	const [teamMembersPerPage, setTeamMembersPerPage] = useState(2);
 	const [pageNumber, setPageNumber] = useState(0);
-
 	const [name, setName] = useState('')
 	const [hoursPerWeek, setHoursPerWeek] = useState('')
-	const [email, setEmail] = useState('')
 	const [teamMember, setTeamMember] = useState({})
 	const [blocked, setBlocked] = useState(false)
 	let updatedTeamMember = {}
@@ -100,9 +98,7 @@ export const TeamMembers = () => {
 
 	const previousPage = async () => {
 
-		console.log('PERVIOUS')
 		let previousPage = currentPage - 1;
-		console.log(previousPage)
 		
 		axios.get("http://localhost:8080/api/teamMembers/paginate?page="+previousPage+"&size=2")
 		.then(response => {

@@ -18,7 +18,6 @@ const Pagination = ({ clientsPerPage, totalClients, paginate }) =>{
                         </a>
                     </li>
                 ))}
-
             </ul>
         </nav>
     )

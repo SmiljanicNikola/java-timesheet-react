@@ -1,6 +1,5 @@
 import {useState} from 'react';
 
-
 const daysShortArr = [
     'Mon', 'Tue', 'Wed', 'Thu', 'Fri', 'Sat', 'Sun'
 ]
@@ -88,5 +87,4 @@ const monthNamesArr = [
         getPrevMonth,
         getNextMonth
       }
-
 }

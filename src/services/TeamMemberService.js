@@ -3,8 +3,6 @@ import axios from 'axios'
 
 const TeamMembers_REST_API_URL = `${process.env.REACT_APP_BACKEND_URL}/api/teamMembers`;
 
-
-
 class TeamMemberService {
 
     getTeamMembers(){

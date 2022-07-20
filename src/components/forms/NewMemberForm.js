@@ -1,7 +1,7 @@
 import React, { useEffect, useState } from 'react'
-import '../assets/css/popup.css'
+import '../../assets/css/popup.css'
 import {useNavigate} from 'react-router-dom'
-import TeamMemberService from '../services/TeamMemberService';
+import TeamMemberService from '../../services/TeamMemberService';
 
 
 export const NewMemberForm = (props) => {
