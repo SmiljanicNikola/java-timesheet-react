@@ -32,8 +32,6 @@ public class TimeSheetActivityDTO {
 		this(timeSheetActivity.getId(), timeSheetActivity.getDescription(), new TeamMemberDTO(timeSheetActivity.getTeamMember()), new ProjectDTO(timeSheetActivity.getProject()), new CategoryDTO(timeSheetActivity.getCategory()), timeSheetActivity.getTime(), timeSheetActivity.getOvertime(), timeSheetActivity.getDate());
 	}
 
-	
-
 
 
 	public TimeSheetActivityDTO(Integer id, String description, TeamMemberDTO teamMember, ProjectDTO project,

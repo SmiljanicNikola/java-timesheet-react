@@ -108,6 +108,10 @@ private Integer id;
 		this.overtime = overtime;
 		this.date = date;
 	}
+
+	public AddActivityDTORequest() {
+		super();
+	}
 	
 	
 	

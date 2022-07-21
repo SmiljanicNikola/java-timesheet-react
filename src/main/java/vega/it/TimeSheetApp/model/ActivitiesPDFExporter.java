@@ -75,7 +75,6 @@ public class ActivitiesPDFExporter {
 			table.addCell(String.valueOf(activity.getProject().getClient()));
 			table.addCell(String.valueOf(activity.getProject()));
 			table.addCell(String.valueOf(activity.getCategory()));
-
 			table.addCell(String.valueOf(activity.getTime()));
 			table.addCell(String.valueOf(activity.getOvertime()));
 			table.addCell(String.valueOf(activity.getDate()));

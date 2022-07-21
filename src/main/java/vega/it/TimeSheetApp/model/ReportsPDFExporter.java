@@ -69,7 +69,6 @@ public class ReportsPDFExporter {
 			table.addCell(String.valueOf(report.getClient()));
 			table.addCell(String.valueOf(report.getProject()));
 			table.addCell(String.valueOf(report.getCategory()));
-
 			table.addCell(String.valueOf(report.getTime()));
 			table.addCell(String.valueOf(report.getOvertime()));
 			table.addCell(String.valueOf(report.getDate()));
