@@ -6,6 +6,7 @@ import TeamMemberService from '../../services/TeamMemberService';
 import ProjectService from '../../services/ProjectService';
 
 export const NewProjectForm = (props) => {
+	
     const [takenProps, setTakenProps] = useState(props.display);
 	const [display, setDisplay] = useState(false);
 	const [clients, setClients] = useState([])
@@ -48,6 +49,7 @@ export const NewProjectForm = (props) => {
 	}
 
 	function saveProject(project){
+		
 		let newProject = {
 			projectName: project.projectName,
 			description: project.description,

@@ -16,13 +16,13 @@ export const TimeSheet = () => {
 	const [days, setDays] = useState([]);
 	const [timeSheetActivities, setTimeSheetActivities] = useState([]);
 	const {firstDayInMonth,
-		todayFormatted,
-		daysShort, 
-		monthNames,
-		getNextMonth, 
-		getPrevMonth,
-		daysInMonth, 
-		selectedMonthLastDate} = Calendar();
+		  todayFormatted,
+		  daysShort, 
+		  monthNames,
+		  getNextMonth, 
+		  getPrevMonth,
+		  daysInMonth, 
+		  selectedMonthLastDate} = Calendar();
 	const startingPoint = daysInWeek.indexOf(firstDayInMonth) + 1;
 
 	useEffect(() => {

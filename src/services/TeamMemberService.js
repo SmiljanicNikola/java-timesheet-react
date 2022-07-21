@@ -10,7 +10,11 @@ class TeamMemberService {
     }
 
     getTeamMembersPaginate(){
-        return axios.get(TeamMembers_REST_API_URL+"/pagination");
+        return axios.get(TeamMembers_REST_API_URL+"/paginate");
+    }
+
+    getMembersPaginateWithParams(nextPage, size){
+        return axios.get(TeamMembers_REST_API_URL+"/paginate?page="+nextPage+"&size="+size);
     }
 
     updateTeamMember(teamMemberId, teamMember){

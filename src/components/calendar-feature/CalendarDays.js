@@ -10,14 +10,14 @@ export const CalendarDays = (props) => {
     const [endDate, setEndDate] = useState()
     const navigate = useNavigate();
 
-    /*for(let a = 0; a< (props.timeSheetActivities).length; a++){
+    for(let a = 0; a< (props.timeSheetActivities).length; a++){
         for(let b = a+1; b < (props.timeSheetActivities).length; b++){
             if(props.timeSheetActivities[a].date == props.timeSheetActivities[b].date ){
                 props.timeSheetActivities[a].time += props.timeSheetActivities[b].time;
                 props.timeSheetActivities[b].time = null;
             }   
         }  
-    }*/
+    }
 
     const viewDays = date => {
         console.log(date);

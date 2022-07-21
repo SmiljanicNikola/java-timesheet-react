@@ -12,6 +12,10 @@ class CategoryService {
         return axios.get(CATEGORIES_REST_API_URL+"/paginate");
     }
 
+    getCategoriesPaginateWithParams(nextPage, size){
+        return axios.get(CATEGORIES_REST_API_URL+"/paginate?page="+nextPage+"&size="+size);
+    }
+    
     updateCategory(categoryId, category){
         return axios.put(CATEGORIES_REST_API_URL+ '/' + categoryId, category);
     }

@@ -77,7 +77,6 @@ export const Calendar2 = () => {
         TimeSheetActivityService.getTimeSheets().then(response => {
 			setTimeSheetActivities(response.data)
         })
-        let totalHours = 0
     }
 
 

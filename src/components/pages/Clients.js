@@ -1,7 +1,7 @@
 import React, { useState, useEffect } from 'react'
 import ClientService from '../../services/ClientService';
 import axios from 'axios'
-import Pagination from '../Pagination';
+import Pagination from '../utils/Pagination';
 import '../../assets/css/popup.css'
 import { NewClientForm } from '../forms/NewClientForm';
 
@@ -19,6 +19,7 @@ export const Clients = () => {
 	const alphabet = ["a","b","c","d","e","f","g","h","i","j","k","l","m","n","o","p","q","r","s","t","u","v","w","x","y","z"];
 	const [close,setClose] = useState('details');
 	const [clientName, setClientName] = useState('');
+	const [size, setSize] = useState(2);
 	const [address, setAddress] = useState('');
 	const [listOfLetters, setListOfLetters] = useState('')
 	const [letters, setLetters] = useState('')
@@ -26,10 +27,9 @@ export const Clients = () => {
 	
     useEffect(() => {
 
-		console.log(pageNumber);
 		const fetchPaginatedClients = async () =>{
-		axios.get("http://localhost:8080/api/clients/paginate?page="+currentPage+"&size=2")
-		.then(response => {
+			ClientService.getClientsPaginateWithParams(currentPage,size)
+			.then(response => {
 			setPaginatedClients(response.data.content);
 			setLoading(false);
 			})
@@ -37,7 +37,7 @@ export const Clients = () => {
 
 		fetchPaginatedClients();
         
-		axios.get("http://localhost:8080/api/clients/paginate")
+		ClientService.getClientsPaginate()
         .then(response => {
 			setClients(response.data.content);
 			setLoading(false);
@@ -46,12 +46,10 @@ export const Clients = () => {
 	}, []);
 
 	const changeStyle = () =>{
-		console.log('e')
 		setClose('details2')
 	}
 
 	const openCard = () =>{
-		console.log('e')
 		setClose('details')
 	}
 
@@ -61,11 +59,10 @@ export const Clients = () => {
 	
 	const nextPage = async () => {
 
-		console.log('NEXT')
 		let nextPage = currentPage + 1;
-		console.log(nextPage)
+		setCurrentPage(nextPage);
 		
-		axios.get("http://localhost:8080/api/clients/paginate?page="+nextPage+"&size=2")
+		ClientService.getClientsPaginateWithParams(nextPage,size)
 		.then(response => {
 			setPaginatedClients(response.data.content);
 		})
@@ -73,11 +70,10 @@ export const Clients = () => {
 
 	const previousPage = async () => {
 
-		console.log('PERVIOUS')
 		let previousPage = currentPage - 1;
-		console.log(previousPage)
+		setCurrentPage(previousPage);
 		
-		axios.get("http://localhost:8080/api/clients/paginate?page="+previousPage+"&size=2")
+		ClientService.getClientsPaginateWithParams(previousPage,size)
 		.then(response => {
 			setPaginatedClients(response.data.content);
 		})
@@ -124,15 +120,16 @@ export const Clients = () => {
 
 
 	const paginate = (pageNumber) => {
+
 		setCurrentPage(pageNumber);
-		axios.get("http://localhost:8080/api/clients/paginate?page="+currentPage+"&size=2")
+		
+		ClientService.getClientsPaginateWithParams(currentPage,size)
 		.then(response => {
 			setPaginatedClients(response.data.content);
 		})
+		
 	}
 	
-	console.log(currentPage);
-
 	const indexOfLastClient = currentPage * clientsPerPage;
 	const indexOfFirstClient = indexOfLastClient - clientsPerPage;
 	const currentClients = clients.slice(indexOfFirstClient, indexOfLastClient); 

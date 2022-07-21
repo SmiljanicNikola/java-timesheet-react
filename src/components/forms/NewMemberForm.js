@@ -16,6 +16,7 @@ export const NewMemberForm = (props) => {
 	}
 
 	function saveTeamMember(member){
+		
 		let newMember = {
 			firstname: member.firstname,
 			lastname: member.lastname,

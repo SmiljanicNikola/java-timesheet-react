@@ -14,10 +14,10 @@ export const Days = () => {
 	const params = useParams();
 	const [clients, setClients] = useState([])
 	const [projects, setProjects] = useState([])
-	const [totalHours, setTotalHours] = useState(0)
 	const [newTimeSheet, setNewTimeSheet] = useState({})
 
 	useEffect(() => {
+
 		TimeSheetActivityService.searchByDate(params.date).then((response => {
 			setTimeSheets(response.data);
 		}))
@@ -29,7 +29,6 @@ export const Days = () => {
 		ProjectService.getProjects().then((response => {
 			setProjects(response.data);
 		}))
-	
 		
 	}, []);
 
@@ -38,17 +37,13 @@ export const Days = () => {
 	for(let i = 0; i < timeSheets.length; i++){
 		{
 			totalTime = totalTime + timeSheets[i].time
+			totalTime = totalTime + timeSheets[i].overtime
 		}
 	}
 
-
-	let totalOvertime = 0;
-	for(let i = 0; i < timeSheets.length; i++){
-		{
-			totalOvertime = totalOvertime + timeSheets[i].overtime
-		}
+	function addActivity(){
+		
 	}
-
 
     return (
 		<div class="container">
@@ -198,7 +193,7 @@ export const Days = () => {
 								<input name="overtime" id="overtime" type="text" onChange={e => setNewTimeSheet({...newTimeSheet, overtime: e.target.value})} class="in-text xsmall" />
 							</td>
 							<td>
-								<button class="btn-success">Add</button>
+								<button class="btn-success" onClick={() => addActivity()}>Add</button>
 							</td>
 						</tr>
 					</table>

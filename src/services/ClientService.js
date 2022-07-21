@@ -12,6 +12,10 @@ class ClientService {
         return axios.get(CLIENTS_REST_API_URL+"/paginate");
     }
 
+    getClientsPaginateWithParams(nextPage, size){
+        return axios.get(CLIENTS_REST_API_URL+"/paginate?page="+nextPage+"&size="+size);
+    }
+
     updateClient(clientId, client){
         return axios.put(CLIENTS_REST_API_URL+ '/' + clientId, client);
     }

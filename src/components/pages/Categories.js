@@ -1,6 +1,6 @@
 import React, {useState, useEffect} from 'react'
 import axios from 'axios';
-import Pagination from '../Pagination';
+import Pagination from '../utils/Pagination';
 import CategoryService from '../../services/CategoryService';
 import { NewCategoryForm } from '../forms/NewCategoryForm';
 
@@ -14,23 +14,23 @@ export const Categories = () => {
 	const [categoriesPerPage, setCategoriesPerPage] = useState(2);
 	const [category, setCategory] = useState({})
 	const [type, setType] = useState('')
+	const [size, setSize] = useState(2);
 	const [display, setDisplay] = useState(false);
 	const alphabet = ["a","b","c","d","e","f","g","h","i","j","k","l","m","n","o","p","q","r","s","t","u","v","w","x","y","z"];
 
 
     useEffect(() => {
 		
-		console.log(pageNumber);
 		const fetchPaginatedCategories = async () =>{
-		axios.get("http://localhost:8080/api/categories/paginate?page="+currentPage+"&size=2")
-		.then(response => {
+			CategoryService.getCategoriesPaginateWithParams(currentPage, size)
+			.then(response => {
 			setPaginatedCategories(response.data.content);
 			})
 		};
 
 		fetchPaginatedCategories();
         
-		axios.get("http://localhost:8080/api/categories/paginate")
+		CategoryService.getCategoriesPaginate()
         .then(response => {
 			setCategories(response.data.content);
 		})
@@ -43,26 +43,24 @@ export const Categories = () => {
 
     const nextPage = async () => {
 
-		console.log('NEXT')
 		let nextPage = currentPage + 1;
-		console.log(nextPage)
+		setCurrentPage(nextPage);
 		
-		axios.get("http://localhost:8080/api/categories/paginate?page="+nextPage+"&size=2")
+		CategoryService.getCategoriesPaginateWithParams(nextPage, size)
 		.then(response => {
 			setPaginatedCategories(response.data.content);
-			})
+		})
 	}	
 
 	const previousPage = async () => {
 
-		console.log('PERVIOUS')
 		let previousPage = currentPage - 1;
-		console.log(previousPage)
+		setCurrentPage(previousPage);
 		
-		axios.get("http://localhost:8080/api/categories/paginate?page="+previousPage+"&size=2")
+		CategoryService.getCategoriesPaginateWithParams(previousPage, size)
 		.then(response => {
 			setPaginatedCategories(response.data.content);
-			})
+		})
 	}	
     
     function saveCategory(id){
@@ -71,12 +69,12 @@ export const Categories = () => {
 			type: type
 		}
 		CategoryService.updateCategory(id, updatedCategory);
+
 	}
 
 	function deleteCategory(id){
 		CategoryService.deleteCategory(id).then(response => {
 			paginatedCategories.filter(paginatedCategories => category.id !== id)
-			console.log('delete')
 		});
 
 	}
@@ -92,10 +90,10 @@ export const Categories = () => {
 
 	const paginate = (pageNumber) => {
 		setCurrentPage(pageNumber);
-		axios.get("http://localhost:8080/api/categories/paginate?page="+currentPage+"&size=2")
+		CategoryService.getCategoriesPaginateWithParams(currentPage,size)
 		.then(response => {
 			setPaginatedCategories(response.data.content);
-			})
+		})
 	}
 	
 	const indexOfLastClient = currentPage * categoriesPerPage;

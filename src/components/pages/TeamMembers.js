@@ -1,7 +1,7 @@
 import React, { useState, useEffect } from 'react'
 import TeamMemberService from '../../services/TeamMemberService';
 import { NewMemberForm } from '../forms/NewMemberForm';
-import Pagination from '../Pagination';
+import Pagination from '../utils/Pagination';
 import axios from 'axios';
 
 export const TeamMembers = () => {
@@ -15,23 +15,23 @@ export const TeamMembers = () => {
 	const [name, setName] = useState('')
 	const [hoursPerWeek, setHoursPerWeek] = useState('')
 	const [teamMember, setTeamMember] = useState({})
+	const [size, setSize] = useState(2);
 	const [blocked, setBlocked] = useState(false)
 	let updatedTeamMember = {}
 
     useEffect(() => {
 
-        console.log(pageNumber);
 		const fetchPaginatedTeamMembers = async () =>{
-		axios.get("http://localhost:8080/api/teamMembers/paginate?page="+currentPage+"&size=2")
-		.then(response => {
+			TeamMemberService.getMembersPaginateWithParams(currentPage, size)
+			.then(response => {
 			setPaginatedTeamMembers(response.data.content);
 			})
 		};
 
 		fetchPaginatedTeamMembers();
         
-		axios.get("http://localhost:8080/api/teamMembers/paginate")
-        .then(response => {
+		TeamMemberService.getTeamMembersPaginate()
+		.then(response => {
 			setTeamMembers(response.data.content);
 		})
 		
@@ -58,6 +58,7 @@ export const TeamMembers = () => {
     }
 
     function deleteTeamMember(id){
+
 		TeamMemberService.deleteTeamMember(id);
 		paginatedTeamMembers.pop(teamMember => teamMember.id == id);
 		paginatedTeamMembers.filter(teamMember => teamMember.id !== id);
@@ -65,53 +66,50 @@ export const TeamMembers = () => {
     }
 
     function resetPassword(id){
-        console.log('delete')
-
+        console.log('Reset password')
     }
 
     function toggleModal(){
         setDisplay(true)
 	}
 
-	const handleNameChange = (e) =>{
-		setName(e.target.value)
-		console.log(name);
-	}
-
 	const handleHoursPerWeekChange = (e) =>{
 		setHoursPerWeek(e.target.value)
-		console.log(hoursPerWeek);
 	}
-
 	
 	const nextPage = async () => {
 
-		console.log('NEXT')
 		let nextPage = currentPage + 1;
-		console.log(nextPage)
+		setCurrentPage(nextPage);
 		
-		axios.get("http://localhost:8080/api/teamMembers/paginate?page="+nextPage+"&size=2")
+		TeamMemberService.getMembersPaginateWithParams(nextPage, size)
 		.then(response => {
 			setPaginatedTeamMembers(response.data.content);
-			})
+		})
+
 	}	
 
 	const previousPage = async () => {
 
 		let previousPage = currentPage - 1;
+		setCurrentPage(previousPage);
 		
-		axios.get("http://localhost:8080/api/teamMembers/paginate?page="+previousPage+"&size=2")
+		TeamMemberService.getMembersPaginateWithParams(previousPage, size)
 		.then(response => {
 			setPaginatedTeamMembers(response.data.content);
-			})
+		})
+
 	}	
 
     const paginate = (pageNumber) => {
+
 		setCurrentPage(pageNumber);
-		axios.get("http://localhost:8080/api/teamMembers/paginate?page="+currentPage+"&size=2")
+
+		TeamMemberService.getMembersPaginateWithParams(currentPage, size)
 		.then(response => {
 			setPaginatedTeamMembers(response.data.content);
-			})
+		})
+
 	}
 
 	const handleRoleInputWorker = () => {
@@ -147,8 +145,6 @@ export const TeamMembers = () => {
                 <NewMemberForm display={display}>
 
                 </NewMemberForm>
-
-
 
 				<div class="accordion-wrap">
 					

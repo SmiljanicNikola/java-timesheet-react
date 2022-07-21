@@ -2,6 +2,7 @@ import React,{useState} from 'react'
 import CategoryService from '../../services/CategoryService';
 
 export const NewCategoryForm = (props) => {
+	
     const [category, setCategory] = useState({})
 
     function saveCategory(category){

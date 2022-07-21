@@ -1,7 +1,7 @@
 import React, {useState, useEffect} from 'react'
 import ProjectService from '../../services/ProjectService';
 import axios from 'axios'
-import Pagination from '../Pagination';
+import Pagination from '../utils/Pagination';
 import { NewProjectForm } from '../forms/NewProjectForm';
 import ClientService from '../../services/ClientService';
 import TeamMemberService from '../../services/TeamMemberService';
@@ -21,6 +21,7 @@ export const Projects = () => {
 	const [teamMembers, setTeamMembers] = useState([])
 	const [valueTeamMember, setValueTeamMember] = useState('')
 	const [valueClient, setValueClient] = useState('');
+	const [size, setSize] = useState(2);
 	const [letters, setLetters] = useState('')
 	let updatedProject = {}
 
@@ -49,17 +50,16 @@ export const Projects = () => {
 
     useEffect(() => {
 
-		console.log(pageNumber);
 		const fetchPaginatedProjects = async () =>{
-		axios.get("http://localhost:8080/api/projects/paginate?page="+currentPage+"&size=2")
-		.then(response => {
+			ProjectService.getProjectsPaginateWithParams(currentPage, size)
+			.then(response => {
 			setPaginatedProjects(response.data.content.filter(project => project.deleted == false));
 			})
 		};
 
 		fetchPaginatedProjects();
         
-		axios.get("http://localhost:8080/api/projects/paginate")
+		ProjectService.getProjectsPaginate()
         .then(response => {
 			setProjects(response.data.content.filter(project => project.deleted == false));
         })
@@ -82,23 +82,21 @@ export const Projects = () => {
 	
 	const nextPage = async () => {
 
-		console.log('NEXT')
 		let nextPage = currentPage + 1;
-		console.log(nextPage)
+		setCurrentPage(nextPage);
 		
-		axios.get("http://localhost:8080/api/projects/paginate?page="+nextPage+"&size=2")
+		ProjectService.getProjectsPaginateWithParams(nextPage, size)
 		.then(response => {
 			setPaginatedProjects(response.data.content.filter(project => project.deleted == false));
 		})
 	}	
 
 	const previousPage = async () => {
-
-		console.log('PERVIOUS')
+	
 		let previousPage = currentPage - 1;
-		console.log(previousPage)
+		setCurrentPage(previousPage);
 		
-		axios.get("http://localhost:8080/api/projects/paginate?page="+previousPage+"&size=2")
+		ProjectService.getProjectsPaginateWithParams(previousPage, size)
 		.then(response => {
 			setPaginatedProjects(response.data.content.filter(project => project.deleted = false));
 		})
@@ -145,20 +143,19 @@ export const Projects = () => {
 	const handleActiveInput = () => {
 	}
 
-	function resetPassword(id){
-		console.log('delete')
-	}
-
 	function toggleModal(){
 		setDisplay(true)
 	}
 
 	const paginate = (pageNumber) => {
+
 		setCurrentPage(pageNumber);
-		axios.get("http://localhost:8080/api/projects/paginate?page="+currentPage+"&size=2")
+
+		ProjectService.getProjectsPaginateWithParams(currentPage,size)
 		.then(response => {
 			setPaginatedProjects(response.data.content.filter(project => project.deleted == false));
 		})
+
 	}
 
 	const indexOfLastClient = currentPage * projectsPerPage;

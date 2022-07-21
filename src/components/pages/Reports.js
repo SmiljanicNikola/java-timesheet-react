@@ -58,15 +58,13 @@ export const Reports = () => {
 		setProjects([])
 		setCategories([])
 
-		axios.get("http://localhost:8080/api/timeSheetActivities/search?").then(response => {
+		TimeSheetActivityService.emptySearchTimeSheets().then(response => {
 			setTimeSheets(response.data)
-		})
+		});
 
 	}
 
 	const handleChangeProject = project =>{
-		/*setSelectedValueProject(project.target.value);
-		console.log(selectedValueProject);*/
 		setValueProject(project.target.value);
 		console.log(valueProject);
 	}
@@ -86,7 +84,6 @@ export const Reports = () => {
 		console.log(valueEndDate);
 	}
 
-
 	const handleChangeClient = client =>{
 		setValueClient(client.target.value);
 		console.log(valueClient);
@@ -97,43 +94,36 @@ export const Reports = () => {
 		console.log(valueCategory);
 	}
 	
-	function search(selectedValueProject){
-		TimeSheetActivityService.getTimeSheetsByProjectId(selectedValueProject.id).then(response => {
-			setTimeSheets(response.data);
-			console.log(timeSheets);
-		})
-	}
+
+		function searchByProjectMemberCategoryAndDates(valueProject, valueTeamMember, valueCategory, valueStartDate, valueEndDate){
+
+			let TARGETED_API = "http://localhost:8080/api/timeSheetActivities/search?";
 	
-	function searchByProjectMemberCategoryAndDates(valueProject, valueTeamMember, valueCategory, valueStartDate, valueEndDate){
-
-		let TARGETED_API = "http://localhost:8080/api/timeSheetActivities/search?";
-
-		if(valueProject != null && valueProject != '' && valueProject != 'Select Project'){
-			TARGETED_API = TARGETED_API + "projectId=" + valueProject;
+			if(valueProject != null && valueProject != '' && valueProject != 'Select Project'){
+				TARGETED_API = TARGETED_API + "projectId=" + valueProject;
+			}
+	
+			if(valueTeamMember != null && valueTeamMember != '' && valueTeamMember != 'Select TeamMember'){
+				TARGETED_API = TARGETED_API + "&teamMemberId=" + valueTeamMember;
+			}
+			
+			if(valueCategory != null && valueCategory != '' && valueCategory != 'Select Category'){
+				TARGETED_API = TARGETED_API + "&categoryId=" + valueCategory;
+			}
+	
+			if(valueStartDate != null && valueStartDate != '' && valueStartDate != 'Select Category'){
+				TARGETED_API = TARGETED_API + "&startDate=" + valueStartDate;
+			}
+	
+			if(valueEndDate != null && valueEndDate != '' && valueEndDate != 'Select Category'){
+				TARGETED_API = TARGETED_API + "&endDate=" + valueEndDate;
+			}
+			
+			axios.get(TARGETED_API).then(response => {
+				setTimeSheets(response.data)
+			})
+			
 		}
-
-		if(valueTeamMember != null && valueTeamMember != '' && valueTeamMember != 'Select TeamMember'){
-			TARGETED_API = TARGETED_API + "&teamMemberId=" + valueTeamMember;
-
-		}
-		
-		if(valueCategory != null && valueCategory != '' && valueCategory != 'Select Category'){
-			TARGETED_API = TARGETED_API + "&categoryId=" + valueCategory;
-		}
-
-		if(valueStartDate != null && valueStartDate != '' && valueStartDate != 'Select Category'){
-			TARGETED_API = TARGETED_API + "&startDate=" + valueStartDate;
-		}
-
-		if(valueEndDate != null && valueEndDate != '' && valueEndDate != 'Select Category'){
-			TARGETED_API = TARGETED_API + "&endDate=" + valueEndDate;
-		}
-		
-		axios.get(TARGETED_API).then(response => {
-			setTimeSheets(response.data)
-		})
-		
-	}
 
 
 	/*function buildInitialTargetedSearchAPI(argument, value){
@@ -145,7 +135,8 @@ export const Reports = () => {
 
 	function buildTargetedSearchAPI(path, argument, value){
 		let additionalAttribute = `${argument}=` + `${value}`;
-		SET_API_SEARCH(path + additionalAttribute);
+		path += additionalAttribute
+		SET_API_SEARCH(path);
 	}*/
 
 	const exportPDF = async (timeSheet) => {
@@ -218,6 +209,15 @@ export const Reports = () => {
 		}).catch(err => alert(err));
 		console.log('click')
 	}
+
+	let totalTime = 0;
+	for(let i = 0; i < timeSheets.length; i++){
+		{
+			totalTime = totalTime + timeSheets[i].time
+			totalTime = totalTime + timeSheets[i].overtime
+		}
+	}
+	console.log(totalTime)
 
 	
 
@@ -356,7 +356,7 @@ export const Reports = () => {
 						</tbody>
 					</table>
 					<div class="total">
-						<span>Report total: <em>7.5</em></span>
+						<span>Report total: <em>{totalTime}</em></span>
 					</div>
 					<div class="grey-box-wrap reports">
 						<div class="btns-inner">

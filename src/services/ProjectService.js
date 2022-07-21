@@ -13,6 +13,10 @@ class ProjectService {
         return axios.get(PROJECTS_REST_API_URL+"/paginate");
     }
 
+    getProjectsPaginateWithParams(nextPage, size){
+        return axios.get(PROJECTS_REST_API_URL+"/paginate?page="+nextPage+"&size="+size);
+    }
+
     updateProject(projectId, project){
         return axios.put(PROJECTS_REST_API_URL+ '/' + projectId, project);
     }
