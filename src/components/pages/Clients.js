@@ -4,6 +4,7 @@ import axios from 'axios'
 import Pagination from '../utils/Pagination';
 import '../../assets/css/popup.css'
 import { NewClientForm } from '../forms/NewClientForm';
+import PaginationHelper from '../utils/PaginationHelper';
 
 
 export const Clients = () => {
@@ -55,26 +56,20 @@ export const Clients = () => {
 	}
 	
 	const nextPage = async () => {
-
 		let nextPage = currentPage + 1;
-		setCurrentPage(nextPage);
-		
-		ClientService.getClientsPaginateWithParams(nextPage,size)
-		.then(response => {
-			setPaginatedClients(response.data.content);
-		})
+		setCurrentPage(nextPage)
+		PaginationHelper.displayPaginated(nextPage, size, ClientService.getClientsPaginateWithParams, setPaginatedClients)
 	}	
 
-	const previousPage = async () => {
 
+	const previousPage = async () => {
 		let previousPage = currentPage - 1;
-		setCurrentPage(previousPage);
-		
-		ClientService.getClientsPaginateWithParams(previousPage,size)
-		.then(response => {
-			setPaginatedClients(response.data.content);
-		})
-	}
+		if(currentPage < 0){
+			currentPage=0
+		}
+		setCurrentPage(previousPage)
+		PaginationHelper.displayPaginated(previousPage, size, ClientService.getClientsPaginateWithParams, setPaginatedClients)
+	}	
 
 	function handleLetterClick(letter){
 		ClientService.filterClientsByFirstLetters(letter).then(response => {

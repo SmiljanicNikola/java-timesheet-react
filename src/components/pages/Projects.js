@@ -5,6 +5,7 @@ import Pagination from '../utils/Pagination';
 import { NewProjectForm } from '../forms/NewProjectForm';
 import ClientService from '../../services/ClientService';
 import TeamMemberService from '../../services/TeamMemberService';
+import PaginationHelper from '../utils/PaginationHelper';
 
 
 export const Projects = () => {
@@ -68,8 +69,24 @@ export const Projects = () => {
 		ProjectService.deleteProject(id);
 		window.location.reload();
 	}
-	
+
 	const nextPage = async () => {
+		let nextPage = currentPage + 1;
+		setCurrentPage(nextPage)
+		PaginationHelper.displayPaginated(nextPage, size, ProjectService.getProjectsPaginateWithParams, setPaginatedProjects)
+	}	
+
+
+	const previousPage = async () => {
+		let previousPage = currentPage - 1;
+		if(currentPage < 0){
+			currentPage=0
+		}
+		setCurrentPage(previousPage)
+		PaginationHelper.displayPaginated(previousPage, size, ProjectService.getProjectsPaginateWithParams, setPaginatedProjects)
+	}	
+	
+	/*const nextPage = async () => {
 
 		let nextPage = currentPage + 1;
 		setCurrentPage(nextPage);
@@ -89,7 +106,7 @@ export const Projects = () => {
 		.then(response => {
 			setPaginatedProjects(response.data.content.filter(project => project.deleted = false));
 		})
-	}	
+	}*/
 
 	function updateProject(id){
 		

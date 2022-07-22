@@ -3,6 +3,7 @@ import TeamMemberService from '../../services/TeamMemberService';
 import { NewMemberForm } from '../forms/NewMemberForm';
 import Pagination from '../utils/Pagination';
 import axios from 'axios';
+import PaginationHelper from '../utils/PaginationHelper';
 
 export const TeamMembers = () => {
 
@@ -73,50 +74,21 @@ export const TeamMembers = () => {
 	}
 	
 	const nextPage = async () => {
-
 		let nextPage = currentPage + 1;
-		displayPaginated(nextPage, size, TeamMemberService.getMembersPaginateWithParams, setPaginatedTeamMembers)
+		setCurrentPage(nextPage)
+		PaginationHelper.displayPaginated(nextPage, size, TeamMemberService.getMembersPaginateWithParams, setPaginatedTeamMembers)
 	}	
 
 
 	const previousPage = async () => {
-
 		let previousPage = currentPage - 1;
-		displayPaginated(previousPage, size, TeamMemberService.getMembersPaginateWithParams, setPaginatedTeamMembers)
+		if(currentPage < 0){
+			currentPage=0
+		}
+		setCurrentPage(previousPage)
+		PaginationHelper.displayPaginated(previousPage, size, TeamMemberService.getMembersPaginateWithParams, setPaginatedTeamMembers)
 
 	}	
-
-	const displayPaginated = async (pageNumber, size, getItemsFunc, displayItemsFunc) => {
-		setCurrentPage(pageNumber);
-
-		getItemsFunc(pageNumber, size).then(response => {
-			displayItemsFunc(response.data.content);
-		});
-	}
-
-	/*const nextPage = async () => {   
-
-		let nextPage = currentPage + 1;
-		setCurrentPage(nextPage);
-		
-		TeamMemberService.getMembersPaginateWithParams(nextPage, size)
-		.then(response => {
-			setPaginatedTeamMembers(response.data.content);
-		})
-
-	}	
-
-	const previousPage = async () => {
-
-		let previousPage = currentPage - 1;
-		setCurrentPage(previousPage);
-		
-		TeamMemberService.getMembersPaginateWithParams(previousPage, size)
-		.then(response => {
-			setPaginatedTeamMembers(response.data.content);
-		})
-
-	}*/
 
 
     const paginate = (pageNumber) => {

@@ -3,6 +3,7 @@ import axios from 'axios';
 import Pagination from '../utils/Pagination';
 import CategoryService from '../../services/CategoryService';
 import { NewCategoryForm } from '../forms/NewCategoryForm';
+import PaginationHelper from '../utils/PaginationHelper';
 
 
 export const Categories = () => {
@@ -44,26 +45,19 @@ export const Categories = () => {
 	}
 
     const nextPage = async () => {
-
 		let nextPage = currentPage + 1;
-		setCurrentPage(nextPage);
-		
-		CategoryService.getCategoriesPaginateWithParams(nextPage, size)
-		.then(response => {
-			setPaginatedCategories(response.data.content);
-		})
+		setCurrentPage(nextPage)
+		PaginationHelper.displayPaginated(nextPage, size, CategoryService.getCategoriesPaginateWithParams, setPaginatedCategories)
 	}	
+
 
 	const previousPage = async () => {
-
 		let previousPage = currentPage - 1;
-		setCurrentPage(previousPage);
+		if(currentPage < 0){currentPage=0}
 		
-		CategoryService.getCategoriesPaginateWithParams(previousPage, size)
-		.then(response => {
-			setPaginatedCategories(response.data.content);
-		})
-	}	
+		setCurrentPage(previousPage)
+		PaginationHelper.displayPaginated(previousPage, size, CategoryService.getCategoriesPaginateWithParams, setPaginatedCategories)
+	}		
     
     function saveCategory(id){
 		let updatedCategory = {

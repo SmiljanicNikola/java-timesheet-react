@@ -3,7 +3,6 @@ import React from 'react';
 const Pagination = ({ clientsPerPage, totalClients, paginate }) =>{
     const pageNumbers = [];
 
-
     for(let i = 1; i <= Math.ceil(totalClients/clientsPerPage); i++){
         pageNumbers.push(i);
     }
@@ -24,3 +23,4 @@ const Pagination = ({ clientsPerPage, totalClients, paginate }) =>{
 }
 
 export default Pagination
+                
