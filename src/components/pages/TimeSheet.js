@@ -10,20 +10,15 @@ export const TimeSheet = () => {
 	const [date, setDate] = useState(new Date());
 	const [selectedDate, setSelectedDate] = useState(today);
 	const daysInWeek = [1, 2, 3, 4, 5, 6, 0];
-	const [month, setMonth] = useState(date.getMonth())
-	const [time, setTime] = useState(date.getTime())
-	const [year, setYeat] = useState(date.getFullYear())
-	const [days, setDays] = useState([]);
 	const [timeSheetActivities, setTimeSheetActivities] = useState([]);
-	const {firstDayInMonth,
-		  todayFormatted,
+	const {
+		  firstDayInMonth,
 		  daysShort, 
 		  monthNames,
 		  getNextMonth, 
 		  getPrevMonth,
-		  daysInMonth, 
-		  selectedMonthLastDate} = Calendar();
-	const startingPoint = daysInWeek.indexOf(firstDayInMonth) + 1;
+		  selectedMonthLastDate
+		} = Calendar();
 
 	useEffect(() => {
 			

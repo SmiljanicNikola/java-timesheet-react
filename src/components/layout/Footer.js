@@ -12,10 +12,10 @@ export const Footer = () => {
                     </ul>
                     <ul class="right">
                         <li>
-                            <a href="javascript:;">Terms of service</a>
+                            <a>Terms of service</a>
                         </li>
                         <li>
-                            <a href="javascript:;" class="last">Privacy policy</a>
+                            <a class="last">Privacy policy</a>
                         </li>
                     </ul>
                 </div>

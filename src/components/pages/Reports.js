@@ -1,6 +1,5 @@
 import axios from 'axios';
 import React, {useEffect, useState} from 'react'
-import AsyncSelect from 'react-select/async'
 import CategoryService from '../../services/CategoryService';
 import ClientService from '../../services/ClientService';
 import ProjectService from '../../services/ProjectService';
@@ -20,7 +19,6 @@ export const Reports = () => {
 	const [valueCategory, setValueCategory] = useState('');
 	const [valueClient, setValueClient] = useState('');
 	const [timeSheets, setTimeSheets] = useState([]);
-	const [API_SEARCH, SET_API_SEARCH] = useState('')
 
 
 	const fetchTeamMembers = () =>{
@@ -52,6 +50,8 @@ export const Reports = () => {
 		setValueProject('');
 		setValueTeamMember('');
 		setValueCategory('');
+		setValueStartDate('');
+		setValueEndDate('');
 
 		setProjects([])
 		setTeamMembers([])
@@ -61,7 +61,6 @@ export const Reports = () => {
 		TimeSheetActivityService.emptySearchTimeSheets().then(response => {
 			setTimeSheets(response.data)
 		});
-
 	}
 
 	const handleChangeProject = project =>{
@@ -94,112 +93,15 @@ export const Reports = () => {
 		console.log(valueCategory);
 	}
 	
-
-		function searchByProjectMemberCategoryAndDates(valueProject, valueTeamMember, valueCategory, valueStartDate, valueEndDate){
-
-			let TARGETED_API = "http://localhost:8080/api/timeSheetActivities/search?";
-	
-			if(valueProject != null && valueProject != '' && valueProject != 'Select Project'){
-				TARGETED_API = TARGETED_API + "projectId=" + valueProject;
-			}
-	
-			if(valueTeamMember != null && valueTeamMember != '' && valueTeamMember != 'Select TeamMember'){
-				TARGETED_API = TARGETED_API + "&teamMemberId=" + valueTeamMember;
-			}
-			
-			if(valueCategory != null && valueCategory != '' && valueCategory != 'Select Category'){
-				TARGETED_API = TARGETED_API + "&categoryId=" + valueCategory;
-			}
-	
-			if(valueStartDate != null && valueStartDate != '' && valueStartDate != 'Select Category'){
-				TARGETED_API = TARGETED_API + "&startDate=" + valueStartDate;
-			}
-	
-			if(valueEndDate != null && valueEndDate != '' && valueEndDate != 'Select Category'){
-				TARGETED_API = TARGETED_API + "&endDate=" + valueEndDate;
-			}
-			
-			axios.get(TARGETED_API).then(response => {
-				setTimeSheets(response.data)
-			})
-			
-		}
-
-
-	/*function buildInitialTargetedSearchAPI(argument, value){
-		SET_API_SEARCH("http://localhost:8080/api/timeSheetActivities/search?")
-		let TARGET_API_SEARCH = "http://localhost:8080/api/timeSheetActivities/search?" + `${argument}=` + `${value}`;
-		SET_API_SEARCH(TARGET_API_SEARCH);
-		console.log(API_SEARCH)
-	}
-
-	function buildTargetedSearchAPI(path, argument, value){
-		let additionalAttribute = `${argument}=` + `${value}`;
-		path += additionalAttribute
-		SET_API_SEARCH(path);
-	}*/
-
-	const exportPDF = async (timeSheet) => {
-
-		let report = {
-			id:1,
-			description: timeSheet.description,
-			teamMember: timeSheet.teamMember,
-			client: timeSheet.project.client,
-			project: timeSheet.project,
-			category: timeSheet.category,
-			time: timeSheet.time,
-			overtime: timeSheet.overtime,
-			date: timeSheet.date
-
-		}
-
-		const requestOptions = {
-			method: 'POST',
-			headers: { 'Content-Type': 'application/json' },
-			body: JSON.stringify({report})
-		};
-
-		console.log('REP')
-		console.log(report)
-		axios.post(`http://localhost:8080/api/timeSheetActivities/reports/export`,requestOptions,{
-		//TimeSheetActivityService.exportPDFReport(report), {
-			params: {
-				cacheBustTimestamp: Date.now(),
-				
-			},
-			  responseType: 'blob',
-			  timeout: 120,
-		}).then((response) => {
-			console.log('>>>', { response });
-			const url = window.URL.createObjectURL(new Blob([response.data]));
-			const link = document.createElement('a');
-			link.href = url;
-			link.setAttribute('download', 'file.pdf');
-			document.body.appendChild(link);
-			link.click();
-		}).catch(err => alert(err));
-		console.log('click')
+	function searchByProjectMemberCategoryAndDates(valueProject, valueTeamMember, valueCategory, valueStartDate, valueEndDate){		
+		TimeSheetActivityService.searchTimeSheetsActivities(valueProject, valueTeamMember, valueCategory, valueStartDate, valueEndDate)
+		.then(response => {
+			setTimeSheets(response.data)
+		})	
 	}
 
 	const exportPDFListOfTimeSheets = async (timeSheets) => {
-
-		const requestOptions = {
-			method: 'POST',
-			headers: { 'Content-Type': 'application/json' },
-			body: JSON.stringify({timeSheets})
-		};
-
-		axios.post(`http://localhost:8080/api/timeSheetActivities/export`,timeSheets,{
-		//TimeSheetActivityService.exportPDFReport(report), {
-			params: {
-				cacheBustTimestamp: Date.now(),
-				
-			},
-			  responseType: 'blob',
-			  timeout: 120,
-		}).then((response) => {
-			console.log('>>>', { response });
+		TimeSheetActivityService.exportPDFReport(timeSheets).then((response) => {
 			const url = window.URL.createObjectURL(new Blob([response.data]));
 			const link = document.createElement('a');
 			link.href = url;
@@ -207,7 +109,6 @@ export const Reports = () => {
 			document.body.appendChild(link);
 			link.click();
 		}).catch(err => alert(err));
-		console.log('click')
 	}
 
 	let totalTime = 0;
@@ -217,9 +118,6 @@ export const Reports = () => {
 			totalTime = totalTime + timeSheets[i].overtime
 		}
 	}
-	console.log(totalTime)
-
-	
 
     return (
         <div class="container">
@@ -290,7 +188,6 @@ export const Reports = () => {
 									onClick={fetchCategories}
 								>
 									<option value={undefined}>Select Category</option>
-
 									{
 										categories.map((category) => (
 											<option
@@ -312,7 +209,7 @@ export const Reports = () => {
 							</li>
 						</ul>
 					</div>
-					<table class="default-table" border="1" style={{}}>
+					<table class="default-table" border="1">
 						<tr>
 							<th>
 								Date
@@ -326,7 +223,6 @@ export const Reports = () => {
 							<th>Categories</th>
 							<th>Description</th>
 							<th class="small">Time</th>
-							<th>Actions</th>
 						</tr>
 						<tbody>{timeSheets.map((timeSheet) => (
 						<tr key={timeSheet.id}>
@@ -348,9 +244,6 @@ export const Reports = () => {
 							<td class="small">
 								{timeSheet.time}
 							</td>
-							<td>
-								<button onClick={() => exportPDF(timeSheet)}>Download PDF</button>
-							</td>
 						</tr>
 						))}
 						</tbody>
@@ -360,13 +253,13 @@ export const Reports = () => {
 					</div>
 					<div class="grey-box-wrap reports">
 						<div class="btns-inner">
-							<a href="javascript:;" class="btn white">
+							<a class="btn white">
 								<span>Print report</span>
 							</a>
-							<a href="javascript:;" class="btn white" onClick={() => exportPDFListOfTimeSheets(timeSheets)}>
+							<a class="btn white" onClick={() => exportPDFListOfTimeSheets(timeSheets)}>
 								<span>Create PDF</span>
 							</a>
-							<a href="javascript:;" class="btn white">
+							<a class="btn white">
 								<span>Export to excel</span>
 							</a>
 						</div>

@@ -18,10 +18,7 @@ export const Clients = () => {
 	const [display, setDisplay] = useState(false);
 	const alphabet = ["a","b","c","d","e","f","g","h","i","j","k","l","m","n","o","p","q","r","s","t","u","v","w","x","y","z"];
 	const [close,setClose] = useState('details');
-	const [clientName, setClientName] = useState('');
 	const [size, setSize] = useState(2);
-	const [address, setAddress] = useState('');
-	const [listOfLetters, setListOfLetters] = useState('')
 	const [letters, setLetters] = useState('')
 
 	
@@ -92,7 +89,6 @@ export const Clients = () => {
 		})
 	}
 
-
 	function saveClient(id){
 		ClientService.getClientById(id).then(response => {
 			setClient(response.data);
@@ -106,16 +102,13 @@ export const Clients = () => {
 			zipCode: client.zipCode,
 			country: client.country
 		}
-
 		ClientService.updateClient(id, updatedClient);
-		console.log(updatedClient);
+		window.location.reload();
 	}
 
 	function deleteClient(id){
-		ClientService.deleteClient(id).then(response => {
-			paginatedClients.pop(client => client.id == id);
-			paginatedClients.filter(client => client.id !== id)
-		});
+		ClientService.deleteClient(id);
+		window.location.reload();
 	}
 
 
@@ -127,13 +120,8 @@ export const Clients = () => {
 		.then(response => {
 			setPaginatedClients(response.data.content);
 		})
-		
 	}
 	
-	const indexOfLastClient = currentPage * clientsPerPage;
-	const indexOfFirstClient = indexOfLastClient - clientsPerPage;
-	const currentClients = clients.slice(indexOfFirstClient, indexOfLastClient); 
-
     return (
         <div>
            <div class="wrapper">
@@ -196,8 +184,8 @@ export const Clients = () => {
 										</ul>
 										<div class="buttons">
 											<div class="inner">
-												<a href="javascript:;" onClick={ () => saveClient(client.id)} class="btn green">Save</a>
-												<a href="#" onClick={ () => deleteClient(client.id)} class="btn green" class="btn red">Delete</a>
+												<a onClick={ () => saveClient(client.id)} class="btn green">Save</a>
+												<a onClick={ () => deleteClient(client.id)} class="btn red">Delete</a>
 											</div>
 										</div>
 									</div>
@@ -218,7 +206,11 @@ export const Clients = () => {
 									paginate={paginate}
 								/>
 							</li>
-							<li><button onClick={() => nextPage()} style={{marginTop:'15px',  marginLeft:'5px'}}>Next</button></li>
+							<li>
+								<button onClick={() => nextPage()} style={{marginTop:'15px',  marginLeft:'5px'}}>
+									Next
+								</button>
+							</li>
 						</ul>
 					</div>
 				</section>			

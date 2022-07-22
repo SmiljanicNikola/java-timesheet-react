@@ -29,9 +29,9 @@ export const NewClientForm = (props) => {
 			address: client.address,
 			city: client.city,
 			zipCode: client.zipCode,
-			countryId: client.countryId
+			countryId: valueCountry
 		}
-		
+		console.log(newClient)
         ClientService.createClient(newClient);
     }
 
@@ -67,13 +67,14 @@ export const NewClientForm = (props) => {
 								>
 									<option>Select country</option>
 									{
-									countries.map((country) => (
-										<option
-										onClick={handleChangeCountry}
-										getOptionValue={country => country.id}
-										value={country.id}
-										key={country.id}
-										> {country.name} </option>
+										countries.map((country) => 
+										(
+											<option
+												onClick={handleChangeCountry}
+												getOptionValue={country => country.id}
+												value={country.id}
+												key={country.id}
+											>{country.name}</option>
 										))
 									}
 								</select>
@@ -81,7 +82,7 @@ export const NewClientForm = (props) => {
 						</ul>
 						<div class="buttons">
 							<div class="inner">
-								<a onClick={saveClient(client)} class="btn green">Save</a>
+								<a onClick={() => saveClient(client)} class="btn green">Save</a>
 							</div>
 						</div>
 					</div>

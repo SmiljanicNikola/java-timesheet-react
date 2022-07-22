@@ -28,12 +28,10 @@ export const Projects = () => {
 	
 	const handleChangeClient = client =>{
 		setValueClient(client.target.value);
-		console.log(valueClient);
 	}
 
 	const handleChangeTeamMember = teamMember =>{
 		setValueTeamMember(teamMember.target.value);
-		console.log(valueTeamMember);
 	}
 
 	const fetchClients = () => {
@@ -66,18 +64,9 @@ export const Projects = () => {
         
 	}, []);
 
-	/*function updateProject(id){
-		ProjectService.getProjectById(id).then(response => {
-			setProject(response.data)
-			console.log(project);
-		})
-	}*/
-
 	function deleteProject(id){
-		ProjectService.deleteProject(id).then(response => {
-			paginatedProjects.filter(paginatedProjects => project.id !== id)
-			console.log('delete')
-		});
+		ProjectService.deleteProject(id);
+		window.location.reload();
 	}
 	
 	const nextPage = async () => {
@@ -116,8 +105,7 @@ export const Projects = () => {
 			}
 
 			ProjectService.updateProject(id, updatedProject);
-
-			console.log(updatedProject);
+			window.location.reload();
 		})
 		
 	}
@@ -270,7 +258,7 @@ export const Projects = () => {
 							</ul>
 							<div class="buttons">
 								<div class="inner">
-									<a  href="javascript:;" class="btn green" onClick={() => updateProject(project.id)}>Save</a>
+									<a class="btn green" onClick={() => updateProject(project.id)}>Save</a>
 									<a class="btn red" onClick={() => deleteProject(project.id)}>Delete</a>
 								</div>
 							</div>
@@ -293,7 +281,11 @@ export const Projects = () => {
 								paginate={paginate}
 							/>
 						</li>
-						<li><button onClick={() => nextPage()} style={{marginTop:'15px',  marginLeft:'5px'}}>Next</button></li>
+						<li>
+							<button onClick={() => nextPage()} style={{marginTop:'15px',  marginLeft:'5px'}}>
+								Next
+							</button>
+						</li>
 					</ul>
 				</div>
 			</section>			

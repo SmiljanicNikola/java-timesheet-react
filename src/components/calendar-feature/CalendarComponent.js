@@ -7,7 +7,6 @@ import { useNavigate } from "react-router-dom";
 export const CalendarComponent = () => {
     
     const {calendarRows, selectedDate, todayFormatted, daysShort, monthNames, getNextMonth, getPrevMonth} = Calendar();
-    const [days, setDays] = useState([]);
     const [timeSheetActivities, setTimeSheetActivities] = useState([]);
     const [totalHours, setTotalHours] = useState(0);
     const navigate = useNavigate();
@@ -18,7 +17,6 @@ export const CalendarComponent = () => {
     }
 
     const viewDays = date => {
-        console.log(date);
         navigate(`/day/${date}`, JSON.stringify(date))
     }
 
@@ -27,7 +25,6 @@ export const CalendarComponent = () => {
 		TimeSheetActivityService.getTimeSheets().then(response => {
 			setTimeSheetActivities(response.data)
 		})
-		console.log(timeSheetActivities)
 
     }, [])
     
@@ -105,7 +102,7 @@ export const CalendarComponent = () => {
                                                 
                                                 </td>
                                             ))}
-                                        </tr>
+                                    </tr>
                             })
                         }
                     </tbody>

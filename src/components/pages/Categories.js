@@ -17,14 +17,14 @@ export const Categories = () => {
 	const [size, setSize] = useState(2);
 	const [display, setDisplay] = useState(false);
 	const alphabet = ["a","b","c","d","e","f","g","h","i","j","k","l","m","n","o","p","q","r","s","t","u","v","w","x","y","z"];
-
+	const [letters, setLetters] = useState('')
 
     useEffect(() => {
 		
 		const fetchPaginatedCategories = async () =>{
 			CategoryService.getCategoriesPaginateWithParams(currentPage, size)
 			.then(response => {
-			setPaginatedCategories(response.data.content);
+				setPaginatedCategories(response.data.content);
 			})
 		};
 
@@ -37,8 +37,10 @@ export const Categories = () => {
 		
 	}, []);
 	
-	const handleLetterClick = (letter) =>{
-		
+	function handleLetterClick(letter){
+		CategoryService.filterCategoriesByFirstLetters(letter).then(response => {
+			setPaginatedCategories(response.data)
+		})
 	}
 
     const nextPage = async () => {
@@ -64,24 +66,20 @@ export const Categories = () => {
 	}	
     
     function saveCategory(id){
-		
 		let updatedCategory = {
 			type: type
 		}
 		CategoryService.updateCategory(id, updatedCategory);
-
+		window.location.reload();
 	}
 
 	function deleteCategory(id){
-		CategoryService.deleteCategory(id).then(response => {
-			paginatedCategories.filter(paginatedCategories => category.id !== id)
-		});
-
+		CategoryService.deleteCategory(id);
+		window.location.reload();
 	}
 
 	function toggleModal(){
 		setDisplay(true)
-
 	}
 
 	const handleTypeChange = (e) => {
@@ -95,20 +93,24 @@ export const Categories = () => {
 			setPaginatedCategories(response.data.content);
 		})
 	}
-	
-	const indexOfLastClient = currentPage * categoriesPerPage;
-	const indexOfFirstClient = indexOfLastClient - categoriesPerPage;
-	const currentClients = categories.slice(indexOfFirstClient, indexOfLastClient); 
+
+	function handleSearchChange(e){
+		setLetters(e.target.value)
+		CategoryService.filterCategoriesByFirstLetters(letters).then(response => {
+			setPaginatedCategories(response.data)
+		})
+	}
 
     return (
-        <div>
-           <div class="wrapper">
+        <div class="wrapper">
 			<section class="content">
 				<h2><i class="ico clients"></i>Categories</h2>
 				<div class="grey-box-wrap reports">
-					<a onClick={ () => toggleModal()} class="link new-member-popup">Create new category</a>
+					<a onClick={ () => toggleModal()} class="link new-member-popup">
+						Create new category
+					</a>
 					<div class="search-page">
-						<input type="search" name="search-clients" class="in-search" />
+						<input type="search" onChange={handleSearchChange} name="search-clients" class="in-search" />
 					</div>
 				</div>
 				<NewCategoryForm display={display}>
@@ -144,57 +146,53 @@ export const Categories = () => {
 						</ul>
 						<div class="buttons">
 							<div class="inner">
-								<a href="javascript:;" class="btn green">Save</a>
+								<a class="btn green">Save</a>
 							</div>
 						</div>
 					</div>
 				</div>
+
 				<div class="alpha">
 					<ul>	
-							{alphabet.map((letter) => (
-                				<li>
-									<a onClick={handleLetterClick()}>{letter}</a>
-								</li>
-							))}
-
-						<li class="last">
-							<a href="javascript:;">z</a>
-						</li>					
+						{alphabet.map((letter) => (
+							<li>
+								<a onClick={() => handleLetterClick(letter)}>{letter}</a>
+							</li>
+						))}				
 					</ul>
 				</div>
+
 				<div class="accordion-wrap clients">
-                
-					
-                {paginatedCategories.map((category) => (
-                <tr key={category.id}>
-
-
-					<div class="item">
-						<div class="heading">
-							<span>{category.type}</span>
-							<i>+</i>
-						</div>
-							<div class="details">
-								<ul class="form">
-									<li>
-										<label>Type:</label>
-										<input type="text" onChange={handleTypeChange} defaultValue={category.type} class="in-text" />
-									</li>								
-								
-									
-								</ul>
-								<div class="buttons">
-									<div class="inner">
-										<a href="javascript:;" onClick={ () => saveCategory(category.id)} class="btn green">Save</a>
-										<a href="#" onClick={ () => deleteCategory(category.id)} class="btn green" class="btn red">Delete</a>
+                			
+					{paginatedCategories.map((category) => 
+					(
+						<tr key={category.id}>
+							<div class="item">
+								<div class="heading">
+									<span>{category.type}</span>
+									<i>+</i>
+								</div>
+								<div class="details">
+									<ul class="form">
+										<li>
+											<label>Type:</label>
+											<input type="text" onChange={handleTypeChange} defaultValue={category.type} class="in-text" />
+										</li>										
+									</ul>
+									<div class="buttons">
+										<div class="inner">
+											<a onClick={ () => saveCategory(category.id)} class="btn green">Save</a>
+											<a onClick={ () => deleteCategory(category.id)} class="btn red">Delete</a>
+										</div>
 									</div>
 								</div>
 							</div>
-					</div>
-            	</tr> 
-          		))}
-      
+						</tr> 
+					))
+					}
+
 				</div>
+
 				<div class="pagination">
 					<ul>
 						<li>
@@ -207,12 +205,15 @@ export const Categories = () => {
 								paginate={paginate}
 							/>
 						</li>
-						<li><button onClick={() => nextPage()} style={{marginTop:'15px',  marginLeft:'5px'}}>Next</button></li>
+						<li>
+							<button onClick={() => nextPage()} style={{marginTop:'15px',  marginLeft:'5px'}}>
+								Next
+							</button>
+						</li>
 					</ul>
 				</div>
 			</section>			
 		</div>
-        </div>
     )
 }
 

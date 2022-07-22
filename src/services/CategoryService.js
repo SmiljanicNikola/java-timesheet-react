@@ -31,6 +31,11 @@ class CategoryService {
     getCategoryById(categoryId){
         return axios.get(CATEGORIES_REST_API_URL + '/' + categoryId);
     }
+
+    filterCategoriesByFirstLetters(letters){
+        return axios.get(CATEGORIES_REST_API_URL + '/filterBy/' + letters);
+    }
+    
 }
 
 export default new CategoryService();

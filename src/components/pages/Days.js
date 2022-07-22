@@ -3,7 +3,6 @@ import { useNavigate, useParams } from 'react-router-dom'
 import ClientService from '../../services/ClientService';
 import ProjectService from '../../services/ProjectService';
 import TimeSheetActivityService from '../../services/TimeSheetActivityService';
-import { Calendar } from '../calendar-feature/Calendar';
 import { NewActivityForm } from '../forms/NewActivityForm';
 
 
@@ -41,8 +40,17 @@ export const Days = () => {
 		}
 	}
 
-	function addActivity(){
-		
+	function addActivity(newTimeSheet){
+		let newActivity = {
+			description: newTimeSheet.description,
+			teamMemberId: newTimeSheet.teamMemberId,
+			projectId: newTimeSheet.projectId,
+			categoryId: newTimeSheet.categoryId,
+			time: newTimeSheet.time,
+			overtime: newTimeSheet.overtime,
+			date: params.date
+		}
+		TimeSheetActivityService.createTimesheetActivity(newActivity);
 	}
 
     return (
@@ -52,56 +60,56 @@ export const Days = () => {
 					<h2><i class="ico timesheet"></i>TimeSheet</h2>
 					<div class="grey-box-wrap">
 						<div class="top">
-							<a href="javascript:;" class="prev"><i class="zmdi zmdi-chevron-left"></i>previous week</a>
+							<a class="prev"><i class="zmdi zmdi-chevron-left"></i>previous week</a>
 							<span class="center">February 04 - February 10, 2013 (week 6)</span>
-							<a href="javascript:;" class="next">next week<i class="zmdi zmdi-chevron-right"></i></a>
+							<a class="next">next week<i class="zmdi zmdi-chevron-right"></i></a>
 						</div>
 						<div class="bottom">
 							<ul class="days">
 								<li>
-									<a href="javascript:;">
+									<a>
 										<b>Feb 04</b>
 										<i>7.5</i>
 										<span>monday</span>
 									</a>
 								</li>
 								<li>
-									<a href="javascript:;">
+									<a>
 										<b>Feb 06</b>
 										<i>7.5</i>
 										<span>tuesday</span>
 									</a>
 								</li>
 								<li>
-									<a href="javascript:;">
+									<a>
 										<b>Feb 06</b>
 										<i>7.5</i>
 										<span>wednesday</span>
 									</a>
 								</li>
 								<li class="active">
-									<a href="javascript:;">
+									<a>
 										<b>Feb 07</b>
 										<i>7.5</i>
 										<span>thursday</span>
 									</a>
 								</li>
 								<li>
-									<a href="javascript:;">
+									<a>
 										<b>Feb 08</b>
 										<i>7.5</i>
 										<span>friday</span>
 									</a>
 								</li>
 								<li>
-									<a href="javascript:;">
+									<a>
 										<b>Feb 09</b>
 										<i>0.0</i>
 										<span>saturday</span>
 									</a>
 								</li>
 								<li class="last">
-									<a href="javascript:;">
+									<a >
 										<b>Feb 10</b>
 										<i>0.0</i>
 										<span>sunday</span>
@@ -155,9 +163,7 @@ export const Days = () => {
 							<td class="small">
 								<input type="text" defaultValue={activity.overtime} class="in-text xsmall" />
 							</td>
-							<td>
-								<button class="btn-info">Update</button>
-							</td>
+							
 						</tr>
 						))}
 						<tr>
@@ -193,7 +199,7 @@ export const Days = () => {
 								<input name="overtime" id="overtime" type="text" onChange={e => setNewTimeSheet({...newTimeSheet, overtime: e.target.value})} class="in-text xsmall" />
 							</td>
 							<td>
-								<button class="btn-success" onClick={() => addActivity()}>Add</button>
+								<button class="btn-success" onClick={() => addActivity(newTimeSheet)}>Add</button>
 							</td>
 						</tr>
 					</table>

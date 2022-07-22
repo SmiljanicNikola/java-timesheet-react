@@ -20,12 +20,18 @@ class TimeSheetActivityService {
         return axios.post(TIMESHEET_REST_API_URL, timeSheetActivity);
     }
 
-    getTimeSheetsByThreeParameters(projectId,teamMemberId, categoryId){
-        return axios.get(TIMESHEET_REST_API_URL+"/projectId/"+projectId+"/teamMemberId/" + teamMemberId + "/categoryId/" + categoryId);
+    searchTimeSheetsActivities(projectId,teamMemberId, categoryId, startDate, endDate){
+        return axios.get(TIMESHEET_REST_API_URL+"/search?"+"projectId="+projectId+"&teamMemberId=" + teamMemberId + "&categoryId=" + categoryId + "&startDate=" + startDate + "&endDate=" + endDate);
     }
 
-    exportPDFReport(report){
-        return axios.post(TIMESHEET_REST_API_URL+"/reports/export", report);
+    exportPDFReport(timeSheets){
+        return axios.post(TIMESHEET_REST_API_URL+"/export", timeSheets,{
+            params: {
+                cacheBustTimestamp: Date.now(),
+            },
+            responseType: 'blob',
+            timeout: 120,
+        });
     }
 
     searchByDate(date){

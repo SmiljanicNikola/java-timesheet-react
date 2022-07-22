@@ -12,7 +12,6 @@ export const TeamMembers = () => {
 	const [paginatedTeamMembers, setPaginatedTeamMembers] = useState([])
 	const [teamMembersPerPage, setTeamMembersPerPage] = useState(2);
 	const [pageNumber, setPageNumber] = useState(0);
-	const [name, setName] = useState('')
 	const [hoursPerWeek, setHoursPerWeek] = useState('')
 	const [teamMember, setTeamMember] = useState({})
 	const [size, setSize] = useState(2);
@@ -34,39 +33,35 @@ export const TeamMembers = () => {
 		.then(response => {
 			setTeamMembers(response.data.content);
 		})
-		
+
     }, []);
 
     function saveTeamMember(id){
 		
 		TeamMemberService.getTeamMemberById(id).then(response => {
 			setTeamMember(response.data)
-			console.log(teamMember.data);
 
 			updatedTeamMember = {
 				id:teamMember.id,
 				firstname: teamMember.firstname,
+				username: teamMembers.username,
 				hoursPerWeek: hoursPerWeek,
 				username: teamMember.username,
 				email: teamMember.email
 			}
 
 			TeamMemberService.updateTeamMember(id,updatedTeamMember);
-
-			console.log(updatedTeamMember);
+			window.location.reload();
 		})
+
     }
 
     function deleteTeamMember(id){
-
 		TeamMemberService.deleteTeamMember(id);
-		paginatedTeamMembers.pop(teamMember => teamMember.id == id);
-		paginatedTeamMembers.filter(teamMember => teamMember.id !== id);
-
+		window.location.reload();
     }
 
     function resetPassword(id){
-        console.log('Reset password')
     }
 
     function toggleModal(){
@@ -78,6 +73,28 @@ export const TeamMembers = () => {
 	}
 	
 	const nextPage = async () => {
+
+		let nextPage = currentPage + 1;
+		displayPaginated(nextPage, size, TeamMemberService.getMembersPaginateWithParams, setPaginatedTeamMembers)
+	}	
+
+
+	const previousPage = async () => {
+
+		let previousPage = currentPage - 1;
+		displayPaginated(previousPage, size, TeamMemberService.getMembersPaginateWithParams, setPaginatedTeamMembers)
+
+	}	
+
+	const displayPaginated = async (pageNumber, size, getItemsFunc, displayItemsFunc) => {
+		setCurrentPage(pageNumber);
+
+		getItemsFunc(pageNumber, size).then(response => {
+			displayItemsFunc(response.data.content);
+		});
+	}
+
+	/*const nextPage = async () => {   
 
 		let nextPage = currentPage + 1;
 		setCurrentPage(nextPage);
@@ -99,10 +116,10 @@ export const TeamMembers = () => {
 			setPaginatedTeamMembers(response.data.content);
 		})
 
-	}	
+	}*/
+
 
     const paginate = (pageNumber) => {
-
 		setCurrentPage(pageNumber);
 
 		TeamMemberService.getMembersPaginateWithParams(currentPage, size)
@@ -128,10 +145,6 @@ export const TeamMembers = () => {
 		setBlocked(false);
 	}
 
-	const indexOfLastClient = currentPage * teamMembersPerPage;
-	const indexOfFirstClient = indexOfLastClient - teamMembersPerPage;
-	const currentClients = teamMembers.slice(indexOfFirstClient, indexOfLastClient); 
-
     return (
         <div>
             <div class="wrapper">
@@ -151,73 +164,74 @@ export const TeamMembers = () => {
                 {paginatedTeamMembers.map((member) => (
 			<tr key={member.id}>
 
-              <div class="item">
-						<div class="heading">
-							<span>{member.firstname} {member.lastname}</span>
-							<i>+</i>
-						</div>
-						<div class="details">
-							<ul class="form">
-								<li>
-									<label>Name:</label>
-									<input type="text" defaultValue={member.firstname} onChange={e => setTeamMember({...member, firstname:e.target.value})} class="in-text" />
-								</li>								
-								<li>
-									<label>Hours per week:</label>
-									<input type="text" defaultValue={member.hoursPerWeek} onChange={handleHoursPerWeekChange} class="in-text" />
-								</li>
-							</ul>
-							<ul class="form">
-								<li>
-									<label>Username:</label>
-									<input type="text" onChange={e => setTeamMember({...member, username:e.target.value})} defaultValue={member.username} class="in-text" />
-								</li>
-								<li>
-									<label>Email:</label>
-									<input type="text" defaultValue={member.email} onChange={e => setTeamMember({...member, email:e.target.value})} class="in-text" />
-								</li>								
-							</ul>
-							<ul class="form last">
-								<li>
-									
-									<label>Status:</label>
-									<span class="radio">
-										<label for="inactive">Inactive:</label>
-										<input type="radio" checked={member.blocked == true} onChange={handleInactiveInput} id="inactive" />
-									</span>
-									<span class="radio">
-										<label for="active">Active:</label>
-										<input type="radio" onChange={handleActiveInput} checked={member.blocked == false}  id="active" />
-									</span>
-								</li>
-								<li>
-									<label>Role:</label>
-									<span class="radio">
-										<label for="admin">Admin:</label>
-										<input type="radio" onChange={handleRoleInputAdmin} checked={member.role == 'ADMIN'}  id="admin" />
-									</span>
-									<span class="radio">
-										<label for="worker">Worker:</label>
-										<input type="radio" onChange={handleRoleInputWorker} checked={member.role == 'WORKER'} id="worker" />
-									</span>
-								</li>
-							</ul>
-							<div class="buttons">
-								<div class="inner">
-									<a href="javascript:;" onClick={ () => saveTeamMember(member.id)} class="btn green">Save</a>
-									<a href="#" onClick={ () => deleteTeamMember(member.id)} class="btn green" class="btn red">Delete</a>
-									<a href="javascript:;" onClick={ () => resetPassword(member.id)} class="btn green" class="btn orange">Reset Password</a>
-								</div>
+              	<div class="item">
+					<div class="heading">
+						<span>{member.firstname} {member.lastname}</span>
+						<i>+</i>
+					</div>
+					<div class="details">
+						<ul class="form">
+							<li>
+								<label>Name:</label>
+								<input type="text" defaultValue={member.firstname} onChange={e => setTeamMember({...member, firstname:e.target.value})} class="in-text" />
+							</li>								
+							<li>
+								<label>Hours per week:</label>
+								<input type="text" defaultValue={member.hoursPerWeek} onChange={handleHoursPerWeekChange} class="in-text" />
+							</li>
+						</ul>
+						<ul class="form">
+							<li>
+								<label>Username:</label>
+								<input type="text" onChange={e => setTeamMember({...member, username:e.target.value})} defaultValue={member.username} class="in-text" />
+							</li>
+							<li>
+								<label>Email:</label>
+								<input type="text" defaultValue={member.email} onChange={e => setTeamMember({...member, email:e.target.value})} class="in-text" />
+							</li>								
+						</ul>
+						<ul class="form last">
+							<li>
+								<label>Status:</label>
+								<span class="radio">
+									<label for="inactive">Inactive:</label>
+									<input type="radio" checked={member.blocked == true} onChange={handleInactiveInput} id="inactive" />
+								</span>
+								<span class="radio">
+									<label for="active">Active:</label>
+									<input type="radio" onChange={handleActiveInput} checked={member.blocked == false}  id="active" />
+								</span>
+							</li>
+							<li>
+								<label>Role:</label>
+								<span class="radio">
+									<label for="admin">Admin:</label>
+									<input type="radio" onChange={handleRoleInputAdmin} checked={member.role == 'ADMIN'}  id="admin" />
+								</span>
+								<span class="radio">
+									<label for="worker">Worker:</label>
+									<input type="radio" onChange={handleRoleInputWorker} checked={member.role == 'WORKER'} id="worker" />
+								</span>
+							</li>
+						</ul>
+						<div class="buttons">
+							<div class="inner">
+								<a onClick={ () => saveTeamMember(member.id)} class="btn green">Save</a>
+								<a onClick={ () => deleteTeamMember(member.id)} class="btn red">Delete</a>
+								<a onClick={ () => resetPassword(member.id)} class="btn orange">Reset Password</a>
 							</div>
 						</div>
 					</div>
+				</div>
             </tr> 
           ))}
 			</div>
 				<div class="pagination">
 					<ul>
 						<li>
-							<button onClick={() => previousPage()} style={{marginTop:'15px', marginRight:'5px'}}>Pervious</button>
+							<button onClick={() => previousPage()} style={{marginTop:'15px', marginRight:'5px'}}>
+								Pervious
+							</button>
 						</li>
 						<li>
 							<Pagination
@@ -226,7 +240,11 @@ export const TeamMembers = () => {
 								paginate={paginate}
 							/>
 						</li>
-						<li><button onClick={() => nextPage()} style={{marginTop:'15px',  marginLeft:'5px'}}>Next</button></li>
+						<li>
+							<button onClick={() => nextPage()} style={{marginTop:'15px',  marginLeft:'5px'}}>
+								Next
+							</button>
+						</li>
 					</ul>
 				</div>
 			</section>			

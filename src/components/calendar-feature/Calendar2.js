@@ -2,6 +2,7 @@ import React,{useState, useEffect, useRef} from 'react'
 import { CalendarDays } from './CalendarDays';
 import {Calendar} from './Calendar';
 import TimeSheetActivityService from '../../services/TimeSheetActivityService';
+import CalendarUtil from '../utils/CalendarUtil'
 
 export const Calendar2 = () => {
 
@@ -13,8 +14,8 @@ export const Calendar2 = () => {
     const [hoursPerDay, setHoursPerDay] = useState(0)
     const [timeSheetActivities, setTimeSheetActivities] = useState([]);
     const [totalMonthTime, setTotalMonthTime] = useState(0)
-    const startDate = findFirstDayOfTheWeek(selectedMonthFirstDate)
-    const dates = getDatesFromStartPointToEndPoint(startDate, selectedMonthLastDate);
+    const startDate = CalendarUtil.findFirstDayOfTheWeek(selectedMonthFirstDate)
+    const dates = CalendarUtil.getDatesFromStartPointToEndPoint(startDate, selectedMonthLastDate);
     let totalHours = 0;
 
     useEffect(() => {
@@ -29,54 +30,24 @@ export const Calendar2 = () => {
     }, []);
 
 
-    function findFirstDayOfTheWeek(date){//Ovde je svuda bilo date umesto selectedDate
-
-        let dayOfTheWeek = date.getDay() -1;
-
-        let firstDayOfTheWeek = date.getDate() + 1 - dayOfTheWeek;
-     
-        return new Date(date.setDate(firstDayOfTheWeek))
-
-    }
-
-    function findLastDayOfTheWeek(date){
-
-        let dayOfTheWeek = date.getDay()
-
-        let lastDayOfTheWeek = date.getDate() + 7 - dayOfTheWeek;
-     
-        return new Date(date.setDate(lastDayOfTheWeek))
-
-    }
-
-
-    function getDatesFromStartPointToEndPoint(startDate, lastCalendarDate){
-        
-        const dates =[];
-
-        for(let i = startDate; i<= lastCalendarDate; i.setDate(i.getDate() + 1)){
-            dates.push(new Date(i));
-        }
-        return dates;
-    }
-
-
     const getPrevMonth = () => {
+
         setSelectedDate(prevValue => new Date(prevValue.getFullYear(), prevValue.getMonth() - 1));
         
         TimeSheetActivityService.getTimeSheets().then(response => {
 			setTimeSheetActivities(response.data)
-		})
+        })
+        
     }
 
-
     const getNextMonth = () => {
-        setSelectedDate(prevValue => new Date(prevValue.getFullYear(), prevValue.getMonth() + 1, 1));
-        let startDate = (dates[0].toISOString().slice(0,10))
-        let endDate = (dates[34].toISOString().slice(0,10))
+
+        setSelectedDate(prevValue => new Date(prevValue.getFullYear(), prevValue.getMonth() + 1));
+        
         TimeSheetActivityService.getTimeSheets().then(response => {
 			setTimeSheetActivities(response.data)
         })
+
     }
 
 
@@ -88,7 +59,6 @@ export const Calendar2 = () => {
             setTotalMonthTime(totalMonthTime + totalTime);
         }
     }
-
 
     for(let i = 0; i < timeSheetActivities.length; i++){
         {

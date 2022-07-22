@@ -7,7 +7,7 @@ import {Projects} from './components/pages/Projects'
 import {Categories} from './components/pages/Categories'
 import {NewMemberForm} from './components/forms/NewMemberForm'
 import {Calendar} from './components/calendar-feature/Calendar'
-import {BrowserRouter as Router, Routes, Route, Outlet} from 'react-router-dom';
+import {BrowserRouter as Router, Routes, Route} from 'react-router-dom';
 import { TimeSheet } from './components/pages/TimeSheet';
 import { Login } from './components/pages/Login';
 import { Reports } from './components/pages/Reports';
@@ -40,10 +40,8 @@ function App() {
           <Route exact path='/calendar' element={<Calendar/>}></Route>
 
         </Routes>
-        
-
+      
       </Router>
-
       <Footer />
 
     </div>
