@@ -4,7 +4,7 @@ import java.time.LocalDate;
 
 public class AddActivityDTORequest {
 
-private Integer id;
+	private Integer id;
 	
 	private String description;
 	
@@ -19,6 +19,10 @@ private Integer id;
 	private Integer overtime;
 	
 	private LocalDate date;
+	
+	public AddActivityDTORequest() {
+		super();
+	}
 
 	public Integer getId() {
 		return id;
@@ -83,6 +87,7 @@ private Integer id;
 	public void setDate(LocalDate date) {
 		this.date = date;
 	}
+	
 
 	public AddActivityDTORequest(Integer id, String description, Integer teamMemberId, Integer projectId,
 			Integer categoryId, Integer time, Integer overtime, LocalDate date) {
@@ -109,8 +114,12 @@ private Integer id;
 		this.date = date;
 	}
 
-	public AddActivityDTORequest() {
-		super();
+
+	@Override
+	public String toString() {
+		return "AddActivityDTORequest [id=" + id + ", description=" + description + ", teamMemberId=" + teamMemberId
+				+ ", projectId=" + projectId + ", categoryId=" + categoryId + ", time=" + time + ", overtime="
+				+ overtime + ", date=" + date + "]";
 	}
 	
 	

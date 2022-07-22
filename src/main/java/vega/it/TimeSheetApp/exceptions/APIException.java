@@ -8,8 +8,4 @@ public class APIException extends RuntimeException {
 		super(message);
 	}
 	
-	
-	
-	
-	
 }

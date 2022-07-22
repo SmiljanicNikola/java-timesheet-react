@@ -49,10 +49,6 @@ public class TimeSheetActivityServiceImpl implements TimeSheetActivityService {
 			Integer categoryId, LocalDate startDate, LocalDate endDate) {
 		return timeSheetActivityRepository.findAllByThreeParameters(projectId, teamMemberId, categoryId, startDate, endDate);
 	}
-	
-	/*public List<TimeSheetActivity> findAllByThreeParameters(SearchObject searchObject) {
-		return timeSheetActivityRepository.findAllByThreeParameters(searchObject);
-	}*/
 
 	@Override
 	public List<TimeSheetActivity> findAllByDate(LocalDate date) {
@@ -63,8 +59,5 @@ public class TimeSheetActivityServiceImpl implements TimeSheetActivityService {
 	public List<TimeSheetActivity> findAllBetweenStartDateAndEndDate(LocalDate startDate, LocalDate endDate) {
 		return timeSheetActivityRepository.findAllBetweenStartDateAndEndDate(startDate, endDate);
 	}
-
-	
-
 	
 }

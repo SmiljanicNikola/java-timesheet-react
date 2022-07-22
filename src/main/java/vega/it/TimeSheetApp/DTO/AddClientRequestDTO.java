@@ -38,8 +38,6 @@ public class AddClientRequestDTO {
 		this.countryId = countryId;
 	}
 	
-	
-
 	public AddClientRequestDTO(String clientName, String address, String city, String zipCode, Integer countryId) {
 		super();
 		this.clientName = clientName;
@@ -48,8 +46,6 @@ public class AddClientRequestDTO {
 		this.zipCode = zipCode;
 		this.countryId = countryId;
 	}
-
-
 
 	public Integer getId() {
 		return id;
@@ -97,6 +93,12 @@ public class AddClientRequestDTO {
 
 	public void setCountryId(Integer countryId) {
 		this.countryId = countryId;
+	}
+
+	@Override
+	public String toString() {
+		return "AddClientRequestDTO [id=" + id + ", clientName=" + clientName + ", address=" + address + ", city="
+				+ city + ", zipCode=" + zipCode + ", countryId=" + countryId + "]";
 	}
 	
 	

@@ -8,7 +8,6 @@ import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
-import org.springframework.web.bind.annotation.CrossOrigin;
 import org.springframework.web.bind.annotation.DeleteMapping;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
@@ -61,6 +60,16 @@ public class CategoryController {
 		
         return new ResponseEntity<>(new CategoryDTO(category), HttpStatus.OK);
 
+	}
+	
+	@GetMapping(value="filterBy/{letter}")
+	public ResponseEntity<List<CategoryDTO>> getCategoryByFirstLetter(@PathVariable("letter") String letter){
+		
+			List<CategoryDTO> categoriesDTO = categoryService.filterAllCategoriesByFirstLetter(letter).stream().map(c -> new CategoryDTO(c)).toList();
+			
+			
+	        return new ResponseEntity<>(categoriesDTO, HttpStatus.OK);
+		
 	}
 	
 	@DeleteMapping(value = "/{id}")

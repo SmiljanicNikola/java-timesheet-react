@@ -1,6 +1,5 @@
 package vega.it.TimeSheetApp.service.implementation;
 
-import java.io.Console;
 import java.time.LocalDate;
 import java.util.ArrayList;
 import java.util.Collections;
@@ -66,60 +65,22 @@ public class DayServiceImpl implements DayService {
 		for(DayDTO dayDTO : targetList) {
 			System.out.println(dayDTO);
 		}
-				
-		
-	
-			/*for(int i = 0; i < daysDTO.size(); i++ ) {
-				for(int j = i + 1; j < daysDTO.size() ; j++) {
-					if(daysDTO.get(i).getDate().equals(daysDTO.get(j).getDate())) {
-						//System.out.println(daysDTO);
-						int time = daysDTO.get(i).getTime();
-						daysDTO.remove(daysDTO.get(j));
-						/*time += daysDTOSecond.get(j).getTime();
-						System.out.println(time);
-						
-						daysDTO.get(i).setTime(time);
-						returnList.add(daysDTO.get(i)); ss
 
-						for(DayDTO dayDTO : daysDTO) {
-							System.out.println(dayDTO);
-						}
-						
-						}
-					}
-				}*/
 	
-			/*for(int i = 0; i < daysDTO.size(); i++ ) {
-				for(int j = daysDTO.size()-1; j > 0; j--) {
-					if(daysDTO.get(i).getDate() == daysDTO.get(j).getDate()) {
-						System.out.println(daysDTO.get(i).getDate());
-						System.out.println(daysDTO.get(j).getDate());
-
-						System.out.println(daysDTO.get(i));
-						System.out.println("SIZE:"+daysDTO.size());
-						System.out.println("TIME OF J:"+daysDTO.get(j).getTime());
-						System.out.println(daysDTO.get(j));
-						System.out.println("TIME OF I:"+daysDTO.get(i).getTime());
-						System.out.println(daysDTO.get(i));
-
-						daysDTO.get(i).setTime(daysDTO.get(i).getTime() + daysDTO.get(j).getTime());
-						System.out.println(daysDTO.get(i).getTime());
-						daysDTO.get(j).setTime(0);
-	
-					}else {
-						System.out.println("PRAZNO");
-					}
+		/*for(int i = 0; i < daysDTO.size(); i++ ) {
+			for(int j = daysDTO.size()-1; j > 0; j--) {
+				if(daysDTO.get(i).getDate() == daysDTO.get(j).getDate()) {
+					daysDTO.get(i).setTime(daysDTO.get(i).getTime() + daysDTO.get(j).getTime());
+					System.out.println(daysDTO.get(i).getTime());
+					daysDTO.get(j).setTime(0);
+				}else {
+					System.out.println("PRAZNO");
 				}
-			}*/
+			}
+		}*/
 		
 		return daysDTO;
-		
-	
-		
+			
 	}
 	
-
-	
-	
-
 }

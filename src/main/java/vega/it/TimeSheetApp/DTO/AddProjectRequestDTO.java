@@ -1,11 +1,5 @@
 package vega.it.TimeSheetApp.DTO;
 
-import javax.persistence.Column;
-import javax.persistence.JoinColumn;
-import javax.persistence.ManyToOne;
-
-import vega.it.TimeSheetApp.model.Client;
-import vega.it.TimeSheetApp.model.TeamMember;
 
 public class AddProjectRequestDTO {
 
@@ -20,6 +14,10 @@ public class AddProjectRequestDTO {
 	private Integer teamMemberId;
 	
 	private Boolean finished;
+	
+	public AddProjectRequestDTO() {
+		super();
+	}
 
 	public Integer getId() {
 		return id;
@@ -80,9 +78,6 @@ public class AddProjectRequestDTO {
 		this.finished = finished;
 	}
 
-	public AddProjectRequestDTO() {
-		super();
-	}
 
 	public AddProjectRequestDTO(String description, String projectName, Integer clientId, Integer teamMemberId,
 			Boolean finished) {
@@ -100,6 +95,12 @@ public class AddProjectRequestDTO {
 		this.projectName = projectName;
 		this.clientId = clientId;
 		this.teamMemberId = teamMemberId;
+	}
+
+	@Override
+	public String toString() {
+		return "AddProjectRequestDTO [id=" + id + ", description=" + description + ", projectName=" + projectName
+				+ ", clientId=" + clientId + ", teamMemberId=" + teamMemberId + ", finished=" + finished + "]";
 	}
 	
 	

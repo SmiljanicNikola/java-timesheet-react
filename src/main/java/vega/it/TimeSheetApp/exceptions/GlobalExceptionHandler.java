@@ -12,6 +12,7 @@ import org.springframework.web.context.request.WebRequest;
 @ControllerAdvice
 public class GlobalExceptionHandler {
 
+		@SuppressWarnings({ "unchecked", "rawtypes" })
 		@ExceptionHandler(ResourceNotFoundException.class)
 		public ResponseEntity<?> handleResourceNotFoundException(ResourceNotFoundException exception, WebRequest request){
 			ErrorDetails errorDetails =
@@ -20,6 +21,7 @@ public class GlobalExceptionHandler {
 			
 		}
 		
+		@SuppressWarnings({ "unchecked", "rawtypes" })
 		@ExceptionHandler(APIException.class)
 		public ResponseEntity<?> handleAPIException(APIException exception, WebRequest request){
 			ErrorDetails errorDetails =

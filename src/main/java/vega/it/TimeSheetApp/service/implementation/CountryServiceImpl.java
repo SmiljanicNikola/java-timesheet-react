@@ -33,8 +33,7 @@ public class CountryServiceImpl implements CountryService {
 
 	@Override
 	public void remove(Integer id) {
-		countryRepository.deleteById(id);
-		
+		countryRepository.deleteById(id);	
 	}
 
 }

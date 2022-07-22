@@ -45,4 +45,9 @@ public class CategoryServiceImpl implements CategoryService {
 		return categoryRepository.findAll(pageable);
 	}
 
+	@Override
+	public List<Category> filterAllCategoriesByFirstLetter(String letter) {
+		return categoryRepository.filterAllCategoriesByFirstLetter(letter);
+	}
+
 }

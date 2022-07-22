@@ -1,5 +1,6 @@
 package vega.it.TimeSheetApp.exceptions;
 
+@SuppressWarnings("serial")
 public class EntityNotFoundException extends RuntimeException {
 	
 	private String message;

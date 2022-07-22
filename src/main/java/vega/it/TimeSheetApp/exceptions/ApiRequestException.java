@@ -1,5 +1,6 @@
 package vega.it.TimeSheetApp.exceptions;
 
+@SuppressWarnings("serial")
 public class ApiRequestException extends RuntimeException {
 
 	public ApiRequestException(String message) {

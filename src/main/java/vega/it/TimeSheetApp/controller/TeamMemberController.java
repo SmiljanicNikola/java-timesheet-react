@@ -123,6 +123,10 @@ public class TeamMemberController {
         	teamMember.setFirstname(teamMemberDTO.getFirstname());
         }
         
+        if(teamMemberDTO.getUsername() != null) {
+        	teamMember.setUsername(teamMemberDTO.getUsername());
+        }
+        
         if(teamMemberDTO.getHoursPerWeek() != null) {
         	teamMember.setHoursPerWeek(teamMemberDTO.getHoursPerWeek());
         }

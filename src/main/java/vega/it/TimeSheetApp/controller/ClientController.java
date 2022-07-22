@@ -113,6 +113,7 @@ public class ClientController {
         client.setCountry(this.countryService.findById(addClientRequestDTO.getCountryId()));        
 
         client = clientService.save(client);
+        
         return new ResponseEntity<>(new ClientDTO(client), HttpStatus.CREATED);
 	        	
 	}

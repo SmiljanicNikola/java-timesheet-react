@@ -8,7 +8,6 @@ import vega.it.TimeSheetApp.model.TimeSheetActivity;
 
 public interface TimeSheetActivityService {
 	
-
 	List<TimeSheetActivity> findAll();
 	
 	TimeSheetActivity findById(Integer timeSheetActivityId);
@@ -21,11 +20,7 @@ public interface TimeSheetActivityService {
 
 	List<TimeSheetActivity> findAllByThreeParameters(Integer projectId, Integer teamMemberId, Integer categoryId, LocalDate startDate, LocalDate endDate);
 	
-	//List<TimeSheetActivity> findAllByThreeParameters(SearchObject searchObject);
-
-	
 	List<TimeSheetActivity> findAllBetweenStartDateAndEndDate(LocalDate startDate, LocalDate endDate);
-
 
 	List<TimeSheetActivity> findAllByDate(LocalDate date);
 

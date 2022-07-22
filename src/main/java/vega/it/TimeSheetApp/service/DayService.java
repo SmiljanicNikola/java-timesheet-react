@@ -13,6 +13,4 @@ public interface DayService {
 		
 	List<DayDTO> findAllBetweenStartDateAndEndDate(LocalDate startDate, LocalDate endDate);
 	
-	
-
 }

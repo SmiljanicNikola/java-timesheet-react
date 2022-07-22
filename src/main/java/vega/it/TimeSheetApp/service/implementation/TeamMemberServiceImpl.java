@@ -50,6 +50,4 @@ public class TeamMemberServiceImpl implements TeamMemberService {
 		return teamMemberRepository.filterAllTeamMembersByUsername(letter);
 	}
 
-	
-
 }
