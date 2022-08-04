@@ -15,34 +15,53 @@ import { NewProjectForm } from './components/forms/NewProjectForm';
 import { NewClientForm } from './components/forms/NewClientForm';
 import { Days } from './components/pages/Days';
 import { NewCategoryForm } from './components/forms/NewCategoryForm';
+import { PrivateRoute } from './services/PrivateRoute';
+import { AuthenticationService } from './services/AuthenticationService';
+import { Navigate } from 'react-router-dom';
 
+const Private = ({Component, roles, path, ...rest}) => {
+  const role = AuthenticationService.getRole();
+  if (!role) {
+    return <Navigate to={{ pathname: "/login" }} />;
+  }
+
+  if (roles && !roles.includes(role)) {
+    // Ako je korisnik ulogovan ali nema dozvolu pristupa zaštićenoj stranici - vrati ga na glavnu stranicu
+    return <Navigate to={{ pathname: "/timesheet" }} />;
+  }
+
+  if (roles && roles.includes(role)) {
+  return <Component></Component>
+  }
+
+}
 
 function App() {
   return (
     <div className="App">
-      <Header /><br></br><br></br>
       <Router>
+
+        
         <Routes>
 
-          <Route exact path='/teamMembers' element={<TeamMembers/>}></Route>
-          <Route exact path='/clients' element={<Clients/>}></Route>
-          <Route exact path='/projects' element={<Projects/>}></Route>
-          <Route exact path='/categories' element={<Categories/>}></Route>
-          <Route exact path='/newMemberForm' element={<NewMemberForm/>}></Route>
-          <Route exact path='/newProjectForm' element={<NewProjectForm/>}></Route>
-          <Route exact path='/newClientForm' element={<NewClientForm/>}></Route>
-          <Route exact path='/newCategoryForm' element={<NewCategoryForm/>}></Route>
-          <Route exact path='/day/:date' element={<Days/>}></Route>
-          <Route exact path='/timeSheet' element={<TimeSheet/>}></Route>
+          {/*<Route exact path='/teamMembers' element={<TeamMembers/>}></Route>*/}
           <Route exact path='/login' element={<Login/>}></Route>
-          <Route exact path='/reports' element={<Reports/>}></Route>
-          <Route exact path='/day' element={<Days/>}></Route>
           <Route exact path='/calendar' element={<Calendar/>}></Route>
 
-        </Routes>
+          <Route exact path='/day/:date' element={<Private Component={Days} roles={["ROLE_ADMIN", "ROLE_WORKER"]} exact path='/day/:date'/>} />
+          <Route exact path='/timeSheet' element={<Private Component={TimeSheet} roles={["ROLE_ADMIN", "ROLE_WORKER"]} exact path='/timeSheet'/>} />
+          <Route exact path='/reports' element={<Private Component={Reports} roles={["ROLE_ADMIN", "ROLE_WORKER"]} exact path='/reports'/>} />
+          <Route exact path='/teamMembers' element={<Private Component={TeamMembers} roles={["ROLE_ADMIN"]} exact path='/teamMembers'/>} />
+          <Route exact path='/projects' element={<Private Component={Projects} roles={["ROLE_ADMIN","ROLE_WORKER"]} exact path='/projects'/>} />
+          <Route exact path='/clients' element={<Private Component={Clients} roles={["ROLE_ADMIN","ROLE_WORKER"]} exact path='/clients'/>} />
+          <Route exact path='/categories' element={<Private Component={Categories} roles={["ROLE_ADMIN","ROLE_WORKER"]} exact path='/categories'/>} />
+          <Route exact path='/newMemberForm' element={<Private Component={NewMemberForm} roles={["ROLE_ADMIN"]} exact path='/newMemberForm'/>} />
+          <Route exact path='/newProjectForm' element={<Private Component={NewProjectForm} roles={["ROLE_ADMIN"]} exact path='/newProjectForm'/>} />
+          <Route exact path='/newClientForm' element={<Private Component={NewClientForm} roles={["ROLE_ADMIN"]} exact path='/newClientForm'/>} />
+          <Route exact path='/newCategoryForm' element={<Private Component={NewCategoryForm} roles={["ROLE_ADMIN"]} exact path='/newCategoryForm'/>} />
       
+        </Routes>
       </Router>
-      <Footer />
 
     </div>
   );

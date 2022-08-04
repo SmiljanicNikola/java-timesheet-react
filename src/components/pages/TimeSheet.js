@@ -3,6 +3,10 @@ import TimeSheetActivityService from '../../services/TimeSheetActivityService';
 import { CalendarComponent } from '../calendar-feature/CalendarComponent';
 import {Calendar} from '../calendar-feature/Calendar'
 import { Calendar2 } from '../calendar-feature/Calendar2';
+import { Header } from '../layout/Header';
+import { Footer } from '../layout/Footer';
+import { AuthenticationService } from '../../services/AuthenticationService';
+import TeamMemberService from '../../services/TeamMemberService';
 
 export const TimeSheet = () => {
 
@@ -11,28 +15,31 @@ export const TimeSheet = () => {
 	const [selectedDate, setSelectedDate] = useState(today);
 	const daysInWeek = [1, 2, 3, 4, 5, 6, 0];
 	const [timeSheetActivities, setTimeSheetActivities] = useState([]);
-	const {
-		  firstDayInMonth,
-		  daysShort, 
-		  monthNames,
-		  getNextMonth, 
-		  getPrevMonth,
-		  selectedMonthLastDate
-		} = Calendar();
+	const [username, setUsername] = useState("");
+	const [role, setRole] = useState("");
+	const [loggedUser, setLoggedUser] = useState({})
+
 
 	useEffect(() => {
-			
-		TimeSheetActivityService.getTimeSheets().then(response => {
-			setTimeSheetActivities(response.data)
-		})
+		
+		const rolee = AuthenticationService.getRole();
+		setRole(rolee);
+		const usernamee = AuthenticationService.getUsername()
+		setUsername(usernamee);
+
+		TeamMemberService.getTeamMemberByUsername(username).then((response => {
+			setLoggedUser(response.data);
+		}))
 
 	}, [])
 
     return (
         <div>
-			<br></br><br></br>
+			<Header></Header><br></br><br></br>
 			{/*<CalendarComponent />*/}
 			<Calendar2/>
+
+			<Footer></Footer>
         </div>
     )
 }

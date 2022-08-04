@@ -6,7 +6,7 @@ const COUNTRY_REST_API_URL = `${process.env.REACT_APP_BACKEND_URL}/api/countries
 class CountryService {
 
     getCountries(){
-        return axios.get(COUNTRY_REST_API_URL);
+        return httpClient.get(COUNTRY_REST_API_URL);
     }
 
 }

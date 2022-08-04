@@ -1,35 +1,41 @@
 import axios from 'axios'
+import httpClient from "../auth/JwtInterceptors"
+
 
 const TeamMembers_REST_API_URL = `${process.env.REACT_APP_BACKEND_URL}/api/teamMembers`;
 
 class TeamMemberService {
 
     getTeamMembers(){
-        return axios.get(TeamMembers_REST_API_URL);
+        return httpClient.get(TeamMembers_REST_API_URL);
     }
 
     getTeamMembersPaginate(){
-        return axios.get(TeamMembers_REST_API_URL+"/paginate");
+        return httpClient.get(TeamMembers_REST_API_URL+"/paginate");
     }
 
     getMembersPaginateWithParams(nextPage, size){
-        return axios.get(TeamMembers_REST_API_URL+"/paginate?page="+nextPage+"&size="+size);
+        return httpClient.get(TeamMembers_REST_API_URL+"/paginate?page="+nextPage+"&size="+size);
     }
 
     updateTeamMember(teamMemberId, teamMember){
-        return axios.put(TeamMembers_REST_API_URL+ '/' + teamMemberId, teamMember);
+        return httpClient.put(TeamMembers_REST_API_URL+ '/' + teamMemberId, teamMember);
     }
 
     deleteTeamMember(teamMemberId){
-        return axios.delete(TeamMembers_REST_API_URL+ "/" + teamMemberId);
+        return httpClient.delete(TeamMembers_REST_API_URL+ "/" + teamMemberId);
     }
 
     createTeamMember(teamMember){
-        return axios.post(TeamMembers_REST_API_URL, teamMember);
+        return httpClient.post(TeamMembers_REST_API_URL, teamMember);
     }
 
     getTeamMemberById(teamMemberId){
-        return axios.get(TeamMembers_REST_API_URL + '/' + teamMemberId);
+        return httpClient.get(TeamMembers_REST_API_URL + '/' + teamMemberId);
+    }
+
+    getTeamMemberByUsername(teamMemberUsername){
+        return httpClient.get(TeamMembers_REST_API_URL + '/username/' + teamMemberUsername);
     }
 }
 

@@ -1,8 +1,35 @@
-import React from 'react'
+import React, { useState, useEffect } from 'react'
 import '../../assets/css/style.css'
+import {AuthenticationService} from '../../services/AuthenticationService';
 import Logo from '../../assets/img/logo.png'
+import TeamMemberService from '../../services/TeamMemberService';
+import { useNavigate } from "react-router-dom";
+
 
 export const Header = () => {
+	const [username, setUsername] = useState("");
+	const [loggedUser, setLoggedUser] = useState({})
+
+	useEffect(() => {
+
+		const username = AuthenticationService.getUsername()
+		if(username != null){
+			setUsername(username);
+		}
+		console.log(username)
+
+		TeamMemberService.getTeamMemberByUsername(username).then((response => {
+			setLoggedUser(response.data);
+			console.log(loggedUser)
+		}))
+
+	}, []);
+
+	const logout = () =>{
+		AuthenticationService.logout();
+	}
+
+
     return (
         <div>
             <header class="header">
@@ -12,10 +39,21 @@ export const Header = () => {
 				<div class="wrapper">
 					<a href="index.html" class="logo">
 						<img src={Logo} alt="VegaITSourcing Timesheet" />
-					</a><br></br>
+					</a>
+					
 					<ul class="user right">
 						<li>
-							<a>Sladjana Miljanovic</a>
+							{loggedUser.firstname != null || loggedUser.lastname != undefined
+							?
+							(
+								<a>{loggedUser.firstname + " " + loggedUser.lastname}</a>
+							)
+							:
+							(
+								<a></a>
+							)
+							}
+							
 							<div class="invisible"></div>
 							<div class="user-menu">
 								<ul>
@@ -32,7 +70,17 @@ export const Header = () => {
 							</div>
 						</li>
 						<li class="last">
-							<a href="javascript:;">Logout</a>
+							{loggedUser.username != null || loggedUser.username != undefined
+							?
+							(
+								<a href="javascript:;" onClick={logout}>Logout</a>
+							)
+							:
+							(
+								<a href="javascript:;" onClick={logout}>Login</a>
+							)
+							}
+							
 						</li>
 					</ul>
 					<br></br>

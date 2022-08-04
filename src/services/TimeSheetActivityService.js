@@ -1,31 +1,36 @@
 import axios from 'axios'
+import httpClient from "../auth/JwtInterceptors"
 
 const TIMESHEET_REST_API_URL = `${process.env.REACT_APP_BACKEND_URL}/api/timeSheetActivities`;
 
 class TimeSheetActivityService {
 
     getTimeSheets(){
-        return axios.get(TIMESHEET_REST_API_URL);
+        return httpClient.get(TIMESHEET_REST_API_URL);
     }
 
     getTimeSheetsByProjectId(projectId){
-        return axios.get(TIMESHEET_REST_API_URL+"/projectId/"+projectId);
+        return httpClient.get(TIMESHEET_REST_API_URL+"/projectId/"+projectId);
     }
 
     getTimeSheetsByDate(date){
-        return axios.get(TIMESHEET_REST_API_URL+"/searchByDate/"+date);
+        return httpClient.get(TIMESHEET_REST_API_URL+"/searchByDate/"+date);
+    }
+
+    getTimeSheetsByTeamMemberId(teamMemberId){
+        return httpClient.get(TIMESHEET_REST_API_URL+"/teamMemberId/"+teamMemberId);
     }
 
     createTimesheetActivity(timeSheetActivity){
-        return axios.post(TIMESHEET_REST_API_URL, timeSheetActivity);
+        return httpClient.post(TIMESHEET_REST_API_URL, timeSheetActivity);
     }
 
     searchTimeSheetsActivities(projectId,teamMemberId, categoryId, startDate, endDate){
-        return axios.get(TIMESHEET_REST_API_URL+"/search?"+"projectId="+projectId+"&teamMemberId=" + teamMemberId + "&categoryId=" + categoryId + "&startDate=" + startDate + "&endDate=" + endDate);
+        return httpClient.get(TIMESHEET_REST_API_URL+"/search?"+"projectId="+projectId+"&teamMemberId=" + teamMemberId + "&categoryId=" + categoryId + "&startDate=" + startDate + "&endDate=" + endDate);
     }
 
     exportPDFReport(timeSheets){
-        return axios.post(TIMESHEET_REST_API_URL+"/export", timeSheets,{
+        return httpClient.post(TIMESHEET_REST_API_URL+"/export", timeSheets,{
             params: {
                 cacheBustTimestamp: Date.now(),
             },
@@ -35,19 +40,23 @@ class TimeSheetActivityService {
     }
 
     searchByDate(date){
-        return axios.get(TIMESHEET_REST_API_URL+"/searchByDate/"+date);
+        return httpClient.get(TIMESHEET_REST_API_URL+"/searchByDate/"+date);
     }
 
     searchByReportCriteria(){
-        return axios.get(TIMESHEET_REST_API_URL+"/search?");
+        return httpClient.get(TIMESHEET_REST_API_URL+"/search?");
     }
 
     getTimeSheetsBetweenStartDateAndEndDate(startDate, endDate){
-        return axios.get(TIMESHEET_REST_API_URL+"/searchBetweenDates?startDate="+startDate+"&endDate="+endDate)
+        return httpClient.get(TIMESHEET_REST_API_URL+"/searchBetweenDates?startDate="+startDate+"&endDate="+endDate)
+    }
+
+    getTimeSheetsBetweenStartDateAndEndDateAndTeamMemberId(startDate, endDate, teamMemberId){
+        return httpClient.get(TIMESHEET_REST_API_URL+"/searchBetweenDatesAndMemberId?startDate="+startDate+"&endDate="+endDate+"&teamMemberId="+teamMemberId);
     }
 
     emptySearchTimeSheets(){
-        return axios.get(TIMESHEET_REST_API_URL+"/search?");
+        return httpClient.get(TIMESHEET_REST_API_URL+"/search?");
     }
     
 }

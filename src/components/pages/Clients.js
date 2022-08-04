@@ -5,6 +5,9 @@ import Pagination from '../utils/Pagination';
 import '../../assets/css/popup.css'
 import { NewClientForm } from '../forms/NewClientForm';
 import PaginationHelper from '../utils/PaginationHelper';
+import { Footer } from '../layout/Footer';
+import { Header } from '../layout/Header';
+import { AuthenticationService } from '../../services/AuthenticationService';
 
 
 export const Clients = () => {
@@ -21,9 +24,17 @@ export const Clients = () => {
 	const [close,setClose] = useState('details');
 	const [size, setSize] = useState(2);
 	const [letters, setLetters] = useState('')
-
+	const [username, setUsername] = useState("");
+	const [role, setRole] = useState("");
+	const [loggedUser, setLoggedUser] = useState({})
 	
     useEffect(() => {
+
+		const rolee = AuthenticationService.getRole();
+		setRole(rolee);
+		const usernamee = AuthenticationService.getUsername()
+		setUsername(usernamee);
+		
 
 		const fetchPaginatedClients = async () =>{
 			ClientService.getClientsPaginateWithParams(currentPage,size)
@@ -119,6 +130,8 @@ export const Clients = () => {
 	
     return (
         <div>
+			<Header></Header><br></br><br></br>
+
            <div class="wrapper">
 				<section class="content">
 					<h2><i class="ico clients"></i>Clients</h2>
@@ -177,12 +190,23 @@ export const Clients = () => {
 												<input type="text" defaultValue={client.country.name} onChange={e => setClient({...client, country:e.target.value})} class="in-text" />
 											</li>
 										</ul>
-										<div class="buttons">
-											<div class="inner">
-												<a onClick={ () => saveClient(client.id)} class="btn green">Save</a>
-												<a onClick={ () => deleteClient(client.id)} class="btn red">Delete</a>
-											</div>
-										</div>
+										{
+											role == 'ROLE_ADMIN' ?
+											(
+												<div class="buttons">
+													<div class="inner">
+														<a onClick={ () => saveClient(client.id)} class="btn green">Save</a>
+														<a onClick={ () => deleteClient(client.id)} class="btn red">Delete</a>
+													</div>
+												</div>
+											)
+											:
+											(
+												<></>
+											)
+										}
+										
+
 									</div>
 							</div>
 
@@ -210,6 +234,7 @@ export const Clients = () => {
 					</div>
 				</section>			
 			</div>
+			<Footer></Footer>
         </div>
     )
 }

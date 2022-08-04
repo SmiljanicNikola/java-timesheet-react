@@ -4,7 +4,9 @@ import Pagination from '../utils/Pagination';
 import CategoryService from '../../services/CategoryService';
 import { NewCategoryForm } from '../forms/NewCategoryForm';
 import PaginationHelper from '../utils/PaginationHelper';
-
+import { Header } from '../layout/Header';
+import { Footer } from '../layout/Footer';
+import { AuthenticationService } from '../../services/AuthenticationService';
 
 export const Categories = () => {
 
@@ -19,8 +21,16 @@ export const Categories = () => {
 	const [display, setDisplay] = useState(false);
 	const alphabet = ["a","b","c","d","e","f","g","h","i","j","k","l","m","n","o","p","q","r","s","t","u","v","w","x","y","z"];
 	const [letters, setLetters] = useState('')
+	const [username, setUsername] = useState("");
+	const [role, setRole] = useState("");
 
     useEffect(() => {
+
+		const rolee = AuthenticationService.getRole();
+		setRole(rolee);
+		const usernamee = AuthenticationService.getUsername()
+		setUsername(usernamee);
+
 		
 		const fetchPaginatedCategories = async () =>{
 			CategoryService.getCategoriesPaginateWithParams(currentPage, size)
@@ -96,6 +106,8 @@ export const Categories = () => {
 	}
 
     return (
+		<div>
+			<Header></Header><br></br><br></br>
         <div class="wrapper">
 			<section class="content">
 				<h2><i class="ico clients"></i>Categories</h2>
@@ -173,12 +185,22 @@ export const Categories = () => {
 											<input type="text" onChange={handleTypeChange} defaultValue={category.type} class="in-text" />
 										</li>										
 									</ul>
-									<div class="buttons">
-										<div class="inner">
-											<a onClick={ () => saveCategory(category.id)} class="btn green">Save</a>
-											<a onClick={ () => deleteCategory(category.id)} class="btn red">Delete</a>
-										</div>
-									</div>
+									{
+										role == 'ROLE_ADMIN' ?
+										(
+											<div class="buttons">
+												<div class="inner">
+													<a onClick={ () => saveCategory(category.id)} class="btn green">Save</a>
+													<a onClick={ () => deleteCategory(category.id)} class="btn red">Delete</a>
+												</div>
+											</div>
+										)
+										:
+										(
+											<></>
+										)
+									}
+									
 								</div>
 							</div>
 						</tr> 
@@ -207,6 +229,8 @@ export const Categories = () => {
 					</ul>
 				</div>
 			</section>			
+		</div>
+		<Footer></Footer>
 		</div>
     )
 }

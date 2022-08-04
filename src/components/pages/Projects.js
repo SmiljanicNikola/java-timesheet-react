@@ -6,6 +6,9 @@ import { NewProjectForm } from '../forms/NewProjectForm';
 import ClientService from '../../services/ClientService';
 import TeamMemberService from '../../services/TeamMemberService';
 import PaginationHelper from '../utils/PaginationHelper';
+import { Footer } from '../layout/Footer';
+import { Header } from '../layout/Header';
+import { AuthenticationService } from '../../services/AuthenticationService';
 
 
 export const Projects = () => {
@@ -25,7 +28,8 @@ export const Projects = () => {
 	const [size, setSize] = useState(2);
 	const [letters, setLetters] = useState('')
 	let updatedProject = {}
-
+	const [username, setUsername] = useState("");
+	const [role, setRole] = useState("");
 	
 	const handleChangeClient = client =>{
 		setValueClient(client.target.value);
@@ -48,6 +52,11 @@ export const Projects = () => {
 	}
 
     useEffect(() => {
+
+		const rolee = AuthenticationService.getRole();
+		setRole(rolee);
+		const usernamee = AuthenticationService.getUsername()
+		setUsername(usernamee);
 
 		const fetchPaginatedProjects = async () =>{
 			ProjectService.getProjectsPaginateWithParams(currentPage, size)
@@ -168,6 +177,7 @@ export const Projects = () => {
 
     return (
         <div>
+			<Header></Header><br></br><br></br>
            <div class="wrapper">
 			<section class="content">
 				<h2><i class="ico clients"></i>Projects</h2>
@@ -273,12 +283,21 @@ export const Projects = () => {
 								
 							</li>
 							</ul>
-							<div class="buttons">
-								<div class="inner">
-									<a class="btn green" onClick={() => updateProject(project.id)}>Save</a>
-									<a class="btn red" onClick={() => deleteProject(project.id)}>Delete</a>
-								</div>
-							</div>
+							{
+								role == 'ROLE_ADMIN' ?
+								(
+									<div class="buttons">
+										<div class="inner">
+											<a class="btn green" onClick={() => updateProject(project.id)}>Save</a>
+											<a class="btn red" onClick={() => deleteProject(project.id)}>Delete</a>
+										</div>
+									</div>
+								)
+								:
+								(
+									<></>
+								)
+							}
 						</div>
 					</div>
 
@@ -307,6 +326,7 @@ export const Projects = () => {
 				</div>
 			</section>			
 		</div>
+		<Footer></Footer>
     </div>
     )
 }

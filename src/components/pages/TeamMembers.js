@@ -4,6 +4,8 @@ import { NewMemberForm } from '../forms/NewMemberForm';
 import Pagination from '../utils/Pagination';
 import axios from 'axios';
 import PaginationHelper from '../utils/PaginationHelper';
+import { Header } from '../layout/Header';
+import { Footer } from '../layout/Footer';
 
 export const TeamMembers = () => {
 
@@ -119,6 +121,7 @@ export const TeamMembers = () => {
 
     return (
         <div>
+			<Header></Header><br></br><br></br>
             <div class="wrapper">
 			<section class="content">
 				<h2><i class="ico team-member"></i>Team members</h2>
@@ -221,6 +224,7 @@ export const TeamMembers = () => {
 				</div>
 			</section>			
 		</div>
+		<Footer></Footer>
         </div>
     )
 }
