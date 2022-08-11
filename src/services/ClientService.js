@@ -17,6 +17,10 @@ class ClientService {
         return httpClient.get(CLIENTS_REST_API_URL+"/paginate?page="+nextPage+"&size="+size);
     }
 
+    getClientsAssociatedWithTeamMemberPaginated(teamMemberUsername,nextPage, size){
+        return httpClient.get(CLIENTS_REST_API_URL+"/teamMemberUsername/"+teamMemberUsername+"/paginated?page="+nextPage+"&size="+size);
+    }
+
     updateClient(clientId, client){
         return httpClient.put(CLIENTS_REST_API_URL+ '/' + clientId, client);
     }

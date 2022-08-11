@@ -28,9 +28,11 @@ export const Projects = () => {
 	const [size, setSize] = useState(2);
 	const [letters, setLetters] = useState('')
 	let updatedProject = {}
-	const [username, setUsername] = useState("");
-	const [role, setRole] = useState("");
-	
+	const [username, setUsername] = useState(AuthenticationService.getUsername());
+	const [role, setRole] = useState(AuthenticationService.getRole());
+	const [loggedUser, setLoggedUser] = useState({});
+	const [lang, setLang] = useState("english");
+
 	const handleChangeClient = client =>{
 		setValueClient(client.target.value);
 	}
@@ -51,26 +53,57 @@ export const Projects = () => {
 		})
 	}
 
+	const fetchPaginatedProjects = async () =>{
+		ProjectService.getProjectsPaginateWithParams(currentPage, size)
+		.then(response => {
+		setPaginatedProjects(response.data.content.filter(project => project.deleted == false));
+		})
+	};
+
+	const findLoggedUser = () => {
+		TeamMemberService.getTeamMemberByUsername(username).then((response => {
+			setLoggedUser(response.data);
+			console.log('TeamMemberId:')
+			console.log(loggedUser.id)
+		}))
+
+	}
+
     useEffect(() => {
 
-		const rolee = AuthenticationService.getRole();
-		setRole(rolee);
-		const usernamee = AuthenticationService.getUsername()
-		setUsername(usernamee);
+		findLoggedUser()
 
-		const fetchPaginatedProjects = async () =>{
-			ProjectService.getProjectsPaginateWithParams(currentPage, size)
+		if(role == 'ROLE_ADMIN'){
+
+			fetchPaginatedProjects();
+			
+			ProjectService.getProjectsPaginate()
 			.then(response => {
-			setPaginatedProjects(response.data.content.filter(project => project.deleted == false));
+				setProjects(response.data.content.filter(project => project.deleted == false));
 			})
-		};
+		}
 
-		fetchPaginatedProjects();
-        
-		ProjectService.getProjectsPaginate()
-        .then(response => {
-			setProjects(response.data.content.filter(project => project.deleted == false));
-        })
+		if(role == 'ROLE_WORKER'){
+			
+
+			/*const fetchPaginatedProjectsForSpecificWorker = async () =>{
+				ProjectService.getProjectsByTeamMemberIdPaginated(loggedUser.id,currentPage, size)
+				.then(response => {
+				setPaginatedProjects(response.data.content.filter(project => project.deleted == false));
+				})
+			};
+
+			fetchPaginatedProjectsForSpecificWorker();*/
+
+			const fetchPaginatedProjectsByTeamMemberUsername = async () =>{
+				ProjectService.getProjectsByTeamMemberUsernamePaginated(username)
+				.then(response => {
+				setPaginatedProjects(response.data.content.filter(project => project.deleted == false));
+				})
+			};
+
+			fetchPaginatedProjectsByTeamMemberUsername(username);
+		}
         
 	}, []);
 
@@ -82,7 +115,12 @@ export const Projects = () => {
 	const nextPage = async () => {
 		let nextPage = currentPage + 1;
 		setCurrentPage(nextPage)
+		if(role == 'ROLE_ADMIN')
 		PaginationHelper.displayPaginated(nextPage, size, ProjectService.getProjectsPaginateWithParams, setPaginatedProjects)
+
+		if(role == 'ROLE_WORKER')
+		PaginationHelper.displayPaginatedByTeamMember(loggedUser.id, nextPage, size, ProjectService.getProjectsByTeamMemberIdPaginated, setPaginatedProjects)
+
 	}	
 
 
@@ -92,30 +130,13 @@ export const Projects = () => {
 			currentPage=0
 		}
 		setCurrentPage(previousPage)
+		if(role == 'ROLE_ADMIN')
 		PaginationHelper.displayPaginated(previousPage, size, ProjectService.getProjectsPaginateWithParams, setPaginatedProjects)
-	}	
-	
-	/*const nextPage = async () => {
 
-		let nextPage = currentPage + 1;
-		setCurrentPage(nextPage);
-		
-		ProjectService.getProjectsPaginateWithParams(nextPage, size)
-		.then(response => {
-			setPaginatedProjects(response.data.content.filter(project => project.deleted == false));
-		})
-	}	
+		if(role == 'ROLE_WORKER')
+		PaginationHelper.displayPaginatedByTeamMember(loggedUser.id,previousPage, size, ProjectService.getProjectsByTeamMemberIdPaginated, setPaginatedProjects)
 
-	const previousPage = async () => {
-	
-		let previousPage = currentPage - 1;
-		setCurrentPage(previousPage);
-		
-		ProjectService.getProjectsPaginateWithParams(previousPage, size)
-		.then(response => {
-			setPaginatedProjects(response.data.content.filter(project => project.deleted = false));
-		})
-	}*/
+	}	
 
 	function updateProject(id){
 		
@@ -182,7 +203,16 @@ export const Projects = () => {
 			<section class="content">
 				<h2><i class="ico clients"></i>Projects</h2>
 				<div class="grey-box-wrap reports">
-					<a onClick={() => toggleModal()} class="link new-member-popup">Create new Project</a>
+
+					{role == 'ROLE_ADMIN' ?
+						(
+							<a onClick={() => toggleModal()} class="link new-member-popup">Create new Project</a>
+						)
+						:
+						(
+							<></>
+						)
+					}
 					<div class="search-page">
 						<input type="search" onChange={handleSearchChange} name="search-clients" class="in-search" />
 					</div>
@@ -305,6 +335,8 @@ export const Projects = () => {
           		))}
         
 				</div>
+				{role == 'ROLE_ADMIN' ?
+				(
 				<div class="pagination">
 					<ul>
 						<li>
@@ -324,6 +356,13 @@ export const Projects = () => {
 						</li>
 					</ul>
 				</div>
+				)
+				:
+				(
+					<></>
+				)
+			}
+				
 			</section>			
 		</div>
 		<Footer></Footer>

@@ -24,33 +24,41 @@ export const Clients = () => {
 	const [close,setClose] = useState('details');
 	const [size, setSize] = useState(2);
 	const [letters, setLetters] = useState('')
-	const [username, setUsername] = useState("");
-	const [role, setRole] = useState("");
+	const [username, setUsername] = useState(AuthenticationService.getUsername());
+	const [role, setRole] = useState(AuthenticationService.getRole());
 	const [loggedUser, setLoggedUser] = useState({})
 	
     useEffect(() => {
 
-		const rolee = AuthenticationService.getRole();
-		setRole(rolee);
-		const usernamee = AuthenticationService.getUsername()
-		setUsername(usernamee);
 		
+		if(role == 'ROLE_ADMIN'){
+			const fetchPaginatedClients = async () =>{
+				ClientService.getClientsPaginateWithParams(currentPage,size)
+				.then(response => {
+				setPaginatedClients(response.data.content);
+				setLoading(false);
+				})
+			};
 
-		const fetchPaginatedClients = async () =>{
-			ClientService.getClientsPaginateWithParams(currentPage,size)
+			fetchPaginatedClients();
+			
+			ClientService.getClientsPaginate()
 			.then(response => {
-			setPaginatedClients(response.data.content);
-			setLoading(false);
+				setClients(response.data.content);
+				setLoading(false);
 			})
-		};
+		}
+		if(role == 'ROLE_WORKER'){
+			const fetchPaginatedClientsAssociatedWithTeamMember = async () =>{
+				ClientService.getClientsAssociatedWithTeamMemberPaginated(username)
+				.then(response => {
+				setPaginatedClients(response.data.content.filter(project => project.deleted == false));
+				})
+			};
 
-		fetchPaginatedClients();
-        
-		ClientService.getClientsPaginate()
-        .then(response => {
-			setClients(response.data.content);
-			setLoading(false);
-        })
+			fetchPaginatedClientsAssociatedWithTeamMember(username);
+		}
+
         
 	}, []);
 
@@ -136,7 +144,17 @@ export const Clients = () => {
 				<section class="content">
 					<h2><i class="ico clients"></i>Clients</h2>
 					<div class="grey-box-wrap reports">
-						<a onClick={() => toggleModal()} class="link new-member-popup">Create new client</a>
+
+					{role == 'ROLE_ADMIN' ?
+						(
+							<a onClick={() => toggleModal()} class="link new-member-popup">Create new client</a>
+
+						)
+						:
+						(
+							<></>
+						)
+					}
 						<div class="search-page">
 							<input type="search" onChange={handleSearchChange} name="search-clients" class="in-search" />
 						</div>
@@ -213,25 +231,34 @@ export const Clients = () => {
 						</tr> 
 						))}
 					</div>
-					<div class="pagination">
-						<ul>
-							<li>
-								<button onClick={() => previousPage()} style={{marginTop:'15px', marginRight:'5px'}}>Pervious</button>
-							</li>
-							<li>
-								<Pagination
-									clientsPerPage={clientsPerPage}
-									totalClients={clients.length}
-									paginate={paginate}
-								/>
-							</li>
-							<li>
-								<button onClick={() => nextPage()} style={{marginTop:'15px',  marginLeft:'5px'}}>
-									Next
-								</button>
-							</li>
-						</ul>
-					</div>
+
+					{role == 'ROLE_ADMIN' ?
+						(
+						<div class="pagination">
+							<ul>
+								<li>
+									<button onClick={() => previousPage()} style={{marginTop:'15px', marginRight:'5px'}}>Pervious</button>
+								</li>
+								<li>
+									<Pagination
+										clientsPerPage={clientsPerPage}
+										totalClients={clients.length}
+										paginate={paginate}
+									/>
+								</li>
+								<li>
+									<button onClick={() => nextPage()} style={{marginTop:'15px',  marginLeft:'5px'}}>
+										Next
+									</button>
+								</li>
+							</ul>
+						</div>
+						)
+						:
+						(
+							<></>
+						)
+					}
 				</section>			
 			</div>
 			<Footer></Footer>

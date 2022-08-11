@@ -15,17 +15,12 @@ export const TimeSheet = () => {
 	const [selectedDate, setSelectedDate] = useState(today);
 	const daysInWeek = [1, 2, 3, 4, 5, 6, 0];
 	const [timeSheetActivities, setTimeSheetActivities] = useState([]);
-	const [username, setUsername] = useState("");
-	const [role, setRole] = useState("");
+	const [username, setUsername] = useState(AuthenticationService.getUsername());
+	const [role, setRole] = useState(AuthenticationService.getRole());
 	const [loggedUser, setLoggedUser] = useState({})
 
 
 	useEffect(() => {
-		
-		const rolee = AuthenticationService.getRole();
-		setRole(rolee);
-		const usernamee = AuthenticationService.getUsername()
-		setUsername(usernamee);
 
 		TeamMemberService.getTeamMemberByUsername(username).then((response => {
 			setLoggedUser(response.data);

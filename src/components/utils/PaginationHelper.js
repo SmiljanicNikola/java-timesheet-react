@@ -5,6 +5,14 @@ const displayPaginated = async (pageNumber, size, getItemsFunc, displayItemsFunc
     });
 }
 
+const displayPaginatedByTeamMember = async (teamMemberId, pageNumber, size, getItemsFunc, displayItemsFunc) => {
+
+    getItemsFunc(teamMemberId,pageNumber, size).then(response => {
+        displayItemsFunc(response.data.content);
+    });
+}
+
 export default{
-    displayPaginated
+    displayPaginated,
+    displayPaginatedByTeamMember
  };

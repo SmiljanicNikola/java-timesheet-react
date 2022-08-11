@@ -9,6 +9,7 @@ import { useNavigate } from "react-router-dom";
 export const Header = () => {
 	const [username, setUsername] = useState("");
 	const [loggedUser, setLoggedUser] = useState({})
+	const [role, setRole] = useState("")
 
 	useEffect(() => {
 
@@ -18,9 +19,14 @@ export const Header = () => {
 		}
 		console.log(username)
 
+		const role = AuthenticationService.getRole()
+		if(role != null){
+			setRole(role);
+		}
+
 		TeamMemberService.getTeamMemberByUsername(username).then((response => {
 			setLoggedUser(response.data);
-			console.log(loggedUser)
+			console.log(loggedUser.id)
 		}))
 
 	}, []);
@@ -96,13 +102,40 @@ export const Header = () => {
 								<a href="projects" class="btn nav">Projects</a>
 							</li>
 							<li>
-								<a href="categories" class="btn nav">Categories</a>
+								{role == 'ROLE_ADMIN'
+								?
+								(
+									<a href="categories" class="btn nav">Categories</a>
+								)
+								:
+								(
+									<div></div>
+								)
+								}
 							</li>
 							<li>
-								<a href="teamMembers" class="btn nav">Team members</a>
+								{role == 'ROLE_ADMIN'
+								?
+								(
+									<a href="teamMembers" class="btn nav">Team members</a>
+								)
+								:
+								(
+									<div></div>
+								)
+								}
 							</li>
 							<li class="last">
-								<a href="reports" class="btn nav">Reports</a>
+								{role == 'ROLE_ADMIN'
+								?
+								(
+									<a href="reports" class="btn nav">Reports</a>
+								)
+								:
+								(
+									<div></div>
+								)
+								}
 							</li>
 						</ul>
 						<div class="mobile-menu">

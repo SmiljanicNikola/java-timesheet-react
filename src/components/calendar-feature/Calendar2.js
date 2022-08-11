@@ -19,38 +19,28 @@ export const Calendar2 = () => {
     const startDate = CalendarUtil.findFirstDayOfTheWeek(selectedMonthFirstDate)
     const dates = CalendarUtil.getDatesFromStartPointToEndPoint(startDate, selectedMonthLastDate);
     let totalHours = 0;
-    const [username, setUsername] = useState("");
-	const [role, setRole] = useState("");
+    const [username, setUsername] = useState(AuthenticationService.getUsername());
+	const [role, setRole] = useState(AuthenticationService.getRole());
 	const [loggedUser, setLoggedUser] = useState({})
 
     useEffect(() => {
-
-        
-
-        const usernamee = AuthenticationService.getUsername()
-        console.log(usernamee)
-        setUsername(usernamee);
-        const rolee = AuthenticationService.getRole();
-        console.log(rolee)
-        setRole(rolee);
-
-		TeamMemberService.getTeamMemberByUsername(usernamee).then((response => {
+		TeamMemberService.getTeamMemberByUsername(username).then((response => {
 			setLoggedUser(response.data);
-            
 		}))
+
         const teamMemberId = loggedUser.id;
         console.log(teamMemberId);
        
         let startDate = (dates[0].toISOString().slice(0,10))
         let endDate = (dates[dates.length-1].toISOString().slice(0,10))
 
-        if(rolee == 'ROLE_ADMIN'){
+        if(role == 'ROLE_ADMIN'){
             TimeSheetActivityService.getTimeSheetsBetweenStartDateAndEndDate(startDate, endDate).then(response => {
                 setTimeSheetActivities(response.data)
             })
         }
 
-        if(rolee == 'ROLE_WORKER'){
+        if(role == 'ROLE_WORKER'){
             TimeSheetActivityService.getTimeSheetsBetweenStartDateAndEndDateAndTeamMemberId(startDate, endDate, loggedUser.id).then(response => {
                 setTimeSheetActivities(response.data)
             })

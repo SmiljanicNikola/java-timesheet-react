@@ -17,6 +17,14 @@ class ProjectService {
         return httpClient.get(PROJECTS_REST_API_URL+"/paginate?page="+nextPage+"&size="+size);
     }
 
+    getProjectsByTeamMemberIdPaginated(teamMemberId,nextPage, size){
+        return httpClient.get(PROJECTS_REST_API_URL+"/teamMemberId/"+teamMemberId+"/paginated?page="+nextPage+"&size="+size);
+    }
+
+    getProjectsByTeamMemberUsernamePaginated(teamMemberUsername,nextPage, size){
+        return httpClient.get(PROJECTS_REST_API_URL+"/teamMemberUsername/"+teamMemberUsername+"/paginated?page="+nextPage+"&size="+size);
+    }
+
     updateProject(projectId, project){
         return httpClient.put(PROJECTS_REST_API_URL+ '/' + projectId, project);
     }
