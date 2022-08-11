@@ -22,6 +22,10 @@ import org.springframework.security.web.authentication.UsernamePasswordAuthentic
 @EnableGlobalMethodSecurity(prePostEnabled = true)
 public class SecurityConfiguration {
 	
+	static final String admin = "ADMIN";
+	static final String worker = "WORKER";
+
+	
 	@Autowired
 	private UserDetailsService userDetailsService;
 	
@@ -63,31 +67,31 @@ public class SecurityConfiguration {
                .authorizeRequests()
 			.antMatchers(HttpMethod.POST,"/api/auth/login").permitAll()
 			
-            .antMatchers(HttpMethod.GET,"/api/categories").hasAnyRole("ADMIN","WORKER")
-            .antMatchers(HttpMethod.GET,"/api/categories/**").hasAnyRole("ADMIN","WORKER")
-            .antMatchers(HttpMethod.DELETE, "/api/categories").hasRole("ADMIN")
-            .antMatchers(HttpMethod.POST, "/api/categories").hasRole("ADMIN")
-            .antMatchers(HttpMethod.PUT, "/api/categories/**").hasRole("ADMIN")
+            .antMatchers(HttpMethod.GET,"/api/categories").hasAnyRole(admin,worker)
+            .antMatchers(HttpMethod.GET,"/api/categories/**").hasAnyRole(admin)
+            .antMatchers(HttpMethod.DELETE, "/api/categories").hasRole(admin)
+            .antMatchers(HttpMethod.POST, "/api/categories").hasRole(admin)
+            .antMatchers(HttpMethod.PUT, "/api/categories/**").hasRole(admin)
     
-            .antMatchers(HttpMethod.GET,"/api/projects").hasAnyRole("ADMIN","WORKER")
-            .antMatchers(HttpMethod.GET,"/api/projects/**").hasAnyRole("ADMIN","WORKER")
-            .antMatchers(HttpMethod.PUT,"/api/projects/**").hasRole("ADMIN")
-            .antMatchers(HttpMethod.DELETE,"/api/projects/**").hasRole("ADMIN")
-            .antMatchers(HttpMethod.POST,"/api/projects").hasRole("ADMIN")
+            .antMatchers(HttpMethod.GET,"/api/projects").hasAnyRole(admin,worker)
+            .antMatchers(HttpMethod.GET,"/api/projects/**").hasAnyRole(admin,worker)
+            .antMatchers(HttpMethod.PUT,"/api/projects/**").hasRole(admin)
+            .antMatchers(HttpMethod.DELETE,"/api/projects/**").hasRole(admin)
+            .antMatchers(HttpMethod.POST,"/api/projects").hasRole(admin)
             
-            .antMatchers(HttpMethod.GET,"/api/teamMembers").hasAnyRole("ADMIN","WORKER")
-            .antMatchers(HttpMethod.GET,"/api/teamMembers/**").hasAnyRole("ADMIN","WORKER")
-            .antMatchers(HttpMethod.PUT,"/api/teamMembers/**").hasRole("ADMIN")
-            .antMatchers(HttpMethod.DELETE,"/api/teamMembers/**").hasRole("ADMIN")
-            .antMatchers(HttpMethod.POST,"/api/teamMembers").hasRole("ADMIN")
+            .antMatchers(HttpMethod.GET,"/api/teamMembers").hasAnyRole(admin,worker)
+            .antMatchers(HttpMethod.GET,"/api/teamMembers/**").hasAnyRole(admin, worker)
+            .antMatchers(HttpMethod.PUT,"/api/teamMembers/**").hasRole(admin)
+            .antMatchers(HttpMethod.DELETE,"/api/teamMembers/**").hasRole(admin)
+            .antMatchers(HttpMethod.POST,"/api/teamMembers").hasRole(admin)
             
-            .antMatchers(HttpMethod.GET,"/api/clients").hasAnyRole("ADMIN","WORKER")
-            .antMatchers(HttpMethod.GET,"/api/clients/**").hasAnyRole("ADMIN","WORKER")
-            .antMatchers(HttpMethod.PUT,"/api/clients/**").hasRole("ADMIN")
-            .antMatchers(HttpMethod.DELETE,"/api/clients/**").hasRole("ADMIN")
-            .antMatchers(HttpMethod.POST,"/api/clients").hasRole("ADMIN")
+            .antMatchers(HttpMethod.GET,"/api/clients").hasAnyRole(admin,worker)
+            .antMatchers(HttpMethod.GET,"/api/clients/**").hasAnyRole(admin,worker)
+            .antMatchers(HttpMethod.PUT,"/api/clients/**").hasRole(admin)
+            .antMatchers(HttpMethod.DELETE,"/api/clients/**").hasRole(admin)
+            .antMatchers(HttpMethod.POST,"/api/clients").hasRole(admin)
 
-            .antMatchers(HttpMethod.GET, "/api/timeSheetActivities").hasAnyRole("ADMIN", "WORKER")
+            .antMatchers(HttpMethod.GET, "/api/timeSheetActivities").hasAnyRole(admin, worker)
 
         
            .anyRequest().authenticated();

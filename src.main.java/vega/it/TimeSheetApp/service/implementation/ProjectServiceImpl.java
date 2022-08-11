@@ -56,4 +56,14 @@ public class ProjectServiceImpl implements ProjectService {
 		return projectRepository.filterAllProjectsByFirstLetter(letter);
 	}
 
+	@Override
+	public Page<Project> findAllProjectsPaginatedByTeamMemberId( Integer teamMemberId,Pageable pageable) {
+		return projectRepository.findAllProjectsWithPaginationByTeamMemberId(pageable, teamMemberId);
+	}
+
+	@Override
+	public Page<Project> findAllProjectsPaginatedByTeamMemberUsername(String teamMemberUsername, Pageable pageable) {
+		return projectRepository.findAllProjectsWithPaginationByTeamMemberUsername(pageable, teamMemberUsername);
+	}
+
 }

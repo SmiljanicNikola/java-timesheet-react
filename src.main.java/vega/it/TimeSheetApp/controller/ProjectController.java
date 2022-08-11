@@ -62,6 +62,36 @@ public class ProjectController {
 		
 	}
 	
+	
+	@GetMapping("teamMemberId/{teamMemberId}/paginated")
+	public ResponseEntity<Page<Project>> findAll(@PathVariable("teamMemberId") Integer teamMemberId, Pageable pageable){
+		
+		return new ResponseEntity<>(projectService.findAllProjectsPaginatedByTeamMemberId(teamMemberId, pageable), HttpStatus.OK);	
+		
+	}
+	
+	@GetMapping("teamMemberUsername/{username}/paginated")
+	public ResponseEntity<Page<Project>> findAll(@PathVariable("username") String teamMemberUsername, Pageable pageable){
+		
+		return new ResponseEntity<>(projectService.findAllProjectsPaginatedByTeamMemberUsername(teamMemberUsername, pageable),HttpStatus.OK);	
+		
+	}
+	
+	/*@GetMapping("teamMemberUsername/{username}/paginated")
+	public ResponseEntity<Page<Project>> findAllByTeamMemberUsername(@PathVariable("username") String teamMemberUsername, Pageable pageable){
+		
+		List<Project> projects = projectService.findAll();
+		List<Page<Project>> matchedProjects = new ArrayList<>();
+		for(Project p: projects) {
+			
+			if(p.getLead().getUsername().equals(teamMemberUsername)) {
+				matchedProjects.
+			}
+		}
+		return new ResponseEntity<>(odgovarajucePorudzbine, HttpStatus.OK);
+		
+	}*/
+	
 	@GetMapping(value="filterBy/{letter}")
 	public ResponseEntity<List<ProjectDTO>> getProjectByFirstLetter(@PathVariable("letter") String letter){
 		
@@ -150,5 +180,7 @@ public class ProjectController {
 	        return new ResponseEntity<>(new ProjectDTO(project), HttpStatus.OK);
 	        
 	    }
+	
+	
 
 }

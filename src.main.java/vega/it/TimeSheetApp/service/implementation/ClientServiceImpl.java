@@ -51,4 +51,9 @@ public class ClientServiceImpl implements ClientService {
 		return clientRepository.filterAllClientsByFirstLetter(letter);
 	}
 
+	@Override
+	public Page<Client> findAllClientsPaginatedByTeamMemberUsername(String teamMemberUsername, Pageable pageable) {
+		return clientRepository.findAllClientsWithPaginationByTeamMemberUsername(teamMemberUsername,pageable);
+	}
+
 }

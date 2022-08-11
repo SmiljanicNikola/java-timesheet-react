@@ -22,6 +22,10 @@ public interface ProjectService {
 	Page<Project> findAll(Pageable pageable);
 	
 	Page<Project> findAllProjectsPaginate(Pageable pageable);
+	
+	Page<Project> findAllProjectsPaginatedByTeamMemberId(Integer teamMemberId,Pageable pageable);
+
+	Page<Project> findAllProjectsPaginatedByTeamMemberUsername(String teamMemberUsername,Pageable pageable);
 
 	List<Project> filterAllProjectsByFirstLetter(String letter);
 }

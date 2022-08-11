@@ -18,7 +18,6 @@ import org.springframework.web.bind.annotation.RestController;
 import vega.it.TimeSheetApp.DTO.TeamMemberDTO;
 import vega.it.TimeSheetApp.model.TeamMember;
 import vega.it.TimeSheetApp.security.JWTResponse;
-import vega.it.TimeSheetApp.security.JWTUtil;
 import vega.it.TimeSheetApp.security.TokenUtils;
 import vega.it.TimeSheetApp.service.TeamMemberService;
 

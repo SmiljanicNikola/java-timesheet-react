@@ -61,6 +61,13 @@ public class ClientController {
 		return new ResponseEntity<>(clientService.findAllClientsPagination(pageable), HttpStatus.OK);
 	}
 	
+	@GetMapping("teamMemberUsername/{username}/paginated")
+	public ResponseEntity<Page<Client>> findAll(@PathVariable("username") String teamMemberUsername, Pageable pageable){
+		
+		return new ResponseEntity<>(clientService.findAllClientsPaginatedByTeamMemberUsername(teamMemberUsername, pageable),HttpStatus.OK);	
+		
+	}
+	
 	
 	@GetMapping(value="/{id}")
 	public ResponseEntity<ClientDTO> getClientById(@PathVariable("id") Integer id){

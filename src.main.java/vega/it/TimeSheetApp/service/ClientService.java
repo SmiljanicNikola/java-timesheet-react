@@ -6,6 +6,7 @@ import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 
 import vega.it.TimeSheetApp.model.Client;
+import vega.it.TimeSheetApp.model.Project;
 import vega.it.TimeSheetApp.model.TeamMember;
 
 public interface ClientService {
@@ -22,5 +23,6 @@ public interface ClientService {
 	
 	List<Client> filterAllClientsByFirstLetter(String letter);
 
-	
+	Page<Client> findAllClientsPaginatedByTeamMemberUsername(String teamMemberUsername,Pageable pageable);
+
 }
