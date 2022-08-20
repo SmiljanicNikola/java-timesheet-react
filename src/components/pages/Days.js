@@ -1,8 +1,12 @@
 import React,{useState, useEffect} from 'react'
 import { useNavigate, useParams } from 'react-router-dom'
+import { AuthenticationService } from '../../services/AuthenticationService';
+import CategoryService from '../../services/CategoryService';
 import ClientService from '../../services/ClientService';
 import ProjectService from '../../services/ProjectService';
+import TeamMemberService from '../../services/TeamMemberService';
 import TimeSheetActivityService from '../../services/TimeSheetActivityService';
+import { WeekComponent } from '../calendar-feature/WeekComponent';
 import { NewActivityForm } from '../forms/NewActivityForm';
 import { Footer } from '../layout/Footer';
 import { Header } from '../layout/Header';
@@ -14,8 +18,16 @@ export const Days = () => {
 	const navigate = useNavigate();
 	const params = useParams();
 	const [clients, setClients] = useState([])
+	const [teamMembers, setTeamMembers] = useState([])
+	const [username, setUsername] = useState(AuthenticationService.getUsername());
+	const [role, setRole] = useState(AuthenticationService.getRole());
 	const [projects, setProjects] = useState([])
 	const [newTimeSheet, setNewTimeSheet] = useState({})
+	const [valueProject, setValueProject] = useState('');
+	const [valueCategory, setValueCategory] = useState('');
+	const [valueTeamMember, setValueTeamMember] = useState('');
+	const [valueClient, setValueClient] = useState('');
+	const [categories, setCategories] = useState([]);
 
 	useEffect(() => {
 
@@ -42,16 +54,63 @@ export const Days = () => {
 		}
 	}
 
+	const handleChangeClient = client =>{
+		setValueClient(client.target.value);
+		console.log(valueClient);
+	}
+
+	const handleChangeCategory = e =>{
+		setValueCategory(e.target.value);
+		console.log(valueCategory);
+	}
+
+	const handleChangeProject = project =>{
+		setValueProject(project.target.value);
+		console.log(valueProject);
+	}
+
+	const handleChangeTeamMember = member =>{
+		setValueTeamMember(member.target.value);
+		console.log(valueTeamMember);
+	}
+
+
+	const fetchProjects = () => {
+		ProjectService.getProjects().then(( response ) => {
+			setProjects(response.data);
+		})
+	}
+
+	const fetchCategories = () => {
+		CategoryService.getCategories().then(( response ) => {
+			setCategories(response.data);
+		})
+	}
+
+	const fetchTeamMembers = () =>{
+		TeamMemberService.getTeamMembers().then(( response ) => {
+			setTeamMembers(response.data);
+		})
+	}
+
+	const fetchClients = () => {
+		ClientService.getClients().then(( response ) => {
+			setClients(response.data);
+		})
+	}
+
 	function addActivity(newTimeSheet){
 		let newActivity = {
 			description: newTimeSheet.description,
-			teamMemberId: newTimeSheet.teamMemberId,
-			projectId: newTimeSheet.projectId,
-			categoryId: newTimeSheet.categoryId,
+			teamMemberId: valueTeamMember,
+			projectId: valueProject,
+			categoryId: valueCategory,
 			time: newTimeSheet.time,
 			overtime: newTimeSheet.overtime,
 			date: params.date
 		}
+		console.log(valueCategory)
+		console.log(newActivity)
 		TimeSheetActivityService.createTimesheetActivity(newActivity);
 	}
 
@@ -62,66 +121,7 @@ export const Days = () => {
 				<div class="wrapper">
 					<section class="content">
 						<h2><i class="ico timesheet"></i>TimeSheet</h2>
-						<div class="grey-box-wrap">
-							<div class="top">
-								<a class="prev"><i class="zmdi zmdi-chevron-left"></i>previous week</a>
-								<span class="center">February 04 - February 10, 2013 (week 6)</span>
-								<a class="next">next week<i class="zmdi zmdi-chevron-right"></i></a>
-							</div>
-							<div class="bottom">
-								<ul class="days">
-									<li>
-										<a>
-											<b>Feb 04</b>
-											<i>7.5</i>
-											<span>monday</span>
-										</a>
-									</li>
-									<li>
-										<a>
-											<b>Feb 06</b>
-											<i>7.5</i>
-											<span>tuesday</span>
-										</a>
-									</li>
-									<li>
-										<a>
-											<b>Feb 06</b>
-											<i>7.5</i>
-											<span>wednesday</span>
-										</a>
-									</li>
-									<li class="active">
-										<a>
-											<b>Feb 07</b>
-											<i>7.5</i>
-											<span>thursday</span>
-										</a>
-									</li>
-									<li>
-										<a>
-											<b>Feb 08</b>
-											<i>7.5</i>
-											<span>friday</span>
-										</a>
-									</li>
-									<li>
-										<a>
-											<b>Feb 09</b>
-											<i>0.0</i>
-											<span>saturday</span>
-										</a>
-									</li>
-									<li class="last">
-										<a >
-											<b>Feb 10</b>
-											<i>0.0</i>
-											<span>sunday</span>
-										</a>
-									</li>
-								</ul>
-							</div>
-						</div>
+						<WeekComponent/>
 						<table class="default-table">
 							<tr>
 								<th>
@@ -170,42 +170,82 @@ export const Days = () => {
 								
 							</tr>
 							))}
-							<tr>
+							{role == 'ROLE_WORKER' ?
+								(
+								<tr>
+									
+									<td>
+										<select name="teamMember"
+											onChange={handleChangeTeamMember}
+											onClick={fetchTeamMembers}
+										>
+											<option>Select TeamMember</option>
+											{
+												teamMembers.map((member) => (
+													<option
+														onClick={handleChangeTeamMember}
+														getOptionValue={member => member.id}
+														value={member.id}
+													key={member.id}> {member.username} </option>
+												))
+											}
+										</select>
+									</td>
+									<td>
+										<select name="project"
+											onChange={handleChangeProject}
+											onClick={fetchProjects}
+										>
+											<option>Select Project</option>
+											{
+												projects.map((project) => (
+													<option
+													onClick={handleChangeProject}
+													getOptionValue={project => project.id}
+													value={project.id}
+													key={project.id}
+													> {project.projectName} </option>
+												))
+											}
+										</select>
+									</td>
+									<td>
+										<select name="category"
+											onChange={handleChangeCategory}
+											onClick={fetchCategories}
+										>
+											<option>Select Category</option>
+											{
+												categories.map((category) => (
+													<option
+													onClick={handleChangeCategory}
+													value={category.id}
+													getOptionValue={category => category.type}
+													key={category.id}> {category.type} </option>
+												))
+											}
+										</select>
+									</td>
+									<td>
+										<input name="description" id="description" onChange={e => setNewTimeSheet({...newTimeSheet, description: e.target.value})} type="text" class="in-text medium" />
+									</td>
+									<td class="small">
+										<input name="time" id="time" type="text" onChange={e => setNewTimeSheet({...newTimeSheet, time: e.target.value})} class="in-text xsmall" />
+									</td>
+									<td class="small">
+										<input name="overtime" id="overtime" type="text" onChange={e => setNewTimeSheet({...newTimeSheet, overtime: e.target.value})} class="in-text xsmall" />
+									</td>
+									<td>
+										<button class="btn-success" onClick={() => addActivity(newTimeSheet)}>Add</button>
+									</td>
+								</tr>
+								)
+								:
+								(
+									<></>
+								)
+							}
 							
-								<td>
-									<select>
-										<option>Choose client</option>
-										<option>Client 1</option>
-										<option>Client 2</option>
-									</select>
-								</td>
-								<td>
-									<select>
-										<option>Choose project</option>
-										<option>Project 1</option>
-										<option>Project 2</option>
-									</select>
-								</td>
-								<td>
-									<select>
-										<option>Choose category</option>
-										<option>Front-End Development</option>
-										<option>Design</option>
-									</select>
-								</td>
-								<td>
-									<input name="description" id="description" onChange={e => setNewTimeSheet({...newTimeSheet, description: e.target.value})} type="text" class="in-text medium" />
-								</td>
-								<td class="small">
-									<input name="time" id="time" type="text" onChange={e => setNewTimeSheet({...newTimeSheet, time: e.target.value})} class="in-text xsmall" />
-								</td>
-								<td class="small">
-									<input name="overtime" id="overtime" type="text" onChange={e => setNewTimeSheet({...newTimeSheet, overtime: e.target.value})} class="in-text xsmall" />
-								</td>
-								<td>
-									<button class="btn-success" onClick={() => addActivity(newTimeSheet)}>Add</button>
-								</td>
-							</tr>
 						</table>
 						<div class="total">
 							<a href="index.html"><i></i>back to monthly view</a>

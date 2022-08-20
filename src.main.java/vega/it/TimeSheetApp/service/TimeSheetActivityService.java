@@ -3,6 +3,7 @@ package vega.it.TimeSheetApp.service;
 import java.time.LocalDate;
 import java.util.List;
 
+import vega.it.TimeSheetApp.DTO.DayDTO;
 import vega.it.TimeSheetApp.model.SearchObject;
 import vega.it.TimeSheetApp.model.TimeSheetActivity;
 
@@ -26,6 +27,7 @@ public interface TimeSheetActivityService {
 	
 	List<TimeSheetActivity> findAllBetweenStartDateAndEndDateAndTeamMemberId(LocalDate startDate, LocalDate endDate, Integer teamMemberId);
 
+	List<TimeSheetActivity> findAllBetweenStartDateAndEndDateAndTeamMemberUsername(LocalDate startDate, LocalDate endDate, String teamMemberUsername);
 
 	List<TimeSheetActivity> findAllByDate(LocalDate date);
 

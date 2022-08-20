@@ -84,25 +84,15 @@ export const Projects = () => {
 		}
 
 		if(role == 'ROLE_WORKER'){
-			
-
-			/*const fetchPaginatedProjectsForSpecificWorker = async () =>{
-				ProjectService.getProjectsByTeamMemberIdPaginated(loggedUser.id,currentPage, size)
-				.then(response => {
-				setPaginatedProjects(response.data.content.filter(project => project.deleted == false));
-				})
-			};
-
-			fetchPaginatedProjectsForSpecificWorker();*/
-
+		
 			const fetchPaginatedProjectsByTeamMemberUsername = async () =>{
-				ProjectService.getProjectsByTeamMemberUsernamePaginated(username)
+				ProjectService.getProjectsByTeamMemberUsernamePaginated()
 				.then(response => {
 				setPaginatedProjects(response.data.content.filter(project => project.deleted == false));
 				})
 			};
 
-			fetchPaginatedProjectsByTeamMemberUsername(username);
+			fetchPaginatedProjectsByTeamMemberUsername();
 		}
         
 	}, []);
@@ -326,7 +316,7 @@ export const Projects = () => {
 								:
 								(
 									<></>
-								)
+								)//Blob Storage Share point
 							}
 						</div>
 					</div>

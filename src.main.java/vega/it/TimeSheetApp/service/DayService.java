@@ -6,6 +6,7 @@ import java.util.List;
 import java.util.Set;
 
 import vega.it.TimeSheetApp.DTO.DayDTO;
+import vega.it.TimeSheetApp.model.TimeSheetActivity;
 
 public interface DayService {
 	
@@ -15,5 +16,6 @@ public interface DayService {
 	
 	List<DayDTO> findAllBetweenStartDateAndEndDateAndTeamMemberId(LocalDate startDate, LocalDate endDate, Integer teamMemberId);
 
-	
+	List<DayDTO> findAllBetweenStartDateAndEndDateAndTeamMemberUsername(LocalDate startDate, LocalDate endDate, String teamMemberUsername);
+
 }

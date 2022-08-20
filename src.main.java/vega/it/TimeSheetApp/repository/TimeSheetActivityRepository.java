@@ -3,11 +3,14 @@ package vega.it.TimeSheetApp.repository;
 import java.time.LocalDate;
 import java.util.List;
 
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.Pageable;
 import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.data.jpa.repository.Query;
 import org.springframework.data.repository.query.Param;
 import org.springframework.stereotype.Repository;
 
+import vega.it.TimeSheetApp.model.Client;
 import vega.it.TimeSheetApp.model.SearchObject;
 import vega.it.TimeSheetApp.model.TimeSheetActivity;
 
@@ -48,4 +51,10 @@ public interface TimeSheetActivityRepository extends JpaRepository<TimeSheetActi
 															@Param("teamMemberId") Integer teamMemberId);
 	
 	 
+
+	@Query(value = "SELECT tsa.timesheet_activity_id, tsa.date, tsa.description, tsa.overtime, tsa.time, tsa.category_id, tsa.project_id, tsa.team_member_id, tm.username FROM timesheet_activity tsa JOIN team_members tm ON tsa.team_member_id = tm.team_member_id where (:startDate is null or tsa.date >= :startDate) and (:endDate is null or tsa.date <= :endDate) and (:teamMemberUsername is null or tm.username = :teamMemberUsername)",nativeQuery = true )
+	List<TimeSheetActivity> findAllBetweenStartDateAndEndDateAndTeamMemberUsername(@Param("startDate") LocalDate startDate,
+																@Param("endDate") LocalDate endDate,
+																@Param("teamMemberUsername") String teamMemberUsername);
+	
 }

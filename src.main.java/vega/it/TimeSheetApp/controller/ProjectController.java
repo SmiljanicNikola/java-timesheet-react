@@ -1,14 +1,19 @@
 package vega.it.TimeSheetApp.controller;
 
+import java.nio.file.attribute.UserPrincipal;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.stream.Collectors;
+
+import javax.servlet.ServletRequest;
+import javax.servlet.http.HttpServletRequest;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
+import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.web.bind.annotation.CrossOrigin;
 import org.springframework.web.bind.annotation.DeleteMapping;
 import org.springframework.web.bind.annotation.GetMapping;
@@ -25,6 +30,8 @@ import vega.it.TimeSheetApp.DTO.ClientDTO;
 import vega.it.TimeSheetApp.DTO.ProjectDTO;
 import vega.it.TimeSheetApp.exceptions.ResourceNotFoundException;
 import vega.it.TimeSheetApp.model.Project;
+import vega.it.TimeSheetApp.model.TeamMember;
+import vega.it.TimeSheetApp.security.TokenUtils;
 import vega.it.TimeSheetApp.service.ClientService;
 import vega.it.TimeSheetApp.service.ProjectService;
 import vega.it.TimeSheetApp.service.TeamMemberService;
@@ -38,6 +45,9 @@ public class ProjectController {
 	
 	@Autowired
 	private ClientService clientService;
+	
+	@Autowired
+	private TokenUtils tokenUtils;
 	
 	@Autowired
 	private TeamMemberService teamMemberService;
@@ -70,27 +80,28 @@ public class ProjectController {
 		
 	}
 	
-	@GetMapping("teamMemberUsername/{username}/paginated")
-	public ResponseEntity<Page<Project>> findAll(@PathVariable("username") String teamMemberUsername, Pageable pageable){
+	@GetMapping("/byTeamMemberUsername/paginated")
+	public ResponseEntity<Page<Project>> findAllByTeamMemberUsername(Pageable pageable){
 		
-		return new ResponseEntity<>(projectService.findAllProjectsPaginatedByTeamMemberUsername(teamMemberUsername, pageable),HttpStatus.OK);	
+		/*HttpServletRequest httpServletRequest = (HttpServletRequest) request;
+		String token = httpServletRequest.getHeader("Authorization");
+		String username = tokenUtils.getUsernameFromToken(token);*/
 		
+		Object userRole = SecurityContextHolder.getContext().getAuthentication().getAuthorities();
+		Object userPrincipal = SecurityContextHolder.getContext().getAuthentication().getPrincipal();
+		String username = SecurityContextHolder.getContext().getAuthentication().getName();
+
+		
+		System.out.println("User Role: " + userRole);
+		System.out.println("User Principal: " + userPrincipal);
+		System.out.println("Username: " + username);
+
+		
+		//return new ResponseEntity<>(projectService.findAllProjectsPaginatedByTeamMemberUsername(teamMemberUsername, pageable),HttpStatus.OK);	
+		return new ResponseEntity<>(projectService.findAllProjectsPaginatedByTeamMemberUsername(username, pageable),HttpStatus.OK);	
 	}
 	
-	/*@GetMapping("teamMemberUsername/{username}/paginated")
-	public ResponseEntity<Page<Project>> findAllByTeamMemberUsername(@PathVariable("username") String teamMemberUsername, Pageable pageable){
-		
-		List<Project> projects = projectService.findAll();
-		List<Page<Project>> matchedProjects = new ArrayList<>();
-		for(Project p: projects) {
-			
-			if(p.getLead().getUsername().equals(teamMemberUsername)) {
-				matchedProjects.
-			}
-		}
-		return new ResponseEntity<>(odgovarajucePorudzbine, HttpStatus.OK);
-		
-	}*/
+	
 	
 	@GetMapping(value="filterBy/{letter}")
 	public ResponseEntity<List<ProjectDTO>> getProjectByFirstLetter(@PathVariable("letter") String letter){

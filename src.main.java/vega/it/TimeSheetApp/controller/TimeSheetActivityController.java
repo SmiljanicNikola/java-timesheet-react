@@ -94,7 +94,7 @@ public class TimeSheetActivityController {
 
 	}
 	
-	@GetMapping(value="teamMemberId/{teamMemberId}")
+	@GetMapping(value="/teamMemberId/{teamMemberId}")//Dodao / u value path
 	public ResponseEntity<List<TimeSheetActivityDTO>> getTimeSheetActivityByTeamMemberId(@PathVariable("teamMemberId") Integer teamMemberId){
 		List<TimeSheetActivityDTO> timesheetActivitiesDTO = timeSheetActivityService.findByTeamMemberId(teamMemberId)
 				.stream()
@@ -135,6 +135,17 @@ public class TimeSheetActivityController {
 			@RequestParam(required=false) Integer teamMemberId){
 		
 		List<DayDTO> daysDTO = dayService.findAllBetweenStartDateAndEndDateAndTeamMemberId(startDate, endDate, teamMemberId);
+		
+		return new ResponseEntity<>(daysDTO, HttpStatus.OK);
+	}
+	
+	@GetMapping(value="/searchBetweenDatesAndMemberUsername")
+	public ResponseEntity<List<DayDTO>> getTimeSheetActivityBetweenStartDateAndEndDateAndTeamMemberUsername(
+			@RequestParam(required=false) @DateTimeFormat(iso = DateTimeFormat.ISO.DATE) LocalDate startDate,
+			@RequestParam(required=false) @DateTimeFormat(iso = DateTimeFormat.ISO.DATE) LocalDate endDate,
+			@RequestParam(required=false) String teamMemberUsername){
+		
+		List<DayDTO> daysDTO = dayService.findAllBetweenStartDateAndEndDateAndTeamMemberUsername(startDate, endDate, teamMemberUsername);
 		
 		return new ResponseEntity<>(daysDTO, HttpStatus.OK);
 	}

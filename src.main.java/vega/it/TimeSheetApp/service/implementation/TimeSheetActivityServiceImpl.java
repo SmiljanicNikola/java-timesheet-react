@@ -72,6 +72,10 @@ public class TimeSheetActivityServiceImpl implements TimeSheetActivityService {
 		return timeSheetActivityRepository.findAllBetweenStartDateAndEndDateAndTeamMemberId(startDate, endDate, teamMemberId);
 	}
 
-	
+	@Override
+	public List<TimeSheetActivity> findAllBetweenStartDateAndEndDateAndTeamMemberUsername(LocalDate startDate,
+			LocalDate endDate, String teamMemberUsername) {
+		return timeSheetActivityRepository.findAllBetweenStartDateAndEndDateAndTeamMemberUsername(startDate, endDate, teamMemberUsername);
+	}
 	
 }

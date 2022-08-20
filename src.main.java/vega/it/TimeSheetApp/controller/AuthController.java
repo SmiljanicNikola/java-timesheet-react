@@ -45,7 +45,7 @@ public class AuthController {
 	public ResponseEntity<JWTResponse> login(@RequestBody TeamMemberDTO teamMemberDTO){
 		String usernameLogged = teamMemberDTO.getUsername();
 		TeamMember teamMember = teamMemberService.findByUsername(usernameLogged);
-		if(teamMember != null) {
+		if(teamMember != null) {//NE OVAKO
 			UsernamePasswordAuthenticationToken authenticationToken = new UsernamePasswordAuthenticationToken(teamMemberDTO.getUsername(), teamMemberDTO.getPassword());
 			Authentication authentication = authenticationManager.authenticate(authenticationToken);
 			SecurityContextHolder.getContext().setAuthentication(authentication);
@@ -57,7 +57,7 @@ public class AuthController {
 		        } catch (UsernameNotFoundException e) {
 		            return ResponseEntity.notFound().build();
 		        }
-			}else {
+			}else {//NE TREBA ELSE ()
 		    	return ResponseEntity.status(404).build();
 		    }
 		}

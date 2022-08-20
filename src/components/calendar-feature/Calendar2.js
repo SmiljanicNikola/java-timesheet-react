@@ -41,7 +41,7 @@ export const Calendar2 = () => {
         }
 
         if(role == 'ROLE_WORKER'){
-            TimeSheetActivityService.getTimeSheetsBetweenStartDateAndEndDateAndTeamMemberId(startDate, endDate, loggedUser.id).then(response => {
+            TimeSheetActivityService.getTimeSheetsBetweenStartDateAndEndDateAndTeamMemberUsername(startDate, endDate, username).then(response => {
                 setTimeSheetActivities(response.data)
             })
         }

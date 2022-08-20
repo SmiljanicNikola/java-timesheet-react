@@ -23,14 +23,12 @@ public class TokenUtils {
 	 
 	 
 	 public String getUsernameFromToken(String token) {
-	        String username;
 	        try {
 	            Claims claims = this.getClaimsFromToken(token);
-	            username = claims.getSubject();
+	           return claims.getSubject();
 	        } catch (Exception e) {
-	            username = null;
+	            return null;
 	        }
-	        return username;
 	    }
 	 
 	 

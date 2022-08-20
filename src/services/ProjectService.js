@@ -21,8 +21,8 @@ class ProjectService {
         return httpClient.get(PROJECTS_REST_API_URL+"/teamMemberId/"+teamMemberId+"/paginated?page="+nextPage+"&size="+size);
     }
 
-    getProjectsByTeamMemberUsernamePaginated(teamMemberUsername,nextPage, size){
-        return httpClient.get(PROJECTS_REST_API_URL+"/teamMemberUsername/"+teamMemberUsername+"/paginated?page="+nextPage+"&size="+size);
+    getProjectsByTeamMemberUsernamePaginated(nextPage, size){
+        return httpClient.get(PROJECTS_REST_API_URL+"/byTeamMemberUsername/paginated?page="+nextPage+"&size="+size);
     }
 
     updateProject(projectId, project){

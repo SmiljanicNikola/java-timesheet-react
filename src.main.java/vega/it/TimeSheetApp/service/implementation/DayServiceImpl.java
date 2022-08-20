@@ -95,5 +95,17 @@ public class DayServiceImpl implements DayService {
 		
 		return daysDTO;
 	}
+
+	@Override
+	public List<DayDTO> findAllBetweenStartDateAndEndDateAndTeamMemberUsername(LocalDate startDate, LocalDate endDate,
+			String teamMemberUsername) {
+		List<DayDTO> daysDTO = timeSheetActivityService.findAllBetweenStartDateAndEndDateAndTeamMemberUsername(startDate, endDate, teamMemberUsername)
+				.stream()
+				.map(tsa -> new DayDTO(tsa.getTime(), tsa.getOvertime(), tsa.getDate()))
+				.collect(Collectors.toList());
+	
+		
+		return daysDTO;
+	}
 	
 }

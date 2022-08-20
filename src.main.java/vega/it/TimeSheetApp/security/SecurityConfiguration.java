@@ -92,8 +92,11 @@ public class SecurityConfiguration {
             .antMatchers(HttpMethod.POST,"/api/clients").hasRole(admin)
 
             .antMatchers(HttpMethod.GET, "/api/timeSheetActivities").hasAnyRole(admin, worker)
-
-        
+            .antMatchers(HttpMethod.GET, "/api/timeSheetActivities/**").hasAnyRole(admin, worker)
+            .antMatchers(HttpMethod.POST, "/api/timeSheetActivities").hasAnyRole(admin,worker)
+            .antMatchers(HttpMethod.DELETE, "/api/timeSheetActivities/**").hasAnyRole(admin)
+            .antMatchers(HttpMethod.PUT, "/api/timeSheetActivities/**").hasAnyRole(admin)
+            
            .anyRequest().authenticated();
 
            httpSecurity.addFilterBefore(authenticationJwtTokenFilter(), UsernamePasswordAuthenticationFilter.class);
