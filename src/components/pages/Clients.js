@@ -8,6 +8,7 @@ import PaginationHelper from '../utils/PaginationHelper';
 import { Footer } from '../layout/Footer';
 import { Header } from '../layout/Header';
 import { AuthenticationService } from '../../services/AuthenticationService';
+import {ADMIN,WORKER} from '../utils/Constants'
 
 
 export const Clients = () => {
@@ -31,16 +32,11 @@ export const Clients = () => {
     useEffect(() => {
 
 		
-		if(role == 'ROLE_ADMIN'){
-			const fetchPaginatedClients = async () =>{
-				ClientService.getClientsPaginateWithParams(currentPage,size)
-				.then(response => {
-				setPaginatedClients(response.data.content);
-				setLoading(false);
-				})
-			};
+		if(role == ADMIN){
 
-			fetchPaginatedClients();
+		
+
+			fetchPaginatedClientsWithParams();
 			
 			ClientService.getClientsPaginate()
 			.then(response => {
@@ -48,19 +44,40 @@ export const Clients = () => {
 				setLoading(false);
 			})
 		}
-		if(role == 'ROLE_WORKER'){
-			const fetchPaginatedClientsAssociatedWithTeamMember = async () =>{
+		if(role == WORKER){
+			/*const fetchPaginatedClientsAssociatedWithTeamMember = async () =>{
 				ClientService.getClientsAssociatedWithTeamMemberPaginated(username)
 				.then(response => {
 				setPaginatedClients(response.data.content.filter(project => project.deleted == false));
 				})
 			};
 
-			fetchPaginatedClientsAssociatedWithTeamMember(username);
+			fetchPaginatedClientsAssociatedWithTeamMember(username);*/
+			
+
+			fetchPaginatedClientsWithoutParams();
+
+			
 		}
 
         
 	}, []);
+
+	const fetchPaginatedClientsWithParams = async () =>{
+		ClientService.getClientsPaginateWithParams(currentPage,size)
+		.then(response => {
+		setPaginatedClients(response.data.content);
+		setLoading(false);
+		})
+	};
+
+	const fetchPaginatedClientsWithoutParams = async () =>{
+		ClientService.getClientsPaginateWithParams()
+		.then(response => {
+		setPaginatedClients(response.data.content);
+		setLoading(false);
+		})
+	};
 
 	const changeStyle = () =>{
 		setClose('details2')
@@ -145,7 +162,7 @@ export const Clients = () => {
 					<h2><i class="ico clients"></i>Clients</h2>
 					<div class="grey-box-wrap reports">
 
-					{role == 'ROLE_ADMIN' ?
+					{role == ADMIN ?
 						(
 							<a onClick={() => toggleModal()} class="link new-member-popup">Create new client</a>
 
@@ -209,7 +226,7 @@ export const Clients = () => {
 											</li>
 										</ul>
 										{
-											role == 'ROLE_ADMIN' ?
+											role == ADMIN ?
 											(
 												<div class="buttons">
 													<div class="inner">

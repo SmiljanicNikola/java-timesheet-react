@@ -22,9 +22,7 @@ export const TimeSheet = () => {
 
 	useEffect(() => {
 
-		TeamMemberService.getTeamMemberByUsername(username).then((response => {
-			setLoggedUser(response.data);
-		}))
+	
 
 	}, [])
 

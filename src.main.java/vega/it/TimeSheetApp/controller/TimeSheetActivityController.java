@@ -16,6 +16,7 @@ import org.springframework.format.annotation.DateTimeFormat;
 import org.springframework.format.annotation.DateTimeFormat.ISO;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
+import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.web.bind.annotation.CrossOrigin;
 import org.springframework.web.bind.annotation.DeleteMapping;
 import org.springframework.web.bind.annotation.GetMapping;
@@ -94,7 +95,7 @@ public class TimeSheetActivityController {
 
 	}
 	
-	@GetMapping(value="/teamMemberId/{teamMemberId}")//Dodao / u value path
+	@GetMapping(value="/teamMemberId/{teamMemberId}")
 	public ResponseEntity<List<TimeSheetActivityDTO>> getTimeSheetActivityByTeamMemberId(@PathVariable("teamMemberId") Integer teamMemberId){
 		List<TimeSheetActivityDTO> timesheetActivitiesDTO = timeSheetActivityService.findByTeamMemberId(teamMemberId)
 				.stream()
@@ -123,7 +124,36 @@ public class TimeSheetActivityController {
 			@RequestParam(required=false) @DateTimeFormat(iso = DateTimeFormat.ISO.DATE) LocalDate startDate,
 			@RequestParam(required=false) @DateTimeFormat(iso = DateTimeFormat.ISO.DATE) LocalDate endDate){
 		
-		List<DayDTO> daysDTO = dayService.findAllBetweenStartDateAndEndDate(startDate, endDate);
+		Object userRole = SecurityContextHolder.getContext().getAuthentication().getAuthorities().toArray()[0];
+		String teamMemberUsername = SecurityContextHolder.getContext().getAuthentication().getName();
+		
+		List<DayDTO> daysDTO = new ArrayList<DayDTO>();
+		
+		if(userRole.toString().contains("ROLE_WORKER")) {
+			daysDTO = dayService.findAllBetweenStartDateAndEndDateAndTeamMemberUsername(startDate, endDate, teamMemberUsername);
+		}
+		
+		if(userRole.toString().contains("ROLE_ADMIN")) {
+			daysDTO = dayService.findAllBetweenStartDateAndEndDate(startDate, endDate);
+		}
+		return new ResponseEntity<>(daysDTO, HttpStatus.OK);
+
+		
+		
+	}
+	
+	
+	@GetMapping(value="/searchBetweenDatesAndMemberUsername")
+	public ResponseEntity<List<DayDTO>> getTimeSheetActivityBetweenStartDateAndEndDateAndTeamMemberUsername(
+			@RequestParam(required=false) @DateTimeFormat(iso = DateTimeFormat.ISO.DATE) LocalDate startDate,
+			@RequestParam(required=false) @DateTimeFormat(iso = DateTimeFormat.ISO.DATE) LocalDate endDate){
+		
+		Object userRole = SecurityContextHolder.getContext().getAuthentication().getAuthorities();
+		Object userPrincipal = SecurityContextHolder.getContext().getAuthentication().getPrincipal();
+		String teamMemberUsername = SecurityContextHolder.getContext().getAuthentication().getName();
+
+		
+		List<DayDTO> daysDTO = dayService.findAllBetweenStartDateAndEndDateAndTeamMemberUsername(startDate, endDate, teamMemberUsername);
 		
 		return new ResponseEntity<>(daysDTO, HttpStatus.OK);
 	}
@@ -139,16 +169,7 @@ public class TimeSheetActivityController {
 		return new ResponseEntity<>(daysDTO, HttpStatus.OK);
 	}
 	
-	@GetMapping(value="/searchBetweenDatesAndMemberUsername")
-	public ResponseEntity<List<DayDTO>> getTimeSheetActivityBetweenStartDateAndEndDateAndTeamMemberUsername(
-			@RequestParam(required=false) @DateTimeFormat(iso = DateTimeFormat.ISO.DATE) LocalDate startDate,
-			@RequestParam(required=false) @DateTimeFormat(iso = DateTimeFormat.ISO.DATE) LocalDate endDate,
-			@RequestParam(required=false) String teamMemberUsername){
-		
-		List<DayDTO> daysDTO = dayService.findAllBetweenStartDateAndEndDateAndTeamMemberUsername(startDate, endDate, teamMemberUsername);
-		
-		return new ResponseEntity<>(daysDTO, HttpStatus.OK);
-	}
+	
 	
 	
 	@GetMapping(value="/search")
@@ -226,18 +247,6 @@ public class TimeSheetActivityController {
     	
     	response.setHeader(headerKey, headerValue);
     	
-    	/*List<IzlaznaFaktura> listaIzlaznihFaktura = izlaznaFakturaService.findAll();
-
-    	List<IzlaznaFaktura> listaIzlaznihFakturaPartnera = new ArrayList<IzlaznaFaktura>();
-    	
-    	for(IzlaznaFaktura izlazna : listaIzlaznihFaktura) {
-    		if(izlazna.getPoslovniPartner().getId() == id) {
-    			listaIzlaznihFakturaPartnera.add(izlazna);
-    		}
-    		
-    	}*/
-    	/*System.out.println(listaIzlaznihFakturaPartnera);
-        log.debug("REST request to delete IzlaznaFaktura : {}", listaIzlaznihFakturaPartnera);*/
 
 
     	ReportPDFExporter exporter = new ReportPDFExporter(report);

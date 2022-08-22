@@ -55,8 +55,8 @@ class TimeSheetActivityService {
         return httpClient.get(TIMESHEET_REST_API_URL+"/searchBetweenDatesAndMemberId?startDate="+startDate+"&endDate="+endDate+"&teamMemberId="+teamMemberId);
     }
 
-    getTimeSheetsBetweenStartDateAndEndDateAndTeamMemberUsername(startDate, endDate, teamMemberUsername){
-        return httpClient.get(TIMESHEET_REST_API_URL+"/searchBetweenDatesAndMemberUsername?startDate="+startDate+"&endDate="+endDate+"&teamMemberUsername="+teamMemberUsername);
+    getTimeSheetsBetweenStartDateAndEndDateAndTeamMemberUsername(startDate, endDate){
+        return httpClient.get(TIMESHEET_REST_API_URL+"/searchBetweenDatesAndMemberUsername?startDate="+startDate+"&endDate="+endDate);
     }
 
     emptySearchTimeSheets(){

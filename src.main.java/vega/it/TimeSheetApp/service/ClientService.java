@@ -25,4 +25,6 @@ public interface ClientService {
 
 	Page<Client> findAllClientsPaginatedByTeamMemberUsername(String teamMemberUsername,Pageable pageable);
 
+	Page<Client> findAllClientsPaginatedByTeamMemberId(Integer teamMemberId,Pageable pageable);
+
 }

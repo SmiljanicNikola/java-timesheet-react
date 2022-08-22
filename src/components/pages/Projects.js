@@ -73,28 +73,12 @@ export const Projects = () => {
 
 		findLoggedUser()
 
-		if(role == 'ROLE_ADMIN'){
-
 			fetchPaginatedProjects();
 			
 			ProjectService.getProjectsPaginate()
 			.then(response => {
 				setProjects(response.data.content.filter(project => project.deleted == false));
-			})
-		}
-
-		if(role == 'ROLE_WORKER'){
-		
-			const fetchPaginatedProjectsByTeamMemberUsername = async () =>{
-				ProjectService.getProjectsByTeamMemberUsernamePaginated()
-				.then(response => {
-				setPaginatedProjects(response.data.content.filter(project => project.deleted == false));
-				})
-			};
-
-			fetchPaginatedProjectsByTeamMemberUsername();
-		}
-        
+			})  
 	}, []);
 
 	function deleteProject(id){
@@ -325,8 +309,7 @@ export const Projects = () => {
           		))}
         
 				</div>
-				{role == 'ROLE_ADMIN' ?
-				(
+				
 				<div class="pagination">
 					<ul>
 						<li>
@@ -346,12 +329,8 @@ export const Projects = () => {
 						</li>
 					</ul>
 				</div>
-				)
-				:
-				(
-					<></>
-				)
-			}
+				
+			
 				
 			</section>			
 		</div>

@@ -28,4 +28,5 @@ public interface ProjectService {
 	Page<Project> findAllProjectsPaginatedByTeamMemberUsername(String teamMemberUsername,Pageable pageable);
 
 	List<Project> filterAllProjectsByFirstLetter(String letter);
+
 }

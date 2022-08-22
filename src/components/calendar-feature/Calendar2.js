@@ -28,23 +28,16 @@ export const Calendar2 = () => {
 			setLoggedUser(response.data);
 		}))
 
-        const teamMemberId = loggedUser.id;
-        console.log(teamMemberId);
        
         let startDate = (dates[0].toISOString().slice(0,10))
         let endDate = (dates[dates.length-1].toISOString().slice(0,10))
 
-        if(role == 'ROLE_ADMIN'){
-            TimeSheetActivityService.getTimeSheetsBetweenStartDateAndEndDate(startDate, endDate).then(response => {
-                setTimeSheetActivities(response.data)
-            })
-        }
 
-        if(role == 'ROLE_WORKER'){
-            TimeSheetActivityService.getTimeSheetsBetweenStartDateAndEndDateAndTeamMemberUsername(startDate, endDate, username).then(response => {
-                setTimeSheetActivities(response.data)
-            })
-        }
+        TimeSheetActivityService.getTimeSheetsBetweenStartDateAndEndDate(startDate, endDate).then(response => {
+            setTimeSheetActivities(response.data)
+        })
+        
+         
 
         countingTotalHoursInMonth()
         

@@ -27,6 +27,7 @@ import org.springframework.web.server.ResponseStatusException;
 
 import vega.it.TimeSheetApp.DTO.AddProjectRequestDTO;
 import vega.it.TimeSheetApp.DTO.ClientDTO;
+import vega.it.TimeSheetApp.DTO.DayDTO;
 import vega.it.TimeSheetApp.DTO.ProjectDTO;
 import vega.it.TimeSheetApp.exceptions.ResourceNotFoundException;
 import vega.it.TimeSheetApp.model.Project;
@@ -68,8 +69,23 @@ public class ProjectController {
 	@GetMapping("/paginate")
 	public ResponseEntity<Page<Project>> findAll(Pageable pageable){
 		
-		return new ResponseEntity<>(projectService.findAllProjectsPaginate(pageable), HttpStatus.OK);	
+		Object userRole = SecurityContextHolder.getContext().getAuthentication().getAuthorities().toArray()[0];
+		String teamMemberUsername = SecurityContextHolder.getContext().getAuthentication().getName();
 		
+		TeamMember teamMember = teamMemberService.findByUsername(teamMemberUsername);
+		
+		Page<Project> page = null;
+		if(userRole.toString().contains("ROLE_WORKER")) {
+			//page = projectService.findAllProjectsPaginatedByTeamMemberUsername(teamMemberUsername, pageable);
+			page = projectService.findAllProjectsPaginatedByTeamMemberId(teamMember.getId(), pageable);
+		}
+		
+		if(userRole.toString().contains("ROLE_ADMIN")) {
+			
+			page = projectService.findAllProjectsPaginate(pageable);
+		}
+		return new ResponseEntity<>(page,HttpStatus.OK);
+			
 	}
 	
 	

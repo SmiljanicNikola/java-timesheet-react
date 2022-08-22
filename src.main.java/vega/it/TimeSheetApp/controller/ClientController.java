@@ -33,6 +33,7 @@ import vega.it.TimeSheetApp.model.Project;
 import vega.it.TimeSheetApp.model.TeamMember;
 import vega.it.TimeSheetApp.service.ClientService;
 import vega.it.TimeSheetApp.service.CountryService;
+import vega.it.TimeSheetApp.service.TeamMemberService;
 
 @RestController
 @RequestMapping(value = "api/clients")
@@ -43,6 +44,10 @@ public class ClientController {
 	
 	@Autowired
 	private CountryService countryService;
+	
+	@Autowired
+	private TeamMemberService teamMemberService;
+	
 	
 	@GetMapping
 	public ResponseEntity<List<ClientDTO>> getClients(){
@@ -59,7 +64,25 @@ public class ClientController {
 	
 	@GetMapping("/paginate")
 	public ResponseEntity<Page<Client>> findAll(Pageable pageable){
-		return new ResponseEntity<>(clientService.findAllClientsPagination(pageable), HttpStatus.OK);
+		
+		Object userRole = SecurityContextHolder.getContext().getAuthentication().getAuthorities().toArray()[0];
+		String teamMemberUsername = SecurityContextHolder.getContext().getAuthentication().getName();
+		
+		TeamMember teamMember = teamMemberService.findByUsername(teamMemberUsername);
+		
+		Page<Client> page = null;
+		if(userRole.toString().contains("ROLE_WORKER")) {
+			//page = projectService.findAllProjectsPaginatedByTeamMemberUsername(teamMemberUsername, pageable);
+			page = clientService.findAllClientsPaginatedByTeamMemberUsername(teamMemberUsername, pageable);
+		}
+		
+		if(userRole.toString().contains("ROLE_ADMIN")) {
+			
+			page = clientService.findAllClientsPagination(pageable);
+		}
+		
+		return new ResponseEntity<>(page,HttpStatus.OK);
+			
 	}
 	
 	@GetMapping("/byTeamMemberUsername/paginated")
