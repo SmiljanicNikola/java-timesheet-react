@@ -58,9 +58,7 @@ public class TeamMember {
 	@OneToMany(mappedBy="lead")
 	private List<Project> projects;
 	
-	public TeamMember() {
-		
-	}
+	
 
 	public Integer getId() {
 		return id;
@@ -189,6 +187,12 @@ public class TeamMember {
 	}
 	
 	
+	
+	
+
+	public TeamMember() {
+		super();
+	}
 
 	public List<Project> getProjects() {
 		return projects;

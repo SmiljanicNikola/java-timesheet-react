@@ -62,6 +62,14 @@ public class Country {
 		this.name = name;
 		this.clients = clients;
 	}
+	
+	
+
+	public Country(Integer id, String name) {
+		super();
+		this.id = id;
+		this.name = name;
+	}
 
 	public Country(String name) {
 		super();

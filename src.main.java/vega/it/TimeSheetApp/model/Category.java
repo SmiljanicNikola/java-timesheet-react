@@ -59,6 +59,14 @@ public class Category {
 		this.type = type;
 		this.timeSheetActivities = timeSheetActivities;
 	}
+	
+	
+
+	public Category(Integer id, String type) {
+		super();
+		this.id = id;
+		this.type = type;
+	}
 
 	public Category(String type) {
 		super();

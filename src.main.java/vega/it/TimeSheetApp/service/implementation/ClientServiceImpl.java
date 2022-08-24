@@ -56,4 +56,10 @@ public class ClientServiceImpl implements ClientService {
 		return clientRepository.findAllClientsWithPaginationByTeamMemberUsername(teamMemberUsername,pageable);
 	}
 
+	@Override
+	public Page<Client> findAllClientsPaginatedByTeamMemberId(Integer teamMemberId, Pageable pageable) {
+		// TODO Auto-generated method stub
+		return null;
+	}
+
 }

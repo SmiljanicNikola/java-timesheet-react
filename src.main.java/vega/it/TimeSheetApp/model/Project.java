@@ -144,6 +144,46 @@ public class Project {
 		this.lead = lead;
 		this.finished = finished;
 	}
+
+
+	public Project(String description, String projectName, Client client, TeamMember lead, Boolean finished,
+			Boolean deleted) {
+		super();
+		this.description = description;
+		this.projectName = projectName;
+		this.client = client;
+		this.lead = lead;
+		this.finished = finished;
+		this.deleted = deleted;
+	}
+
+
+	public Project(Integer id, String description, String projectName, Client client, TeamMember lead, Boolean finished,
+			Boolean deleted) {
+		super();
+		this.id = id;
+		this.description = description;
+		this.projectName = projectName;
+		this.client = client;
+		this.lead = lead;
+		this.finished = finished;
+		this.deleted = deleted;
+	}
+
+
+	public Project(String description, String projectName, Client client, TeamMember lead) {
+		super();
+	
+		this.description = description;
+		this.projectName = projectName;
+		this.client = client;
+		this.lead = lead;
+	}
+	
+	
+	
+	
+	
 	
 	
 	
