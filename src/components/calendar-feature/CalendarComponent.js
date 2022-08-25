@@ -8,9 +8,7 @@ export const CalendarComponent = () => {
     
     const {calendarRows, selectedDate, todayFormatted, daysShort, monthNames, getNextMonth, getPrevMonth} = Calendar();
     const [timeSheetActivities, setTimeSheetActivities] = useState([]);
-    const [totalHours, setTotalHours] = useState(0);
     const navigate = useNavigate();
-    const [hours, setHours] = useState(0);
 
     const dateClickHandler = date =>{
         console.log(date);

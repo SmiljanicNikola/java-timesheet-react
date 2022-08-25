@@ -7,9 +7,9 @@ import ProjectService from '../../services/ProjectService';
 import TeamMemberService from '../../services/TeamMemberService';
 import TimeSheetActivityService from '../../services/TimeSheetActivityService';
 import { WeekComponent } from '../calendar-feature/WeekComponent';
-import { NewActivityForm } from '../forms/NewActivityForm';
 import { Footer } from '../layout/Footer';
 import { Header } from '../layout/Header';
+import {ROLE} from '../utils/Constants'
 
 
 export const Days = () => {
@@ -19,7 +19,6 @@ export const Days = () => {
 	const params = useParams();
 	const [clients, setClients] = useState([])
 	const [teamMembers, setTeamMembers] = useState([])
-	const [username, setUsername] = useState(AuthenticationService.getUsername());
 	const [role, setRole] = useState(AuthenticationService.getRole());
 	const [projects, setProjects] = useState([])
 	const [newTimeSheet, setNewTimeSheet] = useState({})
@@ -48,10 +47,8 @@ export const Days = () => {
 	  
 	let totalTime = 0;
 	for(let i = 0; i < timeSheets.length; i++){
-		{
-			totalTime = totalTime + timeSheets[i].time
-			totalTime = totalTime + timeSheets[i].overtime
-		}
+		totalTime = totalTime + timeSheets[i].time
+		totalTime = totalTime + timeSheets[i].overtime
 	}
 
 	const handleChangeClient = client =>{
@@ -170,7 +167,7 @@ export const Days = () => {
 								
 							</tr>
 							))}
-							{role == 'ROLE_WORKER' ?
+							{role === ROLE.WORKER ?
 								(
 								<tr>
 									
@@ -240,10 +237,8 @@ export const Days = () => {
 									</td>
 								</tr>
 								)
-								:
-								(
-									<></>
-								)
+								: null
+								
 							}
 							
 						</table>

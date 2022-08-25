@@ -1,5 +1,4 @@
 import React, {useState, useEffect} from 'react'
-import axios from 'axios';
 import Pagination from '../utils/Pagination';
 import CategoryService from '../../services/CategoryService';
 import { NewCategoryForm } from '../forms/NewCategoryForm';
@@ -7,30 +6,22 @@ import PaginationHelper from '../utils/PaginationHelper';
 import { Header } from '../layout/Header';
 import { Footer } from '../layout/Footer';
 import { AuthenticationService } from '../../services/AuthenticationService';
+import { ROLE } from '../utils/Constants';
 
 export const Categories = () => {
 
     const [categories, setCategories] = useState([]);
-    const[pageNumber, setPageNumber] = useState(0);
     const [currentPage, setCurrentPage] = useState(1);
     const [paginatedCategories, setPaginatedCategories] = useState([])
-	const [categoriesPerPage, setCategoriesPerPage] = useState(2);
-	const [category, setCategory] = useState({})
+	const [categoriesPerPage] = useState(2);
 	const [type, setType] = useState('')
-	const [size, setSize] = useState(2);
+	const [size] = useState(2);
 	const [display, setDisplay] = useState(false);
 	const alphabet = ["a","b","c","d","e","f","g","h","i","j","k","l","m","n","o","p","q","r","s","t","u","v","w","x","y","z"];
 	const [letters, setLetters] = useState('')
-	const [username, setUsername] = useState("");
-	const [role, setRole] = useState("");
+	const [role] = useState(AuthenticationService.getRole());
 
     useEffect(() => {
-
-		const rolee = AuthenticationService.getRole();
-		setRole(rolee);
-		const usernamee = AuthenticationService.getUsername()
-		setUsername(usernamee);
-
 		
 		const fetchPaginatedCategories = async () =>{
 			CategoryService.getCategoriesPaginateWithParams(currentPage, size)
@@ -63,7 +54,9 @@ export const Categories = () => {
 
 	const previousPage = async () => {
 		let previousPage = currentPage - 1;
-		if(currentPage < 0){currentPage=0}
+		if(currentPage < 0){
+			setCurrentPage(0);
+		}
 		
 		setCurrentPage(previousPage)
 		PaginationHelper.displayPaginated(previousPage, size, CategoryService.getCategoriesPaginateWithParams, setPaginatedCategories)
@@ -152,7 +145,7 @@ export const Categories = () => {
 						</ul>
 						<div class="buttons">
 							<div class="inner">
-								<a class="btn green">Save</a>
+								<a className="btn green">Save</a>
 							</div>
 						</div>
 					</div>
@@ -186,7 +179,7 @@ export const Categories = () => {
 										</li>										
 									</ul>
 									{
-										role == 'ROLE_ADMIN' ?
+										role === ROLE.ADMIN ?
 										(
 											<div class="buttons">
 												<div class="inner">

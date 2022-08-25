@@ -1,13 +1,8 @@
-import React, { useEffect, useState } from 'react'
-import TimeSheetActivityService from '../../services/TimeSheetActivityService';
+import React from 'react'
 import { useNavigate } from "react-router-dom";
 
-
 export const CalendarDays = (props) => {
-    
-    const [dates, setDates] = useState(props.dates)
-    const [startDate, setStartDate] = useState()
-    const [endDate, setEndDate] = useState()
+
     const navigate = useNavigate();
 
     for(let a = 0; a< (props.timeSheetActivities).length; a++){

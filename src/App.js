@@ -1,6 +1,5 @@
 import './App.css';
-import { Header } from './components/layout/Header';
-import { Footer } from './components/layout/Footer';
+
 import {TeamMembers} from './components/pages/TeamMembers'
 import {Clients} from './components/pages/Clients'
 import {Projects} from './components/pages/Projects'
@@ -15,7 +14,6 @@ import { NewProjectForm } from './components/forms/NewProjectForm';
 import { NewClientForm } from './components/forms/NewClientForm';
 import { Days } from './components/pages/Days';
 import { NewCategoryForm } from './components/forms/NewCategoryForm';
-import { PrivateRoute } from './services/PrivateRoute';
 import { AuthenticationService } from './services/AuthenticationService';
 import { Navigate } from 'react-router-dom';
 

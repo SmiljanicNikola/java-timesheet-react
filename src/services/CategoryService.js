@@ -1,4 +1,3 @@
-import axios from 'axios'
 import httpClient from "../auth/JwtInterceptors"
 
 const CATEGORIES_REST_API_URL =  `${process.env.REACT_APP_BACKEND_URL}/api/categories`;

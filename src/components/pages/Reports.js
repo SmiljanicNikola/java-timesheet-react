@@ -1,5 +1,4 @@
-import axios from 'axios';
-import React, {useEffect, useState} from 'react'
+import React, {useState} from 'react'
 import CategoryService from '../../services/CategoryService';
 import ClientService from '../../services/ClientService';
 import ProjectService from '../../services/ProjectService';
@@ -115,10 +114,8 @@ export const Reports = () => {
 
 	let totalTime = 0;
 	for(let i = 0; i < timeSheets.length; i++){
-		{
-			totalTime = totalTime + timeSheets[i].time
-			totalTime = totalTime + timeSheets[i].overtime
-		}
+		totalTime = totalTime + timeSheets[i].time
+		totalTime = totalTime + timeSheets[i].overtime
 	}
 
     return (

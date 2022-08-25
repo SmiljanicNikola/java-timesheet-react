@@ -9,7 +9,6 @@ export const Login = () => {
         password: "",
 
     });
-    const [user, setUser] = useState(undefined);
 
     const handleFormInputChange = (name) => (event) => {
         const val = event.target.value;
@@ -31,7 +30,7 @@ export const Login = () => {
         <div class="wrapper centered">
             <div class="logo-wrap">
                 <a href="index.html" class="inner">
-                    <img src={LogoLarge} />
+                    <img src={LogoLarge} alt="logo" />
                 </a>
             </div>
             <div class="centered-content-wrap">
@@ -48,8 +47,11 @@ export const Login = () => {
                             <input type="checkbox" class="in-checkbox" id="remember" />
                             <label class="in-label" for="remember">Remember me</label>
                             <span class="right">
-                                <a class="link">Forgot password?</a>
-                                <a onClick={login} class="btn orange">Login</a>
+                                {/* eslint-disable-next-line jsx-a11y/anchor-is-valid*/}
+                                <a className="link">Forgot password?</a>
+
+                                {/* eslint-disable-next-line jsx-a11y/anchor-is-valid*/}
+                                <a onClick={login} className="btn orange">Login</a>
                             </span>
                         </li>
                     </ul>

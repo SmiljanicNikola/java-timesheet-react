@@ -2,10 +2,10 @@ import React, { useState, useEffect } from 'react'
 import TeamMemberService from '../../services/TeamMemberService';
 import { NewMemberForm } from '../forms/NewMemberForm';
 import Pagination from '../utils/Pagination';
-import axios from 'axios';
 import PaginationHelper from '../utils/PaginationHelper';
 import { Header } from '../layout/Header';
 import { Footer } from '../layout/Footer';
+import {ROLE} from '../utils/Constants'
 
 export const TeamMembers = () => {
 
@@ -14,7 +14,6 @@ export const TeamMembers = () => {
 	const [currentPage, setCurrentPage] = useState(1);
 	const [paginatedTeamMembers, setPaginatedTeamMembers] = useState([])
 	const [teamMembersPerPage, setTeamMembersPerPage] = useState(2);
-	const [pageNumber, setPageNumber] = useState(0);
 	const [hoursPerWeek, setHoursPerWeek] = useState('')
 	const [teamMember, setTeamMember] = useState({})
 	const [size, setSize] = useState(2);
@@ -49,7 +48,6 @@ export const TeamMembers = () => {
 				firstname: teamMember.firstname,
 				username: teamMembers.username,
 				hoursPerWeek: hoursPerWeek,
-				username: teamMember.username,
 				email: teamMember.email
 			}
 
@@ -85,7 +83,7 @@ export const TeamMembers = () => {
 	const previousPage = async () => {
 		let previousPage = currentPage - 1;
 		if(currentPage < 0){
-			currentPage=0
+			setCurrentPage(0);
 		}
 		setCurrentPage(previousPage)
 		PaginationHelper.displayPaginated(previousPage, size, TeamMemberService.getMembersPaginateWithParams, setPaginatedTeamMembers)
@@ -170,22 +168,22 @@ export const TeamMembers = () => {
 								<label>Status:</label>
 								<span class="radio">
 									<label for="inactive">Inactive:</label>
-									<input type="radio" checked={member.blocked == true} onChange={handleInactiveInput} id="inactive" />
+									<input type="radio" checked={member.blocked === true} onChange={handleInactiveInput} id="inactive" />
 								</span>
 								<span class="radio">
 									<label for="active">Active:</label>
-									<input type="radio" onChange={handleActiveInput} checked={member.blocked == false}  id="active" />
+									<input type="radio" onChange={handleActiveInput} checked={member.blocked === false}  id="active" />
 								</span>
 							</li>
 							<li>
 								<label>Role:</label>
 								<span class="radio">
 									<label for="admin">Admin:</label>
-									<input type="radio" onChange={handleRoleInputAdmin} checked={member.role == 'ADMIN'}  id="admin" />
+									<input type="radio" onChange={handleRoleInputAdmin} checked={member.role === 'ADMIN'}  id="admin" />
 								</span>
 								<span class="radio">
 									<label for="worker">Worker:</label>
-									<input type="radio" onChange={handleRoleInputWorker} checked={member.role == 'WORKER'} id="worker" />
+									<input type="radio" onChange={handleRoleInputWorker} checked={member.role === 'WORKER'} id="worker" />
 								</span>
 							</li>
 						</ul>

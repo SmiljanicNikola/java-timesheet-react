@@ -1,5 +1,5 @@
 import React from "react";
-import { Navigate, Route, Outlet } from "react-router-dom";
+import { Navigate, Route} from "react-router-dom";
 import { AuthenticationService } from "./AuthenticationService";
 
 export const PrivateRoute = ({ component: Component, roles, ...rest }) => (

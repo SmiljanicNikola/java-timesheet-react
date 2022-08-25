@@ -1,6 +1,5 @@
 import React, {useState, useEffect} from 'react'
 import ProjectService from '../../services/ProjectService';
-import axios from 'axios'
 import Pagination from '../utils/Pagination';
 import { NewProjectForm } from '../forms/NewProjectForm';
 import ClientService from '../../services/ClientService';
@@ -9,15 +8,15 @@ import PaginationHelper from '../utils/PaginationHelper';
 import { Footer } from '../layout/Footer';
 import { Header } from '../layout/Header';
 import { AuthenticationService } from '../../services/AuthenticationService';
+import {ROLE} from '../utils/Constants'
 
 
 export const Projects = () => {
     
     const [projects, setProjects] = useState([]);
-	const [pageNumber, setPageNumber] = useState(0);
 	const [currentPage, setCurrentPage] = useState(1);
 	const [paginatedProjects, setPaginatedProjects] = useState([])
-	const [projectsPerPage, setprojectsPerPage] = useState(2);
+	const [projectsPerPage] = useState(2);
 	const [display, setDisplay] = useState(false);
 	const [project, setProject] = useState({})
 	const alphabet = ["a","b","c","d","e","f","g","h","i","j","k","l","m","n","o","p","q","r","s","t","u","v","w","x","y","z"];
@@ -25,13 +24,12 @@ export const Projects = () => {
 	const [teamMembers, setTeamMembers] = useState([])
 	const [valueTeamMember, setValueTeamMember] = useState('')
 	const [valueClient, setValueClient] = useState('');
-	const [size, setSize] = useState(2);
+	const [size] = useState(2);
 	const [letters, setLetters] = useState('')
 	let updatedProject = {}
-	const [username, setUsername] = useState(AuthenticationService.getUsername());
-	const [role, setRole] = useState(AuthenticationService.getRole());
+	const [username] = useState(AuthenticationService.getUsername());
+	const [role] = useState(AuthenticationService.getRole());
 	const [loggedUser, setLoggedUser] = useState({});
-	const [lang, setLang] = useState("english");
 
 	const handleChangeClient = client =>{
 		setValueClient(client.target.value);
@@ -56,7 +54,7 @@ export const Projects = () => {
 	const fetchPaginatedProjects = async () =>{
 		ProjectService.getProjectsPaginateWithParams(currentPage, size)
 		.then(response => {
-		setPaginatedProjects(response.data.content.filter(project => project.deleted == false));
+		setPaginatedProjects(response.data.content.filter(project => project.deleted === false));
 		})
 	};
 
@@ -77,8 +75,9 @@ export const Projects = () => {
 			
 			ProjectService.getProjectsPaginate()
 			.then(response => {
-				setProjects(response.data.content.filter(project => project.deleted == false));
+				setProjects(response.data.content.filter(project => project.deleted === false));
 			})  
+	// eslint-disable-next-line react-hooks/exhaustive-deps
 	}, []);
 
 	function deleteProject(id){
@@ -89,10 +88,10 @@ export const Projects = () => {
 	const nextPage = async () => {
 		let nextPage = currentPage + 1;
 		setCurrentPage(nextPage)
-		if(role == 'ROLE_ADMIN')
+		if(role === ROLE.ADMIN)
 		PaginationHelper.displayPaginated(nextPage, size, ProjectService.getProjectsPaginateWithParams, setPaginatedProjects)
 
-		if(role == 'ROLE_WORKER')
+		if(role === ROLE.WORKER)
 		PaginationHelper.displayPaginatedByTeamMember(loggedUser.id, nextPage, size, ProjectService.getProjectsByTeamMemberIdPaginated, setPaginatedProjects)
 
 	}	
@@ -101,13 +100,13 @@ export const Projects = () => {
 	const previousPage = async () => {
 		let previousPage = currentPage - 1;
 		if(currentPage < 0){
-			currentPage=0
+			setCurrentPage(0)
 		}
 		setCurrentPage(previousPage)
-		if(role == 'ROLE_ADMIN')
+		if(role === ROLE.ADMIN)
 		PaginationHelper.displayPaginated(previousPage, size, ProjectService.getProjectsPaginateWithParams, setPaginatedProjects)
 
-		if(role == 'ROLE_WORKER')
+		if(role === ROLE.WORKER)
 		PaginationHelper.displayPaginatedByTeamMember(loggedUser.id,previousPage, size, ProjectService.getProjectsByTeamMemberIdPaginated, setPaginatedProjects)
 
 	}	
@@ -162,13 +161,10 @@ export const Projects = () => {
 
 		ProjectService.getProjectsPaginateWithParams(currentPage,size)
 		.then(response => {
-			setPaginatedProjects(response.data.content.filter(project => project.deleted == false));
+			setPaginatedProjects(response.data.content.filter(project => project.deleted === false));
 		})
 
 	}
-
-	const indexOfLastClient = currentPage * projectsPerPage;
-	const indexOfFirstClient = indexOfLastClient - projectsPerPage;
 
     return (
         <div>
@@ -178,13 +174,9 @@ export const Projects = () => {
 				<h2><i class="ico clients"></i>Projects</h2>
 				<div class="grey-box-wrap reports">
 
-					{role == 'ROLE_ADMIN' ?
+					{role === ROLE.ADMIN &&
 						(
-							<a onClick={() => toggleModal()} class="link new-member-popup">Create new Project</a>
-						)
-						:
-						(
-							<></>
+							<div onClick={() => toggleModal()} className="link new-member-popup">Create new Project</div>
 						)
 					}
 					<div class="search-page">
@@ -198,12 +190,13 @@ export const Projects = () => {
 				<div class="alpha">
 					<ul>	
 							{alphabet.map((letter) => (
-                				<li>
+                				<li>	
+									{/* eslint-disable-next-line jsx-a11y/anchor-is-valid*/}
 									<a onClick={() => handleLetterClick(letter)}>{letter}</a>
 								</li>
 							))}
 						<li class="last">
-							<a href="javascript:;">z</a>
+							<div onClick={() => {}}>z</div>
 						</li>					
 					</ul>
 				</div>
@@ -278,21 +271,23 @@ export const Projects = () => {
 								<span class="radio">
 									<label for="inactive">Inactive:</label>
 								
-									<input type="radio" checked={project.finished == true} onChange={handleInactiveInput} id="inactive" />
+									<input type="radio" checked={project.finished === true} onChange={handleInactiveInput} id="inactive" />
 								</span>
 								<span class="radio">
 									<label for="active">Active:</label>
-									<input type="radio" checked={project.finished == false} onChange={handleActiveInput} id="active" />
+									<input type="radio" checked={project.finished === false} onChange={handleActiveInput} id="active" />
 								</span>
 								
 							</li>
 							</ul>
 							{
-								role == 'ROLE_ADMIN' ?
+								role === ROLE.ADMIN ?
 								(
 									<div class="buttons">
 										<div class="inner">
+											{/* eslint-disable-next-line jsx-a11y/anchor-is-valid*/}
 											<a class="btn green" onClick={() => updateProject(project.id)}>Save</a>
+											{/* eslint-disable-next-line jsx-a11y/anchor-is-valid*/}
 											<a class="btn red" onClick={() => deleteProject(project.id)}>Delete</a>
 										</div>
 									</div>
@@ -300,7 +295,7 @@ export const Projects = () => {
 								:
 								(
 									<></>
-								)//Blob Storage Share point
+								)
 							}
 						</div>
 					</div>
@@ -313,7 +308,7 @@ export const Projects = () => {
 				<div class="pagination">
 					<ul>
 						<li>
-							<button onClick={() => previousPage()} style={{marginTop:'15px', marginRight:'5px'}}>Pervious</button>
+							<button onClick={() => previousPage()} style={{marginTop:'15px', marginRight:'5px'}}>Previous</button>
 						</li>
 						<li>
 							<Pagination
@@ -334,7 +329,7 @@ export const Projects = () => {
 				
 			</section>			
 		</div>
-		<Footer></Footer>
+		<Footer />
     </div>
     )
 }

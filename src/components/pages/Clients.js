@@ -1,6 +1,5 @@
 import React, { useState, useEffect } from 'react'
 import ClientService from '../../services/ClientService';
-import axios from 'axios'
 import Pagination from '../utils/Pagination';
 import '../../assets/css/popup.css'
 import { NewClientForm } from '../forms/NewClientForm';
@@ -8,56 +7,37 @@ import PaginationHelper from '../utils/PaginationHelper';
 import { Footer } from '../layout/Footer';
 import { Header } from '../layout/Header';
 import { AuthenticationService } from '../../services/AuthenticationService';
-import {ADMIN,WORKER} from '../utils/Constants'
+import {ROLE} from '../utils/Constants'
 
 
 export const Clients = () => {
 
 	const [clients, setClients] = useState([]);
 	const [client, setClient] = useState({});
-	const [loading, setLoading] = useState(false);
-	const [pageNumber, setPageNumber] = useState(0);
 	const [currentPage, setCurrentPage] = useState(1);
 	const [paginatedClients, setPaginatedClients] = useState([])
 	const [clientsPerPage, setClientsPerPage] = useState(2);
 	const [display, setDisplay] = useState(false);
 	const alphabet = ["a","b","c","d","e","f","g","h","i","j","k","l","m","n","o","p","q","r","s","t","u","v","w","x","y","z"];
 	const [close,setClose] = useState('details');
-	const [size, setSize] = useState(2);
+	const [size] = useState(2);
 	const [letters, setLetters] = useState('')
-	const [username, setUsername] = useState(AuthenticationService.getUsername());
-	const [role, setRole] = useState(AuthenticationService.getRole());
-	const [loggedUser, setLoggedUser] = useState({})
+	const [role] = useState(AuthenticationService.getRole());	
 	
     useEffect(() => {
 
-		
-		if(role == ADMIN){
-
-		
+		if(role === ROLE.ADMIN){
 
 			fetchPaginatedClientsWithParams();
-			
+		
 			ClientService.getClientsPaginate()
 			.then(response => {
 				setClients(response.data.content);
-				setLoading(false);
 			})
 		}
-		if(role == WORKER){
-			/*const fetchPaginatedClientsAssociatedWithTeamMember = async () =>{
-				ClientService.getClientsAssociatedWithTeamMemberPaginated(username)
-				.then(response => {
-				setPaginatedClients(response.data.content.filter(project => project.deleted == false));
-				})
-			};
 
-			fetchPaginatedClientsAssociatedWithTeamMember(username);*/
-			
-
+		if(role === ROLE.WORKER){
 			fetchPaginatedClientsWithoutParams();
-
-			
 		}
 
         
@@ -67,7 +47,6 @@ export const Clients = () => {
 		ClientService.getClientsPaginateWithParams(currentPage,size)
 		.then(response => {
 		setPaginatedClients(response.data.content);
-		setLoading(false);
 		})
 	};
 
@@ -75,7 +54,6 @@ export const Clients = () => {
 		ClientService.getClientsPaginateWithParams()
 		.then(response => {
 		setPaginatedClients(response.data.content);
-		setLoading(false);
 		})
 	};
 
@@ -101,7 +79,7 @@ export const Clients = () => {
 	const previousPage = async () => {
 		let previousPage = currentPage - 1;
 		if(currentPage < 0){
-			currentPage=0
+			setCurrentPage(0);
 		}
 		setCurrentPage(previousPage)
 		PaginationHelper.displayPaginated(previousPage, size, ClientService.getClientsPaginateWithParams, setPaginatedClients)
@@ -162,7 +140,7 @@ export const Clients = () => {
 					<h2><i class="ico clients"></i>Clients</h2>
 					<div class="grey-box-wrap reports">
 
-					{role == ADMIN ?
+					{role === ROLE.ADMIN ?
 						(
 							<a onClick={() => toggleModal()} class="link new-member-popup">Create new client</a>
 
@@ -226,7 +204,7 @@ export const Clients = () => {
 											</li>
 										</ul>
 										{
-											role == ADMIN ?
+											role === ROLE.ADMIN ?
 											(
 												<div class="buttons">
 													<div class="inner">
@@ -249,7 +227,7 @@ export const Clients = () => {
 						))}
 					</div>
 
-					{role == 'ROLE_ADMIN' ?
+					{role === ROLE.ADMIN ?
 						(
 						<div class="pagination">
 							<ul>

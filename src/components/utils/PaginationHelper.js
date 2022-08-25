@@ -12,7 +12,14 @@ const displayPaginatedByTeamMember = async (teamMemberId, pageNumber, size, getI
     });
 }
 
-export default{
+const PaginationHelper = {
     displayPaginated,
     displayPaginatedByTeamMember
  };
+
+export default PaginationHelper
+
+export {
+    displayPaginated,
+    displayPaginatedByTeamMember
+}

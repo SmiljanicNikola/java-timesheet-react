@@ -13,31 +13,28 @@ export const Calendar2 = () => {
     const selectedMonthFirstDate = new Date(selectedDate.getFullYear(), selectedDate.getMonth(), 0);
     const selectedMonthLastDate = new Date(selectedDate.getFullYear(), selectedDate.getMonth() + 1, 0);
     const {daysShort} = Calendar();
-    const [hoursPerDay, setHoursPerDay] = useState(0)
+    const [hoursPerDay] = useState(0)
     const [timeSheetActivities, setTimeSheetActivities] = useState([]);
     const [totalMonthTime, setTotalMonthTime] = useState(0)
     const startDate = CalendarUtil.findFirstDayOfTheWeek(selectedMonthFirstDate)
     const dates = CalendarUtil.getDatesFromStartPointToEndPoint(startDate, selectedMonthLastDate);
     let totalHours = 0;
-    const [username, setUsername] = useState(AuthenticationService.getUsername());
-	const [role, setRole] = useState(AuthenticationService.getRole());
+    const [username] = useState(AuthenticationService.getUsername());
+	const [role] = useState(AuthenticationService.getRole());
 	const [loggedUser, setLoggedUser] = useState({})
 
     useEffect(() => {
+
 		TeamMemberService.getTeamMemberByUsername(username).then((response => {
 			setLoggedUser(response.data);
 		}))
 
-       
         let startDate = (dates[0].toISOString().slice(0,10))
         let endDate = (dates[dates.length-1].toISOString().slice(0,10))
-
 
         TimeSheetActivityService.getTimeSheetsBetweenStartDateAndEndDate(startDate, endDate).then(response => {
             setTimeSheetActivities(response.data)
         })
-        
-         
 
         countingTotalHoursInMonth()
         
@@ -75,9 +72,7 @@ export const Calendar2 = () => {
     }
 
     for(let i = 0; i < timeSheetActivities.length; i++){
-        {
-            totalHours = totalHours + timeSheetActivities[i].time
-        }
+        totalHours = totalHours + timeSheetActivities[i].time
     }
 
     return (
@@ -110,11 +105,11 @@ export const Calendar2 = () => {
                         <th>sun</th>
                     </tr>
                     <tr>
-                        <>
+                        
                         {
                         <CalendarDays dates={dates} hours={hoursPerDay} timeSheetActivities={timeSheetActivities}/>
                         }
-                        </>
+                       
                     </tr>
                 </table>
                 <br></br>

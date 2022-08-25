@@ -1,4 +1,3 @@
-import axios from 'axios'
 import httpClient from "../auth/JwtInterceptors"
 
 const TIMESHEET_REST_API_URL = `${process.env.REACT_APP_BACKEND_URL}/api/timeSheetActivities`;
@@ -26,7 +25,7 @@ class TimeSheetActivityService {
     }
 
     searchTimeSheetsActivities(projectId,teamMemberId, categoryId, startDate, endDate){
-        return httpClient.get(TIMESHEET_REST_API_URL+"/search?"+"projectId="+projectId+"&teamMemberId=" + teamMemberId + "&categoryId=" + categoryId + "&startDate=" + startDate + "&endDate=" + endDate);
+        return httpClient.get(TIMESHEET_REST_API_URL+"/search?" + "projectId="+projectId+"&teamMemberId=" + teamMemberId + "&categoryId=" + categoryId + "&startDate=" + startDate + "&endDate=" + endDate);
     }
 
     exportPDFReport(timeSheets){

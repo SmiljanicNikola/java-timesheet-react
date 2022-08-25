@@ -20,7 +20,10 @@ import org.springframework.test.web.servlet.request.MockMvcRequestBuilders;
 import org.springframework.test.web.servlet.setup.MockMvcBuilders;
 import org.springframework.web.context.WebApplicationContext;
 
+import com.fasterxml.jackson.core.JsonProcessingException;
+
 import vega.it.TimeSheetApp.model.Category;
+import vega.it.TimeSheetApp.model.Project;
 import vega.it.TimeSheetApp.repository.TeamMemberRepository;
 import vega.it.TimeSheetApp.security.JWTRequestFilter;
 import vega.it.TimeSheetApp.security.TokenUtils;
@@ -74,5 +77,19 @@ public class CategoryControllerTests {
         mockMvc.perform(MockMvcRequestBuilders.get("/api/categories/paginate").contentType(MediaType.APPLICATION_JSON))
                 .andExpect(status().isOk());
 	}
+	
+	@Test
+	public void testSaveCategory_failed() throws JsonProcessingException, Exception{
+		Category newCategory = new Category("novaKategorija");
+		Category savedCategory = new Category(3, "novaKategorija");
+		
+		Mockito.when(categoryService.save(newCategory)).thenReturn(savedCategory);
+		
+		  mockMvc.perform(MockMvcRequestBuilders.post("/api/categories").contentType(MediaType.APPLICATION_JSON))
+          .andExpect(status().isCreated());
+		
+		
+	}
+	
 	
 }
