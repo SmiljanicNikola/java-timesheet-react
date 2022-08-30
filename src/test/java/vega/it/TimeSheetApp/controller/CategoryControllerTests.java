@@ -21,18 +21,22 @@ import org.springframework.test.web.servlet.setup.MockMvcBuilders;
 import org.springframework.web.context.WebApplicationContext;
 
 import com.fasterxml.jackson.core.JsonProcessingException;
+import com.fasterxml.jackson.databind.ObjectMapper;
 
+import ch.qos.logback.core.joran.conditional.ThenAction;
+import vega.it.TimeSheetApp.DTO.CategoryDTO;
 import vega.it.TimeSheetApp.model.Category;
-import vega.it.TimeSheetApp.model.Project;
+import vega.it.TimeSheetApp.repository.CategoryRepository;
 import vega.it.TimeSheetApp.repository.TeamMemberRepository;
 import vega.it.TimeSheetApp.security.JWTRequestFilter;
-import vega.it.TimeSheetApp.security.TokenUtils;
 import vega.it.TimeSheetApp.service.CategoryService;
-import vega.it.TimeSheetApp.service.ClientService;
-import vega.it.TimeSheetApp.service.CountryService;
-import vega.it.TimeSheetApp.service.DayService;
-import vega.it.TimeSheetApp.service.TeamMemberService;
+
+import static org.hamcrest.Matchers.hasSize;
+import static org.hamcrest.Matchers.notNullValue;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.status;
+import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.jsonPath;
+import static org.assertj.core.api.AssertionsForInterfaceTypes.assertThat;
+
 
 
 @WebMvcTest(CategoryController.class)
@@ -53,8 +57,6 @@ public class CategoryControllerTests {
 	private JWTRequestFilter jwtRequestFilter;
 	
 	
-	
-	
 	@BeforeEach
     public void Init() throws Exception {
         this.mockMvc = MockMvcBuilders.webAppContextSetup(this.webApplicationContext).build();
@@ -65,31 +67,67 @@ public class CategoryControllerTests {
     Category category2 = new Category(2, "categoryType2");
 
 	@Test
-	public void getCategoriesPageable() throws Exception{
+	public void getCategoriesPageable_success() throws Exception{
+		
         ArrayList<Category> categories = new ArrayList<>(Arrays.asList(category1,category2));
         PageImpl<Category> categoriesPage = new PageImpl<Category>(categories);
         
         Mockito.when(categoryService.findAll(org.mockito.ArgumentMatchers.isA(Pageable.class))).thenReturn(categoriesPage);
-        //Mockito.when(teamMemberService.findAllTeamMembersPaginate(org.mockito.ArgumentMatchers.isA(Pageable.class))).thenReturn(teamMembersPage);
-
-        
+   
 
         mockMvc.perform(MockMvcRequestBuilders.get("/api/categories/paginate").contentType(MediaType.APPLICATION_JSON))
-                .andExpect(status().isOk());
+                .andExpect(status().isOk())
+        		.andExpect(jsonPath("$", notNullValue()));
+
 	}
 	
 	@Test
-	public void testSaveCategory_failed() throws JsonProcessingException, Exception{
+	public void testSaveCategory_success() throws JsonProcessingException, Exception{
+		
 		Category newCategory = new Category("novaKategorija");
+		
 		Category savedCategory = new Category(3, "novaKategorija");
 		
-		Mockito.when(categoryService.save(newCategory)).thenReturn(savedCategory);
+		Mockito.when(categoryService.save(Mockito.any(Category.class))).thenReturn(savedCategory);
 		
-		  mockMvc.perform(MockMvcRequestBuilders.post("/api/categories").contentType(MediaType.APPLICATION_JSON))
-          .andExpect(status().isCreated());
-		
-		
+		  mockMvc.perform(MockMvcRequestBuilders.post("/api/categories")
+				  .content(asJsonString(newCategory))
+				  .contentType(MediaType.APPLICATION_JSON))
+          		  .andExpect(status().isCreated())
+          		  .andExpect(jsonPath("$.type").value("novaKategorija"));
+
 	}
+	
+	
+	@Test
+    public void testUpdateCategory_success() throws Exception {
+
+    	Mockito.when(categoryService.findById(category1.getId())).thenReturn(category1);
+    	    	
+    	category1.setType("updatedCategory1");
+    	
+    	Category category2 = new Category(1, category1.getType());
+    	
+        Mockito.when(categoryService.save(category1)).thenReturn(category2);
+
+		  mockMvc.perform(MockMvcRequestBuilders.put("/api/categories/1")
+	               	.content(asJsonString(category1))
+	               	.contentType(MediaType.APPLICATION_JSON))
+		  			.andExpect(status().isOk())
+	                .andExpect(jsonPath("$", notNullValue()))
+	                .andExpect(jsonPath("$.type").value("updatedCategory1"));
+
+		  		
+    }
+	
+	 public static String asJsonString(final Object obj) {
+	        try {
+	            return new ObjectMapper().writeValueAsString(obj);
+	        } catch (Exception e) {
+	        	throw new RuntimeException(e);
+     }
+ }
+
 	
 	
 }

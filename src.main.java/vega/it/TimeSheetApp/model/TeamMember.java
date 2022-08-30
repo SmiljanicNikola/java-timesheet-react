@@ -171,6 +171,36 @@ public class TeamMember {
 	public void setDeleted(Boolean deleted) {
 		this.deleted = deleted;
 	}
+	
+	
+	
+	
+
+	public TeamMember(Integer id, String firstname, String lastname, String username, String password,
+			Integer hoursPerWeek, String email, boolean blocked, Boolean deleted, Roles role) {
+		super();
+		this.id = id;
+		this.firstname = firstname;
+		this.lastname = lastname;
+		this.username = username;
+		this.password = password;
+		this.hoursPerWeek = hoursPerWeek;
+		this.email = email;
+		this.blocked = blocked;
+		this.deleted = deleted;
+		this.role = role;
+	}
+
+	public TeamMember(String firstname, String lastname, String username, String password, Integer hoursPerWeek,
+			String email) {
+		super();
+		this.firstname = firstname;
+		this.lastname = lastname;
+		this.username = username;
+		this.password = password;
+		this.hoursPerWeek = hoursPerWeek;
+		this.email = email;
+	}
 
 	public TeamMember(Integer id, String firstname, String lastname, String username, String password,
 			Integer hoursPerWeek, String email, boolean blocked, Roles role) {
@@ -189,6 +219,18 @@ public class TeamMember {
 	
 	
 	
+
+	public TeamMember(String firstname, String lastname, String username, String password, Integer hoursPerWeek,
+			String email, Roles role) {
+		super();
+		this.firstname = firstname;
+		this.lastname = lastname;
+		this.username = username;
+		this.password = password;
+		this.hoursPerWeek = hoursPerWeek;
+		this.email = email;
+		this.role = role;
+	}
 
 	public TeamMember() {
 		super();

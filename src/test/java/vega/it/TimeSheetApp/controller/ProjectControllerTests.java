@@ -22,6 +22,7 @@ import org.springframework.test.web.servlet.setup.MockMvcBuilders;
 import org.springframework.web.context.WebApplicationContext;
 
 import com.fasterxml.jackson.core.JsonProcessingException;
+import com.fasterxml.jackson.databind.ObjectMapper;
 
 import vega.it.TimeSheetApp.DTO.AddProjectRequestDTO;
 import vega.it.TimeSheetApp.DTO.ProjectDTO;
@@ -92,8 +93,7 @@ public class ProjectControllerTests {
         Mockito.when(projectService.findAllProjectsPaginate(org.mockito.ArgumentMatchers.isA(Pageable.class))).thenReturn(projectsPage);
         //Mockito.when(teamMemberService.findAllTeamMembersPaginate(org.mockito.ArgumentMatchers.isA(Pageable.class))).thenReturn(teamMembersPage);
 
-        
-
+       
         mockMvc.perform(MockMvcRequestBuilders.get("/api/projects/paginate").contentType(MediaType.APPLICATION_JSON))
                 .andExpect(status().isOk());
         }*/
@@ -108,17 +108,28 @@ public class ProjectControllerTests {
     }
 	
 	@Test
-	public void testSaveProject_failed() throws JsonProcessingException, Exception{
+	public void testSaveProject_success() throws JsonProcessingException, Exception{
+		
 		Project newProject = new Project("projectDesc3", "some proj3", client, teamMember);
+		
 		Project savedProject = new Project(3, "projectDesc3", "some proj3", client, teamMember, false,false);
 		
-		Mockito.when(projectService.save(newProject)).thenReturn(savedProject);
+		Mockito.when(projectService.save(Mockito.any(Project.class))).thenReturn(savedProject);
 		
-		  mockMvc.perform(MockMvcRequestBuilders.post("/api/projects").contentType(MediaType.APPLICATION_JSON))
-          .andExpect(status().isCreated());
-		
+		  mockMvc.perform(MockMvcRequestBuilders.post("/api/projects")
+	               	.content(asJsonString(newProject))
+	               	.contentType(MediaType.APPLICATION_JSON))
+         			.andExpect(status().isCreated());
 		
 	}
+	
+	 public static String asJsonString(final Object obj) {
+	        try {
+	            return new ObjectMapper().writeValueAsString(obj);
+	        } catch (Exception e) {
+	        	throw new RuntimeException(e);
+     }
+ }
 	
 
 

@@ -39,7 +39,6 @@ import vega.it.TimeSheetApp.service.DayService;
 import vega.it.TimeSheetApp.service.ProjectService;
 import vega.it.TimeSheetApp.service.TeamMemberService;
 import vega.it.TimeSheetApp.service.TimeSheetActivityService;
-import vega.it.TimeSheetApp.service.implementation.UserDetailsServiceImpl;
 
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.status;
 
