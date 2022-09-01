@@ -281,21 +281,17 @@ export const Projects = () => {
 							</li>
 							</ul>
 							{
-								role === ROLE.ADMIN ?
-								(
-									<div class="buttons">
-										<div class="inner">
-											{/* eslint-disable-next-line jsx-a11y/anchor-is-valid*/}
-											<a class="btn green" onClick={() => updateProject(project.id)}>Save</a>
-											{/* eslint-disable-next-line jsx-a11y/anchor-is-valid*/}
-											<a class="btn red" onClick={() => deleteProject(project.id)}>Delete</a>
-										</div>
+								role === ROLE.ADMIN &&
+								
+								<div class="buttons">
+									<div class="inner">
+										{/* eslint-disable-next-line jsx-a11y/anchor-is-valid*/}
+										<a class="btn green" onClick={() => updateProject(project.id)}>Save</a>
+										{/* eslint-disable-next-line jsx-a11y/anchor-is-valid*/}
+										<a class="btn red" onClick={() => deleteProject(project.id)}>Delete</a>
 									</div>
-								)
-								:
-								(
-									<></>
-								)
+								</div>
+								
 							}
 						</div>
 					</div>

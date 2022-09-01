@@ -1,3 +1,4 @@
+/* eslint-disable jsx-a11y/anchor-is-valid */
 import React, {useState, useEffect} from 'react'
 import Pagination from '../utils/Pagination';
 import CategoryService from '../../services/CategoryService';
@@ -178,21 +179,17 @@ export const Categories = () => {
 											<input type="text" onChange={handleTypeChange} defaultValue={category.type} class="in-text" />
 										</li>										
 									</ul>
-									{
-										role === ROLE.ADMIN ?
-										(
-											<div class="buttons">
-												<div class="inner">
-													<a onClick={ () => saveCategory(category.id)} class="btn green">Save</a>
-													<a onClick={ () => deleteCategory(category.id)} class="btn red">Delete</a>
+									
+										{ 
+											role === ROLE.ADMIN &&
+										
+												<div class="buttons">
+													<div class="inner">
+														<a onClick={ () => saveCategory(category.id)} class="btn green">Save</a>
+														<a onClick={ () => deleteCategory(category.id)} class="btn red">Delete</a>
+													</div>
 												</div>
-											</div>
-										)
-										:
-										(
-											<></>
-										)
-									}
+										}		
 									
 								</div>
 							</div>

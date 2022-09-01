@@ -4,6 +4,7 @@ import {AuthenticationService} from '../../services/AuthenticationService';
 import Logo from '../../assets/img/logo.png'
 import TeamMemberService from '../../services/TeamMemberService';
 import { useNavigate } from "react-router-dom";
+import { ROLE } from '../utils/Constants';
 
 
 export const Header = () => {
@@ -49,15 +50,11 @@ export const Header = () => {
 					
 					<ul class="user right">
 						<li>
-							{loggedUser.firstname != null || loggedUser.lastname != undefined
-							?
-							(
+							{(loggedUser.firstname != null || loggedUser.lastname !== undefined) &&
+							
 								<a>{loggedUser.firstname + " " + loggedUser.lastname}</a>
-							)
-							:
-							(
-								<a></a>
-							)
+							
+							
 							}
 							
 							<div class="invisible"></div>
@@ -76,7 +73,7 @@ export const Header = () => {
 							</div>
 						</li>
 						<li class="last">
-							{loggedUser.username != null || loggedUser.username != undefined
+							{loggedUser.username != null || loggedUser.username !== undefined
 							?
 							(
 								<a href="javascript:;" onClick={logout}>Logout</a>
@@ -102,39 +99,18 @@ export const Header = () => {
 								<a href="projects" class="btn nav">Projects</a>
 							</li>
 							<li>
-								{role == 'ROLE_ADMIN'
-								?
-								(
+								{ role === ROLE.ADMIN  &&		
 									<a href="categories" class="btn nav">Categories</a>
-								)
-								:
-								(
-									<div></div>
-								)
 								}
 							</li>
 							<li>
-								{role == 'ROLE_ADMIN'
-								?
-								(
+								{ role === ROLE.ADMIN &&
 									<a href="teamMembers" class="btn nav">Team members</a>
-								)
-								:
-								(
-									<div></div>
-								)
 								}
 							</li>
 							<li class="last">
-								{role == 'ROLE_ADMIN'
-								?
-								(
+								{ role === ROLE.ADMIN &&
 									<a href="reports" class="btn nav">Reports</a>
-								)
-								:
-								(
-									<div></div>
-								)
 								}
 							</li>
 						</ul>

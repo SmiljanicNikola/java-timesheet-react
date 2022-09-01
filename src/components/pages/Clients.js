@@ -16,7 +16,7 @@ export const Clients = () => {
 	const [client, setClient] = useState({});
 	const [currentPage, setCurrentPage] = useState(1);
 	const [paginatedClients, setPaginatedClients] = useState([])
-	const [clientsPerPage, setClientsPerPage] = useState(2);
+	const [clientsPerPage] = useState(2);
 	const [display, setDisplay] = useState(false);
 	const alphabet = ["a","b","c","d","e","f","g","h","i","j","k","l","m","n","o","p","q","r","s","t","u","v","w","x","y","z"];
 	const [close,setClose] = useState('details');
@@ -139,16 +139,9 @@ export const Clients = () => {
 				<section class="content">
 					<h2><i class="ico clients"></i>Clients</h2>
 					<div class="grey-box-wrap reports">
-
-					{role === ROLE.ADMIN ?
-						(
+					{
+						role === ROLE.ADMIN &&
 							<a onClick={() => toggleModal()} class="link new-member-popup">Create new client</a>
-
-						)
-						:
-						(
-							<></>
-						)
 					}
 						<div class="search-page">
 							<input type="search" onChange={handleSearchChange} name="search-clients" class="in-search" />
@@ -204,21 +197,15 @@ export const Clients = () => {
 											</li>
 										</ul>
 										{
-											role === ROLE.ADMIN ?
-											(
+											role === ROLE.ADMIN &&
+											
 												<div class="buttons">
 													<div class="inner">
 														<a onClick={ () => saveClient(client.id)} class="btn green">Save</a>
 														<a onClick={ () => deleteClient(client.id)} class="btn red">Delete</a>
 													</div>
 												</div>
-											)
-											:
-											(
-												<></>
-											)
-										}
-										
+										}	
 
 									</div>
 							</div>
@@ -227,8 +214,8 @@ export const Clients = () => {
 						))}
 					</div>
 
-					{role === ROLE.ADMIN ?
-						(
+					{role === ROLE.ADMIN &&
+						
 						<div class="pagination">
 							<ul>
 								<li>
@@ -248,11 +235,7 @@ export const Clients = () => {
 								</li>
 							</ul>
 						</div>
-						)
-						:
-						(
-							<></>
-						)
+						
 					}
 				</section>			
 			</div>

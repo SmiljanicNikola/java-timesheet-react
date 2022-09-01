@@ -21,7 +21,7 @@ export const Calendar2 = () => {
     let totalHours = 0;
     const [username] = useState(AuthenticationService.getUsername());
 	const [role] = useState(AuthenticationService.getRole());
-	const [loggedUser, setLoggedUser] = useState({})
+	const [setLoggedUser] = useState({})
 
     useEffect(() => {
 

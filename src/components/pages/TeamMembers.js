@@ -13,11 +13,11 @@ export const TeamMembers = () => {
 	const [display, setDisplay] = useState(false);
 	const [currentPage, setCurrentPage] = useState(1);
 	const [paginatedTeamMembers, setPaginatedTeamMembers] = useState([])
-	const [teamMembersPerPage, setTeamMembersPerPage] = useState(2);
+	const [teamMembersPerPage] = useState(2);
 	const [hoursPerWeek, setHoursPerWeek] = useState('')
 	const [teamMember, setTeamMember] = useState({})
-	const [size, setSize] = useState(2);
-	const [blocked, setBlocked] = useState(false)
+	const [size] = useState(2);
+	const [setBlocked] = useState(false)
 	let updatedTeamMember = {}
 
     useEffect(() => {

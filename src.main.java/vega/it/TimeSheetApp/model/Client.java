@@ -102,6 +102,16 @@ public class Client {
 	
 	
 
+	public Client(Integer id, String clientName, String address, String city, String zipCode, Country country) {
+		super();
+		this.id = id;
+		this.clientName = clientName;
+		this.address = address;
+		this.city = city;
+		this.zipCode = zipCode;
+		this.country = country;
+	}
+
 	public Client(Integer id, String clientName, String address, String city, String zipCode, Country country,
 			Boolean deleted) {
 		super();
