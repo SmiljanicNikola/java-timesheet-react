@@ -16,6 +16,7 @@ import org.springframework.format.annotation.DateTimeFormat;
 import org.springframework.format.annotation.DateTimeFormat.ISO;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
+import org.springframework.security.core.authority.SimpleGrantedAuthority;
 import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.web.bind.annotation.CrossOrigin;
 import org.springframework.web.bind.annotation.DeleteMapping;
@@ -193,10 +194,14 @@ public class TimeSheetActivityController {
 	@PostMapping()
     public ResponseEntity<TimeSheetActivityDTO> saveTimeSheetActivity(@RequestBody AddActivityDTORequest addActivityDTORequest) {
 		
+		SimpleGrantedAuthority userRole = (SimpleGrantedAuthority) SecurityContextHolder.getContext().getAuthentication().getAuthorities().toArray()[0];
+		String teamMemberUsername = SecurityContextHolder.getContext().getAuthentication().getName();
+		TeamMember teamMember = teamMemberService.findByUsername(teamMemberUsername);
+		
 		TimeSheetActivity timeSheetActivity = new TimeSheetActivity();
 		timeSheetActivity.setDescription(addActivityDTORequest.getDescription());
 		timeSheetActivity.setProject(this.projectService.findById(addActivityDTORequest.getProjectId()));
-		timeSheetActivity.setTeamMember(this.teamMemberService.findById(addActivityDTORequest.getTeamMemberId()));
+		timeSheetActivity.setTeamMember(this.teamMemberService.findById(teamMember.getId()));
 		timeSheetActivity.setCategory(this.categoryService.findById(addActivityDTORequest.getCategoryId()));
 		timeSheetActivity.setTime(addActivityDTORequest.getTime());
 		timeSheetActivity.setOvertime(addActivityDTORequest.getOvertime());

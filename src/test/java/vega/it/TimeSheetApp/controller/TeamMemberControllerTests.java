@@ -54,6 +54,7 @@ import static org.assertj.core.api.AssertionsForInterfaceTypes.assertThat;
 import static org.hamcrest.Matchers.notNullValue;
 
 
+
 @WebMvcTest(TeamMemberController.class)
 //@DataJpaTest
 public class TeamMemberControllerTests {
@@ -116,7 +117,8 @@ public class TeamMemberControllerTests {
 
         Mockito.when(teamMemberRepository.findAll()).thenReturn(teamMembers);
 
-        mockMvc.perform(MockMvcRequestBuilders.get("/api/teamMembers").contentType(MediaType.APPLICATION_JSON))
+        mockMvc.perform(MockMvcRequestBuilders.get("/api/teamMembers")
+        		.contentType(MediaType.APPLICATION_JSON))
                 .andExpect(status().isOk())
         		.andExpect(jsonPath("$", notNullValue()));
 
@@ -160,6 +162,16 @@ public class TeamMemberControllerTests {
             .andExpect(status().isOk())
     		.andExpect(jsonPath("$", notNullValue()))
             .andExpect(jsonPath("$.username").value("mare"));
+
+    }
+	
+	@Test
+ 	public void getMemberByNonExistentUsername_success() throws Exception{		
+         		
+			Mockito.when(teamMemberService.findByUsername("milko")).thenReturn(null);	         
+	       	        
+	        mockMvc.perform(MockMvcRequestBuilders.get("/api/teamMembers/username/milko").contentType(MediaType.APPLICATION_JSON))
+            .andExpect(status().isNotFound());
 
     }
 	
@@ -231,7 +243,6 @@ public class TeamMemberControllerTests {
 			teamMember2.setDeleted(true);
 		     
 			Mockito.when(teamMemberService.save(Mockito.any(TeamMember.class))).thenReturn(teamMember2);
-		    //teamMemberRepository.save(teamMember2);
 		     
 			Mockito.when(teamMemberService.findByUsername(teamMember2.getUsername())).thenReturn(teamMember2);
 			
@@ -249,14 +260,13 @@ public class TeamMemberControllerTests {
     public void deleteTeamMember_stillWORKINGGGG() throws Exception {
 		
 		
-        //Mockito.when(teamMemberRepository.deleteById(teamMember2.getId())).thenReturn(teamMember2);
+    	Mockito.when(teamMemberService.findById(teamMember1.getId())).thenReturn(teamMember1);
         
-        /*Mockito.doNothing().when(teamMemberService).delete(teamMember2.getId());
-
         mockMvc.perform(MockMvcRequestBuilders
-                        .delete("/api/teamMembers/2")
+                        .delete("/api/teamMembers/1")
                         .contentType(MediaType.APPLICATION_JSON))
-        				.andExpect(status().isOk());*/
+        				.andExpect(status().isOk());
+
     }
 	
 	

@@ -33,26 +33,25 @@ public class TokenUtils {
 	 
 	 
 	 private Claims getClaimsFromToken(String token) {
-	        Claims claims;
 	        try {
-	            claims = Jwts.parser().setSigningKey(this.secret)
+	        	Claims claims = Jwts.parser().setSigningKey(this.secret)
 	                    .parseClaimsJws(token).getBody();
+	            return claims;
 	        } catch (Exception e) {
-	            claims = null;
+	            return null;
 	        }
-	        return claims;
 	    }
 	 
 	 
 	 public Date getExpirationDateFromToken(String token) {
-	        Date expirationDate;
 	        try {
 	            final Claims claims = this.getClaimsFromToken(token);
-	            expirationDate = claims.getExpiration();
+	            Date expirationDate = claims.getExpiration();
+	            return expirationDate;
 	        } catch (Exception e) {
-	            expirationDate = null;
+	            return null;
 	        }
-	        return expirationDate;
+	        
 	    }
 	 
 	 

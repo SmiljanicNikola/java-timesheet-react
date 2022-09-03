@@ -125,10 +125,9 @@ export const NewProjectForm = (props) => {
                         <button className="close-btn" onClick={ () => closePopup()}>
 							Close
 						</button>
-						<div class="buttons">
-							<div class="inner">
-								<a href="javascript:;" onClick={() => saveProject(project)} class="btn green">Save</a>
-							</div>
+
+						<div class="buttons" style={{marginTop:'25px'}}>
+							<a href="javascript:;" onClick={() => saveProject(project)} class="btn green">Save</a>
 						</div>
 					</div>
 				</div>

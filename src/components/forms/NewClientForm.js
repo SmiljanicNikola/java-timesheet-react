@@ -80,10 +80,8 @@ export const NewClientForm = (props) => {
 								</select>
 							</li>
 						</ul>
-						<div class="buttons">
-							<div class="inner">
+						<div class="buttons" style={{marginTop:'25px'}}>				
 								<a onClick={() => saveClient(client)} class="btn green">Save</a>
-							</div>
 						</div>
 					</div>
 				</div>

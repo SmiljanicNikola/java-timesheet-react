@@ -67,17 +67,13 @@ public class ClientController {
 		
 		Object userRole = SecurityContextHolder.getContext().getAuthentication().getAuthorities().toArray()[0];
 		String teamMemberUsername = SecurityContextHolder.getContext().getAuthentication().getName();
-		
-		TeamMember teamMember = teamMemberService.findByUsername(teamMemberUsername);
-		
+				
 		Page<Client> page = null;
 		if(userRole.toString().contains("ROLE_WORKER")) {
-			//page = projectService.findAllProjectsPaginatedByTeamMemberUsername(teamMemberUsername, pageable);
 			page = clientService.findAllClientsPaginatedByTeamMemberUsername(teamMemberUsername, pageable);
 		}
 		
 		if(userRole.toString().contains("ROLE_ADMIN")) {
-			
 			page = clientService.findAllClientsPagination(pageable);
 		}
 		

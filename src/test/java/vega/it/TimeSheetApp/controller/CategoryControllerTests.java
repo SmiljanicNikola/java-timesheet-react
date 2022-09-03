@@ -26,6 +26,7 @@ import com.fasterxml.jackson.databind.ObjectMapper;
 import ch.qos.logback.core.joran.conditional.ThenAction;
 import vega.it.TimeSheetApp.DTO.CategoryDTO;
 import vega.it.TimeSheetApp.model.Category;
+import vega.it.TimeSheetApp.model.Client;
 import vega.it.TimeSheetApp.repository.CategoryRepository;
 import vega.it.TimeSheetApp.repository.TeamMemberRepository;
 import vega.it.TimeSheetApp.security.JWTRequestFilter;
@@ -60,8 +61,7 @@ public class CategoryControllerTests {
 	@BeforeEach
     public void Init() throws Exception {
         this.mockMvc = MockMvcBuilders.webAppContextSetup(this.webApplicationContext).build();
-    }
-	    
+    }   
 	
     Category category1 = new Category(1, "categoryType1");
     Category category2 = new Category(2, "categoryType2");
@@ -82,6 +82,21 @@ public class CategoryControllerTests {
 	}
 	
 	@Test
+	public void filterCategoryByLetterOfType_success() throws Exception{
+		
+	   ArrayList<Category> categories = new ArrayList<>(Arrays.asList(category1,category2));
+
+       Mockito.when(categoryService.filterAllCategoriesByFirstLetter("c")).thenReturn(categories);
+		
+       mockMvc.perform(MockMvcRequestBuilders.get("/api/categories/filterBy/c").contentType(MediaType.APPLICATION_JSON))
+               .andExpect(status().isOk())
+               .andExpect(jsonPath("$", notNullValue()))
+		   	   .andExpect(jsonPath("$[0].type").value("categoryType1"))
+		   	   .andExpect(jsonPath("$[1].type").value("categoryType2"));
+
+	}
+	
+	@Test
 	public void testSaveCategory_success() throws JsonProcessingException, Exception{
 		
 		Category newCategory = new Category("novaKategorija");
@@ -95,7 +110,6 @@ public class CategoryControllerTests {
 				  .contentType(MediaType.APPLICATION_JSON))
           		  .andExpect(status().isCreated())
           		  .andExpect(jsonPath("$.type").value("novaKategorija"));
-
 	}
 	
 	
@@ -116,8 +130,7 @@ public class CategoryControllerTests {
 		  			.andExpect(status().isOk())
 	                .andExpect(jsonPath("$", notNullValue()))
 	                .andExpect(jsonPath("$.type").value("updatedCategory1"));
-
-		  		
+	
     }
 	
 	 public static String asJsonString(final Object obj) {

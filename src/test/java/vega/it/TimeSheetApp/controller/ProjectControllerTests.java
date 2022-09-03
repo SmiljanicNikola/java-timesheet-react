@@ -1,5 +1,9 @@
 package vega.it.TimeSheetApp.controller;
 
+import static org.hamcrest.Matchers.notNullValue;
+import static org.junit.jupiter.api.Assertions.assertEquals;
+import static org.junit.jupiter.api.Assertions.assertTrue;
+import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.jsonPath;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.status;
 
 import java.util.ArrayList;
@@ -12,6 +16,7 @@ import org.mockito.Mockito;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.autoconfigure.web.servlet.WebMvcTest;
 import org.springframework.boot.test.mock.mockito.MockBean;
+import org.springframework.data.crossstore.ChangeSetPersister.NotFoundException;
 import org.springframework.data.domain.PageImpl;
 import org.springframework.data.domain.Pageable;
 import org.springframework.http.MediaType;
@@ -54,7 +59,6 @@ public class ProjectControllerTests {
 	@MockBean
 	private TeamMemberService teamMemberService;
 	
-	 
 	@MockBean
 	private ClientService clientService;
 	
@@ -108,6 +112,15 @@ public class ProjectControllerTests {
     }
 	
 	@Test
+ 	public void getProjectByNonExistentId_success() throws Exception{		
+
+        Mockito.when(projectService.findById(7)).thenReturn(null);
+		
+        mockMvc.perform(MockMvcRequestBuilders.get("/api/projects/7").contentType(MediaType.APPLICATION_JSON))
+                .andExpect(status().isNotFound());
+    }
+	
+	@Test
 	public void testSaveProject_success() throws JsonProcessingException, Exception{
 		
 		Project newProject = new Project("projectDesc3", "some proj3", client, teamMember);
@@ -122,6 +135,52 @@ public class ProjectControllerTests {
          			.andExpect(status().isCreated());
 		
 	}
+	
+	@Test
+    public void testUpdateProject_success() throws Exception {
+		
+    	Mockito.when(projectService.findById(project1.getId())).thenReturn(project1);
+
+    	TeamMember teamMemberTest = new TeamMember(5, "member", "someLastname", "someUsername", "memberPassword", 8, "memberrrr@gmail.com", false, Roles.ADMIN);
+    	Client clientTest = new Client(5, "client", "address", "Novi Sad", "12020", country, false);
+    	 
+		project1.setProjectName("updatedProjectName");
+		project1.setDescription("updatedDescription");
+		project1.setClient(clientService.findById(clientTest.getId()));
+		project1.setLead(teamMemberService.findById(teamMemberTest.getId()));
+		
+		Project updatedProject = new Project(
+				project1.getDescription(),
+				project1.getProjectName(),
+				project1.getClient(),
+				project1.getLead(),
+				project1.getFinished(),
+				project1.getDeleted());
+			
+		  Mockito.when(projectService.save(project1)).thenReturn(updatedProject);
+	
+	
+		  mockMvc.perform(MockMvcRequestBuilders.put("/api/projects/1")
+	               	.content(asJsonString(project1))
+	               	.contentType(MediaType.APPLICATION_JSON))
+		  			.andExpect(status().isOk())
+	                .andExpect(jsonPath("$", notNullValue()))
+	                .andExpect(jsonPath("$.projectName").value("updatedProjectName"))
+	                .andExpect(jsonPath("$.description").value("updatedDescription"));
+	                
+
+    }
+	
+	@Test
+	public void deleteProjectByNonExistentId_success() throws Exception {
+	    Mockito.when(projectService.findById(5)).thenReturn(null);
+
+	    mockMvc.perform(MockMvcRequestBuilders
+	            .delete("/api/projects/2")
+	            .contentType(MediaType.APPLICATION_JSON))
+	    		.andExpect(status().is4xxClientError());
+	}
+	
 	
 	 public static String asJsonString(final Object obj) {
 	        try {

@@ -13,6 +13,7 @@ import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
+import org.springframework.security.core.authority.SimpleGrantedAuthority;
 import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.web.bind.annotation.CrossOrigin;
 import org.springframework.web.bind.annotation.DeleteMapping;
@@ -69,21 +70,23 @@ public class ProjectController {
 	@GetMapping("/paginate")
 	public ResponseEntity<Page<Project>> findAll(Pageable pageable){
 		
-		Object userRole = SecurityContextHolder.getContext().getAuthentication().getAuthorities().toArray()[0];
+		SimpleGrantedAuthority userRole = (SimpleGrantedAuthority) SecurityContextHolder.getContext().getAuthentication().getAuthorities().toArray()[0];
 		String teamMemberUsername = SecurityContextHolder.getContext().getAuthentication().getName();
-		
+		//Custom context klasu koji ce sadrzati sve stvari iz tokena i ekstrakovati sve da ne moram u kontroleru
 		TeamMember teamMember = teamMemberService.findByUsername(teamMemberUsername);
-		
+		//TimeSheetCallContext custom klasa koja prima SecurityContextHolder
+		System.out.println(userRole);
+		System.out.println(userRole.toString());
+
 		Page<Project> page = null;
-		if(userRole.toString().contains("ROLE_WORKER")) {
-			//page = projectService.findAllProjectsPaginatedByTeamMemberUsername(teamMemberUsername, pageable);
+		if(userRole.getAuthority().equalsIgnoreCase("ROLE_WORKER")) {
 			page = projectService.findAllProjectsPaginatedByTeamMemberId(teamMember.getId(), pageable);
 		}
-		
-		if(userRole.toString().contains("ROLE_ADMIN")) {
-			
+		//Ekstraktovati custom kontroler iz poziva drugog
+		if(userRole.getAuthority().equalsIgnoreCase("ROLE_ADMIN")) {
 			page = projectService.findAllProjectsPaginate(pageable);
 		}
+		
 		return new ResponseEntity<>(page,HttpStatus.OK);
 			
 	}

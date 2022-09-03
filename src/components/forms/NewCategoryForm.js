@@ -1,3 +1,4 @@
+/* eslint-disable jsx-a11y/anchor-is-valid */
 import React,{useState} from 'react'
 import CategoryService from '../../services/CategoryService';
 
@@ -28,10 +29,8 @@ export const NewCategoryForm = (props) => {
 						Close
 					</button>
 					
-					<div class="buttons">
-						<div class="inner">
-							<a class="btn green" onClick={() => saveCategory(category)}>Add Category</a>
-						</div>
+					<div class="buttons" style={{marginTop:'20px'}}>
+						<a class="btn green" onClick={() => saveCategory(category)}>Add Category</a>
 					</div>
 				</div>
 			</div>

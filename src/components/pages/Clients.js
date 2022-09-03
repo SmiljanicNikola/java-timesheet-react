@@ -1,3 +1,4 @@
+/* eslint-disable jsx-a11y/anchor-is-valid */
 import React, { useState, useEffect } from 'react'
 import ClientService from '../../services/ClientService';
 import Pagination from '../utils/Pagination';
@@ -147,9 +148,12 @@ export const Clients = () => {
 							<input type="search" onChange={handleSearchChange} name="search-clients" class="in-search" />
 						</div>
 					</div>
+
 					<NewClientForm display={display}>
 						
 					</NewClientForm>
+					
+
 					<div class="alpha">
 						<ul>	
 							{alphabet.map((letter) => (

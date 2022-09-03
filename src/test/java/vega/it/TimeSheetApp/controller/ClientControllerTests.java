@@ -45,7 +45,7 @@ public class ClientControllerTests {
 	@Autowired
 	private MockMvc mockMvc;
 	
-	 @Autowired
+	@Autowired
     private WebApplicationContext webApplicationContext;
 	
 	@MockBean

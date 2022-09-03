@@ -25,10 +25,6 @@ export const Calendar2 = () => {
 
     useEffect(() => {
 
-		TeamMemberService.getTeamMemberByUsername(username).then((response => {
-			setLoggedUser(response.data);
-		}))
-
         let startDate = (dates[0].toISOString().slice(0,10))
         let endDate = (dates[dates.length-1].toISOString().slice(0,10))
 

@@ -27,6 +27,8 @@ export const Days = () => {
 	const [valueTeamMember, setValueTeamMember] = useState('');
 	const [valueClient, setValueClient] = useState('');
 	const [categories, setCategories] = useState([]);
+	const [username] = useState(AuthenticationService.getUsername());
+	
 
 	useEffect(() => {
 
@@ -122,7 +124,7 @@ export const Days = () => {
 						<table class="default-table">
 							<tr>
 								<th>
-									Client <em>*</em>
+									TeamMember <em>*</em>
 								</th>
 								<th>
 									Project <em>*</em>
@@ -141,7 +143,7 @@ export const Days = () => {
 							<tr>
 								<td>
 									<select>
-									<option>{activity.project.client.clientName}</option>
+									<option>{activity.teamMember.username}</option>
 
 									</select>
 								</td>
@@ -176,8 +178,9 @@ export const Days = () => {
 											onChange={handleChangeTeamMember}
 											onClick={fetchTeamMembers}
 										>
-											<option>Select TeamMember</option>
-											{
+											<option>{username}</option>
+										</select>
+											{/*{
 												teamMembers.map((member) => (
 													<option
 														onClick={handleChangeTeamMember}
@@ -186,7 +189,7 @@ export const Days = () => {
 													key={member.id}> {member.username} </option>
 												))
 											}
-										</select>
+										</select>*/}
 									</td>
 									<td>
 										<select name="project"
@@ -233,7 +236,7 @@ export const Days = () => {
 										<input name="overtime" id="overtime" type="text" onChange={e => setNewTimeSheet({...newTimeSheet, overtime: e.target.value})} class="in-text xsmall" />
 									</td>
 									<td>
-										<button class="btn-success" onClick={() => addActivity(newTimeSheet)}>Add</button>
+										<button  class="btn-success" onClick={() => addActivity(newTimeSheet)}>Add</button>
 									</td>
 								</tr>
 								)
