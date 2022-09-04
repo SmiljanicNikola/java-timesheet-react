@@ -29,7 +29,6 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 import org.springframework.web.server.ResponseStatusException;
 
-import net.bytebuddy.description.modifier.EnumerationState;
 import vega.it.TimeSheetApp.DTO.AddProjectRequestDTO;
 import vega.it.TimeSheetApp.DTO.ClientDTO;
 import vega.it.TimeSheetApp.DTO.ProjectDTO;

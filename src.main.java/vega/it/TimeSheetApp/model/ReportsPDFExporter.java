@@ -63,12 +63,11 @@ public class ReportsPDFExporter {
 	
 	private void writeTableData(PdfPTable table) {
 		for(Report report : reports) {
-			table.addCell(String.valueOf(report.getId()));
 			table.addCell(report.getDescription());
-			table.addCell(String.valueOf(report.getTeamMember()));
-			table.addCell(String.valueOf(report.getClient()));
-			table.addCell(String.valueOf(report.getProject()));
-			table.addCell(String.valueOf(report.getCategory()));
+			table.addCell(String.valueOf(report.getTeamMember().getFirstname() + report.getTeamMember().getLastname()));
+			table.addCell(String.valueOf(report.getClient().getClientName() + "," + report.getClient().getAddress()));
+			table.addCell(String.valueOf(report.getProject().getProjectName()));
+			table.addCell(String.valueOf(report.getCategory().getType()));
 			table.addCell(String.valueOf(report.getTime()));
 			table.addCell(String.valueOf(report.getOvertime()));
 			table.addCell(String.valueOf(report.getDate()));

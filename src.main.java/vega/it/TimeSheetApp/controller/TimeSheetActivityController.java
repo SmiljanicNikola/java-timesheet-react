@@ -8,9 +8,7 @@ import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
 import java.util.stream.Collectors;
-
 import javax.servlet.http.HttpServletResponse;
-
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.format.annotation.DateTimeFormat;
 import org.springframework.format.annotation.DateTimeFormat.ISO;
@@ -27,9 +25,7 @@ import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
-
 import com.lowagie.text.DocumentException;
-
 import vega.it.TimeSheetApp.DTO.AddActivityDTORequest;
 import vega.it.TimeSheetApp.DTO.AddProjectRequestDTO;
 import vega.it.TimeSheetApp.DTO.ClientDTO;
@@ -41,7 +37,6 @@ import vega.it.TimeSheetApp.DTO.TimeSheetActivityDTO;
 import vega.it.TimeSheetApp.model.ActivitiesPDFExporter;
 import vega.it.TimeSheetApp.model.Project;
 import vega.it.TimeSheetApp.model.Report;
-import vega.it.TimeSheetApp.model.ReportPDFExporter;
 import vega.it.TimeSheetApp.model.ReportsPDFExporter;
 import vega.it.TimeSheetApp.model.SearchObject;
 import vega.it.TimeSheetApp.model.TeamMember;
@@ -240,24 +235,6 @@ public class TimeSheetActivityController {
 	}
 	
 	
-	@PostMapping("/reports/export")
-    public void exportToPDFKlijent(HttpServletResponse response,@RequestBody Report report) throws DocumentException, IOException {
-    	response.setContentType("application/pdf");
-    	DateFormat dateFormatter = new SimpleDateFormat("yyyy-MM-dd_HH:mm:ss");
-    	String currentDateTime = dateFormatter.format(new Date());
-    	
-    	
-    	String headerKey = "Content-Disposition";
-    	String headerValue = "attachment; filename=reports_" + currentDateTime + ".pdf";
-    	
-    	response.setHeader(headerKey, headerValue);
-    	
-
-
-    	ReportPDFExporter exporter = new ReportPDFExporter(report);
-    	exporter.export(response);
-    }
-	
 	@PostMapping("/export")
     public void exportToPDF(HttpServletResponse response,@RequestBody List<TimeSheetActivity> timeSheetActivities) throws DocumentException, IOException {
     	response.setContentType("application/pdf");
@@ -269,20 +246,6 @@ public class TimeSheetActivityController {
     	String headerValue = "attachment; filename=reports_" + currentDateTime + ".pdf";
     	
     	response.setHeader(headerKey, headerValue);
-    	
-    	//List<TimeSheetActivity> listOfActivities = timeSheetActivityService.fin
-
-    	/*List<IzlaznaFaktura> listaIzlaznihFakturaPartnera = new ArrayList<IzlaznaFaktura>();
-    	
-    	for(IzlaznaFaktura izlazna : listaIzlaznihFaktura) {
-    		if(izlazna.getPoslovniPartner().getId() == id) {
-    			listaIzlaznihFakturaPartnera.add(izlazna);
-    		}
-    		
-    	}*/
-    	/*System.out.println(listaIzlaznihFakturaPartnera);
-        log.debug("REST request to delete IzlaznaFaktura : {}", listaIzlaznihFakturaPartnera);*/
-
 
     	ActivitiesPDFExporter exporter = new ActivitiesPDFExporter(timeSheetActivities);
     	exporter.export(response);

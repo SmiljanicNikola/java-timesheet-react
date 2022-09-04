@@ -69,12 +69,11 @@ public class ActivitiesPDFExporter {
 	
 	private void writeTableData(PdfPTable table) {
 		for(TimeSheetActivity activity : timeSheetActivities) {
-			table.addCell(String.valueOf(activity.getId()));
 			table.addCell(activity.getDescription());
-			table.addCell(String.valueOf(activity.getTeamMember()));
-			table.addCell(String.valueOf(activity.getProject().getClient()));
-			table.addCell(String.valueOf(activity.getProject()));
-			table.addCell(String.valueOf(activity.getCategory()));
+			table.addCell(String.valueOf(activity.getTeamMember().getFirstname() + activity.getTeamMember().getLastname()));
+			table.addCell(String.valueOf(activity.getProject().getClient().getClientName() + "," + activity.getProject().getClient().getAddress()));
+			table.addCell(String.valueOf(activity.getProject().getProjectName()));
+			table.addCell(String.valueOf(activity.getCategory().getType()));
 			table.addCell(String.valueOf(activity.getTime()));
 			table.addCell(String.valueOf(activity.getOvertime()));
 			table.addCell(String.valueOf(activity.getDate()));
@@ -90,7 +89,7 @@ public class ActivitiesPDFExporter {
 		
 		Font font = FontFactory.getFont(FontFactory.HELVETICA_BOLD);
 		font.setColor(Color.BLACK);
-		font.setSize(18);
+		font.setSize(15);
 		
 		
 		Paragraph title = new Paragraph("PDF List of Reports",font);
@@ -100,7 +99,7 @@ public class ActivitiesPDFExporter {
 		PdfPTable table = new PdfPTable(8);
 		table.setWidthPercentage(100);
 		table.setSpacingBefore(15);
-		table.setWidths(new float[] {2.7f, 3.0f, 3.0f, 3.0f, 3.0f,3.0f,3.0f,3.0f});
+		table.setWidths(new float[] {2.6f, 3.4f, 3.4f, 3.4f, 3.0f,1.8f,2.8f,3.0f});
 		
 		
 		writeTableHeader(table);
