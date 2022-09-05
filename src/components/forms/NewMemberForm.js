@@ -6,8 +6,7 @@ import TeamMemberService from '../../services/TeamMemberService';
 
 export const NewMemberForm = (props) => {
 
-	const [display, setDisplay] = useState(props.value);
-	const navigate = useNavigate();
+	const [setDisplay] = useState(props.value);
 	const [member, setMember] = useState({})
 
 

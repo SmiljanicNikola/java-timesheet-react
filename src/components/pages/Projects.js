@@ -320,9 +320,6 @@ export const Projects = () => {
 						</li>
 					</ul>
 				</div>
-				
-			
-				
 			</section>			
 		</div>
 		<Footer />

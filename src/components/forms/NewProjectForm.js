@@ -8,7 +8,6 @@ import ProjectService from '../../services/ProjectService';
 export const NewProjectForm = (props) => {
 	
     const [takenProps, setTakenProps] = useState(props.display);
-	const [display, setDisplay] = useState(false);
 	const [clients, setClients] = useState([])
 	const [teamMembers, setTeamMembers] = useState([])
 	const [project, setProject] = useState({})

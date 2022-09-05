@@ -1,3 +1,4 @@
+/* eslint-disable jsx-a11y/anchor-is-valid */
 import React,{useEffect, useState} from 'react'
 import ClientService from '../../services/ClientService';
 import CountryService from '../../services/CountryService';
@@ -5,9 +6,7 @@ import '../../assets/css/popup.css'
 
 export const NewClientForm = (props) => {
 	
-	const [takenProps, setTakenProps] = useState(props.display);   
 	const [client, setClient] = useState({})
-	const [display, setDisplay] = useState(false);
 	const [countries, setCountries] = useState([])
 	const [valueCountry, setValueCountry] = useState('')
 
