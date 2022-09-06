@@ -143,6 +143,9 @@ export const Projects = () => {
 		ProjectService.filterProjectsByFirstLetters(letters).then(response => {
 			setPaginatedProjects(response.data)
 		})
+		if(e.target.value === ''){
+			fetchPaginatedProjects();
+		}
 	}
 
 	const handleInactiveInput = () => {

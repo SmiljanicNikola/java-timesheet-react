@@ -79,7 +79,7 @@ public class ClientControllerTests {
 		
         ArrayList<Client> clients = new ArrayList<>(Arrays.asList(client1,client2));
 
-        Mockito.when(clientRepository.findAll()).thenReturn(clients);
+        Mockito.when(clientService.findAll()).thenReturn(clients);
 
         mockMvc.perform(MockMvcRequestBuilders.get("/api/clients").contentType(MediaType.APPLICATION_JSON))
                 .andExpect(status().isOk())

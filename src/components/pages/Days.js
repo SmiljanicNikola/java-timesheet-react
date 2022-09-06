@@ -111,6 +111,8 @@ export const Days = () => {
 		console.log(valueCategory)
 		console.log(newActivity)
 		TimeSheetActivityService.createTimesheetActivity(newActivity);
+		window.location.reload();
+
 	}
 
     return (
