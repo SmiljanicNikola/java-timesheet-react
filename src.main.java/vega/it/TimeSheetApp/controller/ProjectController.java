@@ -69,17 +69,17 @@ public class ProjectController {
 		
 		SimpleGrantedAuthority userRole = (SimpleGrantedAuthority) SecurityContextHolder.getContext().getAuthentication().getAuthorities().toArray()[0];
 		String teamMemberUsername = SecurityContextHolder.getContext().getAuthentication().getName();
-		//Custom context klasu koji ce sadrzati sve stvari iz tokena i ekstrakovati sve da ne moram u kontroleru
 		TeamMember teamMember = teamMemberService.findByUsername(teamMemberUsername);
+
+		
+		//Custom context klasu koji ce sadrzati sve stvari iz tokena i ekstrakovati sve da ne moram u kontroleru
 		//TimeSheetCallContext custom klasa koja prima SecurityContextHolder
-		System.out.println(userRole);
-		System.out.println(userRole.toString());
+		//Ekstraktovati custom kontroler iz poziva drugog
 
 		Page<Project> page = null;
 		if(userRole.getAuthority().equalsIgnoreCase("ROLE_WORKER")) {
 			page = projectService.findAllProjectsPaginatedByTeamMemberId(teamMember.getId(), pageable);
 		}
-		//Ekstraktovati custom kontroler iz poziva drugog
 		if(userRole.getAuthority().equalsIgnoreCase("ROLE_ADMIN")) {
 			page = projectService.findAllProjectsPaginate(pageable);
 		}

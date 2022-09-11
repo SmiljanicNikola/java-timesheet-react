@@ -10,7 +10,6 @@ const monthNamesArr = [
     'September', 'October', 'November', 'December'
   ];
   
-
  export const Calendar = (daysShort= daysShortArr, monthNames = monthNamesArr) => {
 
     const today = new Date();

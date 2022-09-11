@@ -1,10 +1,9 @@
+/* eslint-disable jsx-a11y/anchor-is-valid */
 import React,{useState, useEffect, useRef} from 'react'
 import { CalendarDays } from './CalendarDays';
 import {Calendar} from './Calendar';
 import TimeSheetActivityService from '../../services/TimeSheetActivityService';
 import CalendarUtil from '../utils/CalendarUtil'
-import TeamMemberService from '../../services/TeamMemberService';
-import { AuthenticationService } from '../../services/AuthenticationService';
 
 export const Calendar2 = () => {
 
@@ -19,9 +18,6 @@ export const Calendar2 = () => {
     const startDate = CalendarUtil.findFirstDayOfTheWeek(selectedMonthFirstDate)
     const dates = CalendarUtil.getDatesFromStartPointToEndPoint(startDate, selectedMonthLastDate);
     let totalHours = 0;
-    const [username] = useState(AuthenticationService.getUsername());
-	const [role] = useState(AuthenticationService.getRole());
-	const [setLoggedUser] = useState({})
 
     useEffect(() => {
 
@@ -33,9 +29,7 @@ export const Calendar2 = () => {
         })
 
         countingTotalHoursInMonth()
-        
     }, []);
-
 
     const getPrevMonth = () => {
 
@@ -44,7 +38,6 @@ export const Calendar2 = () => {
         TimeSheetActivityService.getTimeSheets().then(response => {
 			setTimeSheetActivities(response.data)
         })
-        
     }
 
     const getNextMonth = () => {
@@ -54,9 +47,7 @@ export const Calendar2 = () => {
         TimeSheetActivityService.getTimeSheets().then(response => {
 			setTimeSheetActivities(response.data)
         })
-
     }
-
 
     function countingTotalHoursInMonth(){
         let totalTime = 0;

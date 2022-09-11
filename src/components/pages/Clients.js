@@ -86,6 +86,17 @@ export const Clients = () => {
 		PaginationHelper.displayPaginated(previousPage, size, ClientService.getClientsPaginateWithParams, setPaginatedClients)
 	}	
 
+	const paginate = (pageNumber) => {
+
+		setCurrentPage(pageNumber);
+		
+		ClientService.getClientsPaginateWithParams(currentPage,size)
+		.then(response => {
+			setPaginatedClients(response.data.content);
+		})
+	}
+	
+
 	function handleLetterClick(letter){
 		ClientService.filterClientsByFirstLetters(letter).then(response => {
 			setPaginatedClients(response.data)
@@ -122,15 +133,6 @@ export const Clients = () => {
 	}
 
 
-	const paginate = (pageNumber) => {
-
-		setCurrentPage(pageNumber);
-		
-		ClientService.getClientsPaginateWithParams(currentPage,size)
-		.then(response => {
-			setPaginatedClients(response.data.content);
-		})
-	}
 	
     return (
         <div>
