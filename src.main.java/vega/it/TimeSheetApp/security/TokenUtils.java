@@ -4,6 +4,7 @@ import java.util.Date;
 import java.util.HashMap;
 import java.util.Map;
 
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.stereotype.Component;
@@ -11,9 +12,14 @@ import org.springframework.stereotype.Component;
 import io.jsonwebtoken.Claims;
 import io.jsonwebtoken.Jwts;
 import io.jsonwebtoken.SignatureAlgorithm;
+import vega.it.TimeSheetApp.model.TeamMember;
+import vega.it.TimeSheetApp.service.TeamMemberService;
 
 @Component
 public class TokenUtils {
+	
+	@Autowired
+	private TeamMemberService teamMemberService;
 	
 	 @Value("timesheet")
 	 private String secret;
@@ -32,7 +38,7 @@ public class TokenUtils {
 	    }
 	 
 	 
-	 private Claims getClaimsFromToken(String token) {
+	 public Claims getClaimsFromToken(String token) {
 	        try {
 	        	Claims claims = Jwts.parser().setSigningKey(this.secret)
 	                    .parseClaimsJws(token).getBody();
@@ -69,7 +75,11 @@ public class TokenUtils {
 	
 	 
 	 public String generateToken(UserDetails userDetails) {
+		 
+			TeamMember teamMember = teamMemberService.findByUsername(userDetails.getUsername());
+
 	        Map<String, Object> claims = new HashMap<String, Object>();
+	        claims.put("id", teamMember.getId());
 	        claims.put("sub", userDetails.getUsername());
 	        claims.put("role", userDetails.getAuthorities().toArray()[0]);
 	        claims.put("created", new Date(System.currentTimeMillis()));

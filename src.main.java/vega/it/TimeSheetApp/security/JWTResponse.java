@@ -48,6 +48,12 @@ public class JWTResponse {
 	public void setUsername(String username) {
 		this.username = username;
 	}
+	//SimpleGrantedAuthority userRole = (SimpleGrantedAuthority) SecurityContextHolder.getContext().getAuthentication().getAuthorities().toArray()[0];
+			//String teamMemberUsername = SecurityContextHolder.getContext().getAuthentication().getName();
+			//Custom context klasu koji ce sadrzati sve stvari iz tokena i ekstrakovati sve da ne moram u kontroleru
+			//TimeSheetCallContext custom klasa koja prima SecurityContextHolder
+			//Ekstraktovati custom kontroler iz poziva drugog
+
 	
 	
 

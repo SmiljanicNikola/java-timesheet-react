@@ -1,4 +1,5 @@
 import httpClient from "../auth/JwtInterceptors"
+import { TokenService } from "./TokenService";
 
 const PROJECTS_REST_API_URL = `${process.env.REACT_APP_BACKEND_URL}/api/projects`;
 
@@ -13,6 +14,7 @@ class ProjectService {
     }
 
     getProjectsPaginateWithParams(nextPage, size){
+        const token = TokenService.getToken();
         return httpClient.get(PROJECTS_REST_API_URL+"/paginate?page="+nextPage+"&size="+size);
     }
 

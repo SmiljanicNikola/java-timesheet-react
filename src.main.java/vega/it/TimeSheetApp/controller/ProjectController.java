@@ -5,6 +5,10 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.stream.Collectors;
 
+import javax.servlet.ServletRequest;
+import javax.servlet.ServletResponse;
+import javax.servlet.http.HttpServletRequest;
+
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
@@ -23,6 +27,7 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 import org.springframework.web.server.ResponseStatusException;
 
+import io.jsonwebtoken.Claims;
 import vega.it.TimeSheetApp.DTO.AddProjectRequestDTO;
 import vega.it.TimeSheetApp.DTO.ClientDTO;
 import vega.it.TimeSheetApp.DTO.DayDTO;
@@ -30,6 +35,7 @@ import vega.it.TimeSheetApp.DTO.ProjectDTO;
 import vega.it.TimeSheetApp.exceptions.ResourceNotFoundException;
 import vega.it.TimeSheetApp.model.Project;
 import vega.it.TimeSheetApp.model.TeamMember;
+import vega.it.TimeSheetApp.security.CustomSecurityContext;
 import vega.it.TimeSheetApp.security.TokenUtils;
 import vega.it.TimeSheetApp.service.ClientService;
 import vega.it.TimeSheetApp.service.ProjectService;
@@ -47,6 +53,9 @@ public class ProjectController {
 	
 	@Autowired
 	private TokenUtils tokenUtils;
+	
+	@Autowired
+	private CustomSecurityContext customSecurityContext;
 	
 	@Autowired
 	private TeamMemberService teamMemberService;
@@ -67,15 +76,12 @@ public class ProjectController {
 	@GetMapping("/paginate")
 	public ResponseEntity<Page<Project>> findAll(Pageable pageable){
 		
-		SimpleGrantedAuthority userRole = (SimpleGrantedAuthority) SecurityContextHolder.getContext().getAuthentication().getAuthorities().toArray()[0];
-		String teamMemberUsername = SecurityContextHolder.getContext().getAuthentication().getName();
-		TeamMember teamMember = teamMemberService.findByUsername(teamMemberUsername);
+		SimpleGrantedAuthority userRole = customSecurityContext.getUserRoleFromSecurityContextHolder();
 
+		String teamMemberUsername = customSecurityContext.getUsernameFromSecurityContextHolder();
 		
-		//Custom context klasu koji ce sadrzati sve stvari iz tokena i ekstrakovati sve da ne moram u kontroleru
-		//TimeSheetCallContext custom klasa koja prima SecurityContextHolder
-		//Ekstraktovati custom kontroler iz poziva drugog
-
+		TeamMember teamMember = teamMemberService.findByUsername(teamMemberUsername);
+		
 		Page<Project> page = null;
 		if(userRole.getAuthority().equalsIgnoreCase("ROLE_WORKER")) {
 			page = projectService.findAllProjectsPaginatedByTeamMemberId(teamMember.getId(), pageable);
@@ -83,9 +89,7 @@ public class ProjectController {
 		if(userRole.getAuthority().equalsIgnoreCase("ROLE_ADMIN")) {
 			page = projectService.findAllProjectsPaginate(pageable);
 		}
-		
-		return new ResponseEntity<>(page,HttpStatus.OK);
-			
+		return new ResponseEntity<>(page,HttpStatus.OK);		
 	}
 	
 	
@@ -98,10 +102,6 @@ public class ProjectController {
 	
 	@GetMapping("/byTeamMemberUsername/paginated")
 	public ResponseEntity<Page<Project>> findAllByTeamMemberUsername(Pageable pageable){
-		
-		/*HttpServletRequest httpServletRequest = (HttpServletRequest) request;
-		String token = httpServletRequest.getHeader("Authorization");
-		String username = tokenUtils.getUsernameFromToken(token);*/
 		
 		Object userRole = SecurityContextHolder.getContext().getAuthentication().getAuthorities();
 		Object userPrincipal = SecurityContextHolder.getContext().getAuthentication().getPrincipal();

@@ -54,9 +54,7 @@ import static org.assertj.core.api.AssertionsForInterfaceTypes.assertThat;
 import static org.hamcrest.Matchers.notNullValue;
 
 
-
 @WebMvcTest(TeamMemberController.class)
-//@DataJpaTest
 public class TeamMemberControllerTests {
 	
 	@MockBean
@@ -65,7 +63,7 @@ public class TeamMemberControllerTests {
 	@Autowired
 	private MockMvc mockMvc;
 	
-	 @Autowired
+	@Autowired
     private WebApplicationContext webApplicationContext;
 	
 	@MockBean
@@ -115,7 +113,7 @@ public class TeamMemberControllerTests {
 		
         ArrayList<TeamMember> teamMembers = new ArrayList<>(Arrays.asList(teamMember1,teamMember2));
 
-        Mockito.when(teamMemberRepository.findAll()).thenReturn(teamMembers);
+        Mockito.when(teamMemberService.findAll()).thenReturn(teamMembers);
 
         mockMvc.perform(MockMvcRequestBuilders.get("/api/teamMembers")
         		.contentType(MediaType.APPLICATION_JSON))
@@ -257,7 +255,7 @@ public class TeamMemberControllerTests {
 	
 	
 	@Test
-    public void deleteTeamMember_stillWORKINGGGG() throws Exception {
+    public void deleteTeamMember() throws Exception {
 		
 		
     	Mockito.when(teamMemberService.findById(teamMember1.getId())).thenReturn(teamMember1);
