@@ -19,9 +19,7 @@ public interface TimeSheetActivityService {
 	
 	void remove(Integer id);
 	
-	List<TimeSheetActivity> findAllByProjectId(Integer projectId);
-
-	List<TimeSheetActivity> findAllByThreeParameters(Integer projectId, Integer teamMemberId, Integer categoryId, LocalDate startDate, LocalDate endDate);
+	List<TimeSheetActivity> findAllByAllParameters(Integer projectId, Integer teamMemberId, Integer categoryId, LocalDate startDate, LocalDate endDate);
 	
 	List<TimeSheetActivity> findAllBetweenStartDateAndEndDate(LocalDate startDate, LocalDate endDate);
 	

@@ -39,13 +39,9 @@ public class TimeSheetActivityServiceImpl implements TimeSheetActivityService {
 		
 	}
 
-	@Override
-	public List<TimeSheetActivity> findAllByProjectId(Integer projectId) {
-		return timeSheetActivityRepository.findAllByProjectId(projectId);
-	}
 
 	@Override
-	public List<TimeSheetActivity> findAllByThreeParameters(Integer projectId, Integer teamMemberId,
+	public List<TimeSheetActivity> findAllByAllParameters(Integer projectId, Integer teamMemberId,
 			Integer categoryId, LocalDate startDate, LocalDate endDate) {
 		return timeSheetActivityRepository.findAllByThreeParameters(projectId, teamMemberId, categoryId, startDate, endDate);
 	}

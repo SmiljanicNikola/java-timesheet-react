@@ -16,7 +16,6 @@ import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.core.authority.SimpleGrantedAuthority;
 import org.springframework.security.core.context.SecurityContextHolder;
-import org.springframework.web.bind.annotation.CrossOrigin;
 import org.springframework.web.bind.annotation.DeleteMapping;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
@@ -27,22 +26,12 @@ import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 import com.lowagie.text.DocumentException;
 import vega.it.TimeSheetApp.DTO.AddActivityDTORequest;
-import vega.it.TimeSheetApp.DTO.AddProjectRequestDTO;
-import vega.it.TimeSheetApp.DTO.ClientDTO;
 import vega.it.TimeSheetApp.DTO.DayDTO;
-import vega.it.TimeSheetApp.DTO.ProjectDTO;
-import vega.it.TimeSheetApp.DTO.ReportDTO;
-import vega.it.TimeSheetApp.DTO.TeamMemberDTO;
 import vega.it.TimeSheetApp.DTO.TimeSheetActivityDTO;
 import vega.it.TimeSheetApp.model.ActivitiesPDFExporter;
-import vega.it.TimeSheetApp.model.Project;
-import vega.it.TimeSheetApp.model.Report;
-import vega.it.TimeSheetApp.model.ReportsPDFExporter;
-import vega.it.TimeSheetApp.model.SearchObject;
 import vega.it.TimeSheetApp.model.TeamMember;
 import vega.it.TimeSheetApp.model.TimeSheetActivity;
 import vega.it.TimeSheetApp.service.CategoryService;
-import vega.it.TimeSheetApp.service.ClientService;
 import vega.it.TimeSheetApp.service.DayService;
 import vega.it.TimeSheetApp.service.ProjectService;
 import vega.it.TimeSheetApp.service.TeamMemberService;
@@ -99,19 +88,6 @@ public class TimeSheetActivityController {
 				.collect(Collectors.toList());
 		
 		return new ResponseEntity<>(timesheetActivitiesDTO, HttpStatus.OK);
-	}
-	
-	@GetMapping(value="byDate/{date}")
-	public ResponseEntity<List<TimeSheetActivityDTO>> getTimeSheetActivityByDate(
-		@RequestParam(name = "date")
-	       @DateTimeFormat(iso = ISO.DATE)
-	       LocalDate date){
-		
-		//List<TimeSheetActivity> timesheetActivities = timeSheetActivityService.findAll().stream().filter(tsa -> tsa.getDate().toString().equals(date.toString())).collect(Collectors.toList());
-		List<TimeSheetActivity> timesheetActivities = timeSheetActivityService.findAllByDate(date);
-		List<TimeSheetActivityDTO> timeSheetActivitesDTO = timesheetActivities.stream().map(tsa -> new TimeSheetActivityDTO(tsa)).collect(Collectors.toList());
-        return new ResponseEntity<>(timeSheetActivitesDTO, HttpStatus.OK);
-
 	}
 	
 	
@@ -177,7 +153,7 @@ public class TimeSheetActivityController {
 			@RequestParam(required=false) @DateTimeFormat(iso = DateTimeFormat.ISO.DATE) LocalDate endDate
 			){
 		
-		List<TimeSheetActivityDTO> timesheetActivitiesDTO = timeSheetActivityService.findAllByThreeParameters(projectId, teamMemberId, categoryId, startDate, endDate)
+		List<TimeSheetActivityDTO> timesheetActivitiesDTO = timeSheetActivityService.findAllByAllParameters(projectId, teamMemberId, categoryId, startDate, endDate)
 				.stream()
 				.map(tsa -> new TimeSheetActivityDTO(tsa))
 				.collect(Collectors.toList());
@@ -222,12 +198,11 @@ public class TimeSheetActivityController {
     }
 	
 	@GetMapping(value="searchByDate/{date}")
-	public ResponseEntity<List<TimeSheetActivityDTO>> getTimeSheetActivityByDate2(
+	public ResponseEntity<List<TimeSheetActivityDTO>> getTimeSheetActivityByDate(
 		@PathVariable(name = "date")
 	       @DateTimeFormat(iso = ISO.DATE)
 	       LocalDate date){
 		
-		//List<TimeSheetActivity> timesheetActivities = timeSheetActivityService.findAll().stream().filter(tsa -> tsa.getDate().toString().equals(date.toString())).collect(Collectors.toList());
 		List<TimeSheetActivity> timesheetActivities = timeSheetActivityService.findAllByDate(date);
 		List<TimeSheetActivityDTO> timeSheetActivitesDTO = timesheetActivities.stream().map(tsa -> new TimeSheetActivityDTO(tsa)).collect(Collectors.toList());
         return new ResponseEntity<>(timeSheetActivitesDTO, HttpStatus.OK);

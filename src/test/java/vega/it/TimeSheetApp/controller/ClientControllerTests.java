@@ -104,7 +104,7 @@ public class ClientControllerTests {
     
     
    	@Test
-    	public void getClientById_success() throws Exception{		
+    public void getClientById_success() throws Exception{		
 
            Mockito.when(clientService.findById(1)).thenReturn(client1);
    		

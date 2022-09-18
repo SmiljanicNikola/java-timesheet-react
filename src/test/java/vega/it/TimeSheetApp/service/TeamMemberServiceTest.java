@@ -44,7 +44,7 @@ public class TeamMemberServiceTest {
 	private TeamMemberRepository teamMemberRepository;
 	
 	@MockBean
-	private TeamMemberServiceImpl teamMemberService;
+	private TeamMemberService teamMemberService;
 	
 	@MockBean
 	private JWTRequestFilter jwtRequestFilter;
@@ -73,31 +73,31 @@ public class TeamMemberServiceTest {
 	     assertThat(teamMember1.getId(), is(1));
 	 }
 	 
-		@Test
-		public void testSaveTeamMember() {
+	@Test
+	public void testSaveTeamMember() {
+		
+		TeamMember newTeamMember = new TeamMember("milenko", "milenkovic", "milenkom", "memberPassword", 8, "milenko@gmail.com");
 			
-			TeamMember newTeamMember = new TeamMember("milenko", "milenkovic", "milenkom", "memberPassword", 8, "milenko@gmail.com");
-			
-			TeamMember savedTeamMember = new TeamMember(3,"milenko", "milenkovic", "milenkom", "memberPassword", 8, "milenko@gmail.com", false, null);
-			
-			 Mockito.when(teamMemberRepository.save(newTeamMember)).thenReturn(savedTeamMember);
+		TeamMember savedTeamMember = new TeamMember(3,"milenko", "milenkovic", "milenkom", "memberPassword", 8, "milenko@gmail.com", false, null);
+		
+		 Mockito.when(teamMemberRepository.save(newTeamMember)).thenReturn(savedTeamMember);
 
-		     assertThat(savedTeamMember.getId(), is(3));
-		     assertThat(savedTeamMember.getUsername(), is("milenkom"));
-		     assertThat(savedTeamMember.getFirstname(), is("milenko"));
-		     assertThat(savedTeamMember.getLastname(), is("milenkovic"));
-		     assertThat(savedTeamMember.getPassword(), is("memberPassword"));
-		     assertThat(savedTeamMember.getHoursPerWeek(), is(8));
-		     assertThat(savedTeamMember.getEmail(), is("milenko@gmail.com"));
+	     assertThat(savedTeamMember.getId(), is(3));
+	     assertThat(savedTeamMember.getUsername(), is("milenkom"));
+	     assertThat(savedTeamMember.getFirstname(), is("milenko"));
+	     assertThat(savedTeamMember.getLastname(), is("milenkovic"));
+	     assertThat(savedTeamMember.getPassword(), is("memberPassword"));
+	     assertThat(savedTeamMember.getHoursPerWeek(), is(8));
+	     assertThat(savedTeamMember.getEmail(), is("milenko@gmail.com"));
 
 		}
 		
 		@Test
 		public void testFilterTeamMembersByUsername() {
 			
-			TeamMember teamMember4 = new TeamMember(1, "memberFirstname", "memberLastname", "djura", "memberPassword", 8, "member@gmail.com", false, Roles.ADMIN);
-			TeamMember teamMember5 = new TeamMember(1, "memberFirstname", "memberLastname", "mika", "memberPassword", 8, "member@gmail.com", false, Roles.ADMIN);
-			TeamMember teamMember6 = new TeamMember(1, "memberFirstname", "memberLastname", "mile", "memberPassword", 8, "member@gmail.com", false, Roles.ADMIN);
+			TeamMember teamMember4 = new TeamMember(4, "memberFirstname", "memberLastname", "djura", "memberPassword", 8, "member@gmail.com", false, Roles.ADMIN);
+			TeamMember teamMember5 = new TeamMember(5, "memberFirstname", "memberLastname", "mika", "memberPassword", 8, "member@gmail.com", false, Roles.ADMIN);
+			TeamMember teamMember6 = new TeamMember(6, "memberFirstname", "memberLastname", "mile", "memberPassword", 8, "member@gmail.com", false, Roles.ADMIN);
 
 			ArrayList<TeamMember> filteredTeamMembers = new ArrayList<>(Arrays.asList(teamMember5,teamMember6));
 
